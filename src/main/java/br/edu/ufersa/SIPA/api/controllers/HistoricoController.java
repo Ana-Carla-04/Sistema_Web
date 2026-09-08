@@ -1,5 +1,22 @@
 package br.edu.ufersa.SIPA.api.controllers;
-//HistoricoController - Tela de Histórico
 
+import br.edu.ufersa.SIPA.api.dto.HistoricoResponseDTO;
+import br.edu.ufersa.SIPA.api.services.HistoricoService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/historico")
 public class HistoricoController {
+
+    private final HistoricoService historicoService;
+
+    public HistoricoController(HistoricoService historicoService) {
+        this.historicoService = historicoService;
+    }
+
+    @GetMapping
+    public ResponseEntity<HistoricoResponseDTO> obterHistorico() {
+        return ResponseEntity.ok(historicoService.obterHistorico());
+    }
 }
