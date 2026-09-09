@@ -21,55 +21,56 @@ import java.util.List;
 @RestController      //padrao do spring boot
 @RequestMapping("/SIPA/plantio")   //define um URL e o metodo HTTP que vai executar cada função
 public class PlantioController {
+
     @GetMapping("/testes")
     public String testar(){
         return "Primeiro endpoint criado!!";
     }
 
-
-
     //lista todos os plantios
-//    @GetMapping
-//    public List<Plantio> listarTodos(){
-//
-//    }
-//
-//    //listar plantio por data
-//    @GetMapping("/data")
-//    public List<Plantio> listarData(@RequestParam LocalDate data){ //requisita o parametro data
-//
-//    }
-//
-//    //listar plantio por status
-//    @GetMapping("/status")
-//    public List<Plantio> listarStatus(@RequestParam String status){
-//
-//    }
-//
-//    //listar plantio por nome
-//    @GetMapping("/nomePlantio")
-//    public List<Plantio> listarNome(@RequestParam String nome){
-//
-//    }
-//
-//    //tela de sobreposição editar plantio:
-//    //editar plantio(atualizar dados do plantio)
-//    @PutMapping("/editar")
-//    public Plantio editarPlantio(@RequestParam Long id, @RequestParam Plantio plantio){
-//
-//    }
-//
-//    //deletar plantio
-//    @DeleteMapping("/delete")
-//    public void deletarPlantio(@RequestParam Long id){
-//
-//    }
-//
-//    //tela de sobreposição de adicionar plantio:
-//    //adicionar plantio(adicionar dados de plantio
-//    @PostMapping("/adicionar")
-//    public Plantio adicionarPlantio(@RequestParam Plantio plantio){
-//
-//    }
+    @GetMapping
+    public List<Plantio> listarTodos(){
+        return null;
+    }
+
+    //listar plantio por data
+    @GetMapping("/data")
+    public List<Plantio> listarData(@RequestParam LocalDate data){ //requisita o parametro data
+        return null;
+    }
+
+    //listar plantio por status
+    @GetMapping("/status")
+    public List<Plantio> listarStatus(@RequestParam String status){
+        return null;
+    }
+
+    //listar plantio por nome
+    @GetMapping("/nomePlantio")
+    public List<Plantio> listarNome(@RequestParam String nome){
+        return null;
+    }
+
+    //tela de sobreposição editar plantio:
+    //editar plantio(atualizar dados do plantio)
+    @PutMapping("/editar/{id}")
+    public Plantio editarPlantio(@PathVariable Long id, @RequestBody Plantio plantio) {
+        return null;
+    }
+
+    //deletar plantio
+    @DeleteMapping("/delete/{id}")
+    public void deletarPlantio(@RequestParam Long id){
+
+    }
+
+    //tela de sobreposição de adicionar plantio:
+    //adicionar plantio(adicionar dados de plantio
+    @PostMapping("/adicionar")
+    public Plantio adicionarPlantio(@RequestParam Plantio plantio){
+        return null;
+    }
+
+
 
 }
