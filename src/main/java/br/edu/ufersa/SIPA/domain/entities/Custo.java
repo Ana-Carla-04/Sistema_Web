@@ -14,9 +14,11 @@ public class Custo {
     @Column(nullable = false)
     private LocalDate data;
 
+    // Antes era "lote" — renomeado para "plantio" para casar com a URL
+    // /SIPA/plantios/{plantioId}/custos e com os DTOs.
     @ManyToOne
     @JoinColumn(name = "plantio_id", nullable = false)
-    private Plantio lote;
+    private Plantio plantio;
 
     @Column(nullable = false)
     private String categoria;
@@ -35,8 +37,8 @@ public class Custo {
     public LocalDate getData() { return data; }
     public void setData(LocalDate data) { this.data = data; }
 
-    public Plantio getLote() { return lote; }
-    public void setLote(Plantio lote) { this.lote = lote; }
+    public Plantio getPlantio() { return plantio; }
+    public void setPlantio(Plantio plantio) { this.plantio = plantio; }
 
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }

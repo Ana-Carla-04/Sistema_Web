@@ -30,9 +30,11 @@ public class Plantio {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, orphanRemoval = true)
+    // Custo tem campo "plantio" (renomeado de "lote")
+    @OneToMany(mappedBy = "plantio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Custo> custos = new ArrayList<>();
 
+    // Colheita ainda tem campo "lote" (não renomeado)
     @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Colheita> colheitas = new ArrayList<>();
 
