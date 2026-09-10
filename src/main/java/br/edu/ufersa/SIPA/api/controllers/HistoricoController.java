@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/historico")
+@RequestMapping("/SIPA/{userId}/historico")
 public class HistoricoController {
 
     private final HistoricoService historicoService;

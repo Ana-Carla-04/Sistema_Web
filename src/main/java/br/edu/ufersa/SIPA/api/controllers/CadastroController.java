@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 // Ainda sem repositório ligado - métodos ainda retornando null
 @RestController
-@RequestMapping("/api/v1/usuarios")
+@RequestMapping("/SIPA/usuarios")
 public class CadastroController {
 
     @PostMapping

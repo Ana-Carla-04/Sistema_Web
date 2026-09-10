@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/usuarios/{usuarioId}/tarefas")
+@RequestMapping("/SIPA/{usuarioId}/tarefas")
 public class TarefaController {
 
     @GetMapping
