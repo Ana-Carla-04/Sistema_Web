@@ -26,6 +26,9 @@ public class PlantioController {
     }
 
     // lista todos os plantios
+    // @PathVariable pega um valor que está dentro da URL e coloca esse valor no parametro do metodo.
+    // Neste caso, {userId} vem do @RequestMapping e identifica o usuario dos plantios.
+    // Exemplo: na URL /SIPA/10/plantio, o valor 10 será recebido em userId.
     @GetMapping
     public ResponseEntity<List<Plantio>> listarTodos(@PathVariable Long userId) {
         return null;
@@ -51,12 +54,23 @@ public class PlantioController {
 
     // tela de sobreposição editar plantio:
     // editar plantio (atualizar dados do plantio)
+    // @PutMapping representa uma requisicao HTTP PUT.
+    // E usado para atualizar ou substituir todos os dados já existentes.
+    // O caminho final fica, por exemplo: PUT /SIPA/10/plantio/25
+    // Nesse exemplo, 10 e o usuarioId e 25 e o ID.
+    // O @RequestBody recebe a nova versao completa da tarefa.
+    // O @PathVariable userId recebe o 10 e o @PathVariable id recebe o 25.
+    // Cada nome entre chaves na URL deve corresponder a um @PathVariable do metodo.
     @PutMapping("/editar/{id}")
     public ResponseEntity<Plantio> editarPlantio(@PathVariable Long userId, @PathVariable Long id, @RequestBody Plantio plantio) {
         return null;
     }
 
     // deletar plantio
+    // @DeleteMapping representa uma requisicao HTTP DELETE.
+    // E usado para remover uma tarefa existente.
+    // O caminho fica, por exemplo: DELETE /SIPA/10/plantio/25
+    // O usuarioId identifica o dono e o tarefaId identifica a tarefa que sera removida.
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletarPlantio(@PathVariable Long userId, @PathVariable Long id) {
         return null;
@@ -64,6 +78,11 @@ public class PlantioController {
 
     // tela de sobreposição de adicionar plantio:
     // adicionar plantio (adicionar dados de plantio)
+    // @PostMapping representa uma requisicao HTTP POST.
+    // E usado para criar uma nova tarefa.
+    // Como nao existe um caminho adicional dentro da anotacao, o endpoint fica:
+    // POST /SIPA/{usuarioId}/plantio
+    // Cada nome entre chaves na URL deve corresponder a um @PathVariable do metodo.
     @PostMapping("/adicionar")
     public ResponseEntity<Plantio> adicionarPlantio(@PathVariable Long userId, @RequestBody Plantio plantio) {
         return null;

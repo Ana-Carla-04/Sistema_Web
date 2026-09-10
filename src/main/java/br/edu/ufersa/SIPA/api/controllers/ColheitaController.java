@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/SIPA/colheita")
+@RequestMapping("/SIPA/{usuarioId}/colheita")
 public class ColheitaController {
 
     private static final double KG_POR_ALQUEIRE = 115.0;
 
     // Calcular receita completa (POST porque envia muitos dados)
+    // @PostMapping representa uma requisicao HTTP POST.
+    // E usado aqui para enviar varios dados e calcular uma receita completa.
+    // O caminho deste endpoint e: POST /SIPA/{usuarioId}/colheita/calcular.
+    // O @RequestBody recebe esses dados no corpo da requisicao.
     @PostMapping("/calcular")
     public ResponseEntity<ColheitaResponse> calcularReceita(@RequestBody ColheitaRequest request) {
 
@@ -91,6 +95,10 @@ public class ColheitaController {
     }
 
     // Editar colheita
+    // @PutMapping representa uma requisicao HTTP PUT.
+    // E usado para atualizar ou substituir os dados completos de uma colheita.
+    // O id identifica, por parametro na URL, qual colheita sera atualizada.
+    // O @RequestBody recebe os novos dados da colheita.
     @PutMapping("/editar")
     public ResponseEntity<Colheita> editarColheita(
             @RequestParam Long id,
@@ -99,6 +107,7 @@ public class ColheitaController {
         return null;
     }
 
+    
     // Deletar colheita
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deletarColheita(@RequestParam Long id) {
@@ -107,6 +116,9 @@ public class ColheitaController {
     }
 
     // Adicionar colheita
+    // @PostMapping tambem e usado aqui para criar uma nova colheita.
+    // O caminho fica: POST /SIPA/{usuarioId}/colheita/adicionar.
+    // O @RequestBody recebe os dados da colheita no corpo da requisicao.
     @PostMapping("/adicionar")
     public ResponseEntity<Colheita> adicionarColheita(@RequestBody Colheita colheita) {
         //  depende do ColheitaRepository
