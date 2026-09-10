@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.api.services;
 
-import br.edu.ufersa.SIPA.api.dto.DashboardResponseDTO;
+import br.edu.ufersa.SIPA.api.dtos.DashboardResponseDTO;
 import br.edu.ufersa.SIPA.domain.repositories.CustoRepository;
 import br.edu.ufersa.SIPA.domain.repositories.PlantioRepository;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.api.dto;
+package br.edu.ufersa.SIPA.api.dtos;
 
 import java.time.LocalDate;
 import java.util.List;
