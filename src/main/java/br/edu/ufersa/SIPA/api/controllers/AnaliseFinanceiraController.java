@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.api.controllers;
 
-import br.edu.ufersa.SIPA.api.dto.AnaliseFinanceiraResponseDTO;
+import br.edu.ufersa.SIPA.api.dtos.AnaliseFinanceiraResponseDTO;
 import br.edu.ufersa.SIPA.api.services.AnaliseFinanceiraService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

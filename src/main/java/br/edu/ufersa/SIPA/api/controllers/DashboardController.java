@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.api.controllers;
 
-import br.edu.ufersa.SIPA.api.dto.DashboardResponseDTO;
+import br.edu.ufersa.SIPA.api.dtos.DashboardResponseDTO;
 import br.edu.ufersa.SIPA.api.services.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

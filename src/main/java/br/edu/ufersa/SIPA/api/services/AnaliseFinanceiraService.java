@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.api.services;
 
-import br.edu.ufersa.SIPA.api.dto.AnaliseFinanceiraResponseDTO;
+import br.edu.ufersa.SIPA.api.dtos.AnaliseFinanceiraResponseDTO;
 import br.edu.ufersa.SIPA.domain.entities.Plantio;
 import br.edu.ufersa.SIPA.domain.repositories.CustoRepository;
 import br.edu.ufersa.SIPA.domain.repositories.PlantioRepository;
