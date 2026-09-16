@@ -1,0 +1,16 @@
+Entidades :
+    Usuario
+    Plantio
+    Colheita
+    Custo
+    Tarefa
+
+DTO:
+
+Service:
+
+Controller:
+
+Repository:
+
+AplicationService:
