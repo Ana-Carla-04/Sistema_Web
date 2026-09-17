@@ -1,16 +1,65 @@
-Entidades :
-    Usuario
-    Plantio
-    Colheita
-    Custo
-    Tarefa
+Entidades : Representa a tabela no banco de dados
 
-DTO:
+Repository:É a ponte entre o seu código e o banco de dados. Só existe se houver uma Entity.
+Ele que faz os comandos de salvar, buscar, deletar.
 
-Service:
+DTO:Objeto usado para transportar dados. Usado para receber os dados do front-end (Request)
+ou devolver dados para o front-end (Response). Evita expor sua Entity diretamente.
 
-Controller:
+Service: É o "cérebro" da feature. Onde ficam as regras de negócio (validações, cálculos,
+junção de dados de vários repositórios).
 
-Repository:
+Controller:É a "porta de entrada" da API (REST). Ele recebe as requisições HTTP (GET, POST, PUT, DELETE)
+e repassa para o Service.
 
-AplicationService:
+    AnaliseFinanceiraController - implementado
+    AnaliseFinanceiraDTO - revisar
+    AnaliseFinanceiroService - revisar
+
+    CadastroController - implementado
+
+    Colheita - Revisado
+    ColheitaRepository - Não implementado
+    ColheitaDTO - implementado e revisado
+    ColheitaService - nao implementado
+    ColheitaController - implementado
+
+    Custo - Revisar
+    CustoRepository - Revisar
+    CustoDTO - Revisar
+    CustoService - revisar
+    CustoController - implementado
+
+    DashboardController (Endpoint /dashboard) - implementado
+    DashboardResponseDTO (Um objeto com o resumo dos dados) - revisar
+    DashboardService (Faz as contas, chama o CustoRepository, ColheitaRepository, etc.) - revisar
+
+    HistoricoDTO - revisar
+    HistoricoService - revisar
+    HistoricoController - implementado
+
+    LoginController (Endpoint /login) - implementado
+    LoginResquestDTO(receber email e senha) - Nao implementada
+    LoginResponseDTO(devolver o token) - nao implementado
+    LoginService (Valida a senha, gera o token - ele vai usar o UsuarioRepository aqui dentro) - Não implementado
+
+    Plantio - Revisar
+    PlantioRepository - Revisar
+    PlantioRequestDTO e PlantioResponseDTO - Nao implementado
+    PlantioController (Endpoints da API) - implementado
+    PlantioService - Não implementado
+
+    Tarefa - Revisar
+    TarefaRepository - Não implementado
+    TarefaDTO - nao implementado
+    TarefaService - nao implementado
+    TarefaController - implementado
+
+    Usuario - Revisar
+    UsuarioRepository - Não implementado
+    UsuarioDTO - nao implementado
+    UsuarioService - nao implementado
+    UsuarioController - Nao implementado(nao sei nem se precisa)
+
+
+AplicationService:  orquestra o fluxo, enquanto o DomainService tem as regras puras( por enquanto deixar quieto)
