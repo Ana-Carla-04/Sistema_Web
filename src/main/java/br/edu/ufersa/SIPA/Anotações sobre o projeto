@@ -18,11 +18,12 @@ e repassa para o Service.
 
     CadastroController - implementado
 
-    Colheita - Revisado
-    ColheitaRepository - Não implementado
-    ColheitaDTO - implementado e revisado
-    ColheitaService - nao implementado
+    Colheita - implementado
+    ColheitaRepository - implementado
+    ColheitaDTO - implementado
+    ColheitaService -  implementado
     ColheitaController - implementado
+
 
     Custo - Revisar
     CustoRepository - Revisar
@@ -43,11 +44,12 @@ e repassa para o Service.
     LoginResponseDTO(devolver o token) - nao implementado
     LoginService (Valida a senha, gera o token - ele vai usar o UsuarioRepository aqui dentro) - Não implementado
 
-    Plantio - Revisar
-    PlantioRepository - Revisar
-    PlantioRequestDTO e PlantioResponseDTO - Nao implementado
+    Plantio - implementado
+    PlantioRepository - implementado
+    PlantioRequestDTO e PlantioResponseDTO - implementados
     PlantioController (Endpoints da API) - implementado
-    PlantioService - Não implementado
+    PlantioService - implementado
+
 
     Tarefa - Revisar
     TarefaRepository - Não implementado
@@ -56,7 +58,7 @@ e repassa para o Service.
     TarefaController - implementado
 
     Usuario - Revisar
-    UsuarioRepository - Não implementado
+    UsuarioRepository - Não implementado(vazio)
     UsuarioDTO - nao implementado
     UsuarioService - nao implementado
     UsuarioController - Nao implementado(nao sei nem se precisa)

@@ -1,7 +1,7 @@
 package br.edu.ufersa.SIPA.freatures.colheita;
 
-import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaRequest;
-import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResponse;
+import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaRequestDTO;
+import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResponseDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResumoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,20 +12,19 @@ import java.util.List;
 @RequestMapping("/SIPA/{usuarioId}/colheita")
 public class ColheitaController {
 
-    private static final double KG_POR_ALQUEIRE = 115.0;
+    private final ColheitaService colheitaService;
 
-    // Calcular receita completa (POST porque envia muitos dados)
-    // @PostMapping representa uma requisicao HTTP POST.
-    // E usado aqui para enviar varios dados e calcular uma receita completa.
-    // O caminho deste endpoint e: POST /SIPA/{usuarioId}/colheita/calcular.
-    // O @RequestBody recebe esses dados no corpo da requisicao.
+    public ColheitaController(ColheitaService colheitaService) {
+        this.colheitaService = colheitaService;
+    }
+
+    // Calcular receita completa (POST porque envia vários dados)
+    // Endpoint: POST /SIPA/{usuarioId}/colheita/calcular
     @PostMapping("/calcular")
-    public ResponseEntity<ColheitaResponse> calcularReceita(@RequestBody ColheitaRequest request) {
-
-        // então não implementei aqui pra não arriscar inventar campos que conflitem
-        // com o que você já tem. A lógica é a mesma dos métodos abaixo, só precisa
-        // ler os valores do request e montar o response.
-        return null;
+    public ResponseEntity<ColheitaResponseDTO> calcularReceita(
+            @PathVariable Long usuarioId,
+            @RequestBody ColheitaRequestDTO request) {
+        return ResponseEntity.ok(colheitaService.calcularReceita(usuarioId, request));
     }
 
     // Mostrar produção líquida
@@ -33,16 +32,13 @@ public class ColheitaController {
     public ResponseEntity<Double> calcularProducaoLiquida(
             @RequestParam Double producaoBruta,
             @RequestParam Double descontoUmidade) {
-        double producaoLiquida = producaoBruta - (producaoBruta * descontoUmidade / 100);
-        return ResponseEntity.ok(producaoLiquida);
+        return ResponseEntity.ok(colheitaService.calcularProducaoLiquida(producaoBruta, descontoUmidade));
     }
 
     // Mostrar equivalência em alqueire
     @GetMapping("/equivalencia-alqueire")
-    public ResponseEntity<Double> calcularEquivalenciaAlqueire(
-            @RequestParam Double producaoLiquida) {
-        double equivalenteAlqueire = producaoLiquida / KG_POR_ALQUEIRE;
-        return ResponseEntity.ok(equivalenteAlqueire);
+    public ResponseEntity<Double> calcularEquivalenciaAlqueire(@RequestParam Double producaoLiquida) {
+        return ResponseEntity.ok(colheitaService.calcularEquivalenciaAlqueire(producaoLiquida));
     }
 
     // Mostrar receita bruta estimada
@@ -50,8 +46,7 @@ public class ColheitaController {
     public ResponseEntity<Double> calcularReceitaBruta(
             @RequestParam Double equivalenteAlqueire,
             @RequestParam Double precoAlqueire) {
-        double receitaBruta = equivalenteAlqueire * precoAlqueire;
-        return ResponseEntity.ok(receitaBruta);
+        return ResponseEntity.ok(colheitaService.calcularReceitaBruta(equivalenteAlqueire, precoAlqueire));
     }
 
     // Mostrar despesas
@@ -59,8 +54,7 @@ public class ColheitaController {
     public ResponseEntity<Double> calcularDespesas(
             @RequestParam Double receitaBruta,
             @RequestParam Double taxaMaquina) {
-        double despesas = receitaBruta * taxaMaquina / 100;
-        return ResponseEntity.ok(despesas);
+        return ResponseEntity.ok(colheitaService.calcularDespesas(receitaBruta, taxaMaquina));
     }
 
     // Mostrar saldo
@@ -68,59 +62,55 @@ public class ColheitaController {
     public ResponseEntity<Double> calcularSaldo(
             @RequestParam Double receitaBruta,
             @RequestParam Double despesas) {
-        double saldo = receitaBruta - despesas;
-        return ResponseEntity.ok(saldo);
+        return ResponseEntity.ok(colheitaService.calcularSaldo(receitaBruta, despesas));
     }
 
-    // Listar todas as colheitas
+    // Listar todas as colheitas do usuário
     @GetMapping
-    public ResponseEntity<List<Colheita>> listarTodos() {
-        //  depende do ColheitaRepository (ainda vazio) - próxima etapa
-        return null;
+    public ResponseEntity<List<Colheita>> listarTodos(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(colheitaService.listarTodos(usuarioId));
     }
 
-    // Listar colheitas recentes (para a tabela)
+    // Listar colheitas recentes (para a tabela "Lançamentos de Colheitas Recentes")
     @GetMapping("/recentes")
-    public ResponseEntity<List<ColheitaResumoDTO>> listarRecentes() {
-        //  depende do ColheitaRepository
-        return null;
+    public ResponseEntity<List<ColheitaResumoDTO>> listarRecentes(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(colheitaService.listarRecentes(usuarioId));
     }
 
     // Listar colheita por lote
     @GetMapping("/lote")
-    public ResponseEntity<List<Colheita>> listarLote(@RequestParam String lote) {
-        //  depende do ColheitaRepository
-        return null;
+    public ResponseEntity<List<Colheita>> listarLote(
+            @PathVariable Long usuarioId,
+            @RequestParam Long plantioId) {
+        return ResponseEntity.ok(colheitaService.listarPorLote(usuarioId, plantioId));
     }
 
     // Editar colheita
-    // @PutMapping representa uma requisicao HTTP PUT.
-    // E usado para atualizar ou substituir os dados completos de uma colheita.
-    // O id identifica, por parametro na URL, qual colheita sera atualizada.
-    // O @RequestBody recebe os novos dados da colheita.
+    // Endpoint: PUT /SIPA/{usuarioId}/colheita/editar?id=...
     @PutMapping("/editar")
     public ResponseEntity<Colheita> editarColheita(
+            @PathVariable Long usuarioId,
             @RequestParam Long id,
             @RequestBody Colheita colheita) {
-        //  depende do ColheitaRepository
-        return null;
+        return ResponseEntity.ok(colheitaService.editar(usuarioId, id, colheita));
     }
 
-    
     // Deletar colheita
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> deletarColheita(@RequestParam Long id) {
-        //  depende do ColheitaRepository
-        return null;
+    public ResponseEntity<Void> deletarColheita(
+            @PathVariable Long usuarioId,
+            @RequestParam Long id) {
+        colheitaService.deletar(usuarioId, id);
+        return ResponseEntity.noContent().build();
     }
 
     // Adicionar colheita
-    // @PostMapping tambem e usado aqui para criar uma nova colheita.
-    // O caminho fica: POST /SIPA/{usuarioId}/colheita/adicionar.
-    // O @RequestBody recebe os dados da colheita no corpo da requisicao.
+    // Endpoint: POST /SIPA/{usuarioId}/colheita/adicionar?plantioId=...
     @PostMapping("/adicionar")
-    public ResponseEntity<Colheita> adicionarColheita(@RequestBody Colheita colheita) {
-        //  depende do ColheitaRepository
-        return null;
+    public ResponseEntity<Colheita> adicionarColheita(
+            @PathVariable Long usuarioId,
+            @RequestParam Long plantioId,
+            @RequestBody Colheita colheita) {
+        return ResponseEntity.ok(colheitaService.adicionar(usuarioId, plantioId, colheita));
     }
 }

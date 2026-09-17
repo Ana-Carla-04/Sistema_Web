@@ -1,0 +1,130 @@
+sistema **SIPA** (Sistema Integrado de Produção Agrícola). O sistema é uma plataforma de gestão agrícola
+voltada para o produtor de arroz, permitindo o controle de plantios, custos, colheitas, tarefas e análise financeira.
+
+
+1. Estrutura Global (Layout Base)
+Presente em quase todas as telas internas, compõe a navegação principal:
+    Barra Lateral (Sidebar):** Contém o logo "SIPA" e o menu de navegação: Dashboard, Plantios, Custos,
+     Colheita, Tarefas, Análise Financeira, Histórico e Sair. No rodapé, exibe o perfil do usuário logado (Ex:
+     João Silva - Pequeno Produtor).
+    Barra Superior (Top Bar):** Contém um campo de busca global ("Pesquisar no sistema..."), ícone de
+    notificações, e um seletor de safra ativa ("Safra 2025/2026").
+
+2. Telas de Autenticação
+
+Tela: Fazer Login
+*   **O que faz:** Permite que o usuário acesse o sistema.
+*   **O que recebe (Inputs):**
+    *   E-mail (campo de texto)
+    *   Senha (campo de texto oculto)
+*   **O que retorna (Outputs):**
+    *   **Ação:** Autenticação do usuário. Se bem-sucedido, redireciona para o Dashboard.
+    *   **Navegação:** Link "Cadastrar" que redireciona para a tela de criação de conta.
+
+Tela: Cadastro
+*   **O que faz:** Permite a criação de uma nova conta de usuário no sistema.
+*   **O que recebe (Inputs):**
+    *   Nome de usuário
+    *   E-mail
+    *   Senha
+*   **O que retorna (Outputs):**
+    *   **Ação:** Criação do registro do usuário no banco de dados. Redirecionamento para o Dashboard ou Login.
+    *   **Navegação:** Link "Entrar" que redireciona para a tela de login.
+
+---
+
+ 3. Dashboard (Painel de Controle)
+*   **O que faz:** Oferece uma visão geral e em tempo real do estado da fazenda.
+*   **O que recebe (Inputs):** Seleção de safra (topo), termo de busca global.
+*   **O que retorna (Outputs):**
+    *   **KPIs (Indicadores):** Cards com Produção Total (1.250 Tons), Área Plantada (320 ha), Receita Bruta (R$ 875.000) e Lucro Líquido (R$ 312.500).
+    *   **Gráficos:** Produção por Safra (barras anuais) e Distribuição de Custos (barras por categoria: Solo, Defensivos, Energia, Fertilizantes).
+    *   **Status dos Lotes:** Lista resumida dos lotes (A, B, C, D) com área e status atual (Plantado, Em crescimento, Colheita, Preparação).
+    *   **Widget de Clima:** Informações meteorológicas da localidade (Mosoró, RN), incluindo temperatura, umidade, vento, chuva, índice UV, previsão para os próximos dias e um alerta sobre condições ideais para irrigação.
+    *   **Próximas Tarefas:** Lista resumida das tarefas mais urgentes com data, lote e status (Prioritário, Pendente, Agendado, Planejado).
+
+---
+
+4. Módulo de Plantios
+
+Tela: Meus Plantios
+*   **O que faz:** Gerencia os lotes de plantio da fazenda.
+*   **O que recebe (Inputs):** Busca por lote, filtros de Safra e Status.
+*   **O que retorna (Outputs):** Grid de cards com informações de cada lote (Nome, Variedade, Área Total, Data de Plantio, Status e botão "Editar"). Botão "+ Novo Plantio".
+
+ Modal: Adicionando um plantio
+*   **O que faz:** Cadastra um novo lote de plantio.
+*   **O que recebe (Inputs):** Nome, Área total (ha), Status (dropdown), Data do Plantio, Variedade.
+*   **O que retorna (Outputs):** Salva o novo lote no sistema e atualiza o grid de plantios.
+
+#### Modal: Editar plantio
+*   **O que faz:** Altera as informações de um lote existente ou o exclui.
+*   **O que recebe (Inputs):** Nome, Área total, Status, Data do Plantio, Variedade.
+*   **O que retorna (Outputs):** Atualiza os dados do lote no sistema. O botão "Excluir" remove o lote permanentemente.
+
+---
+
+ 5. Módulo de Custos
+
+ Tela: Custos
+*   **O que faz:** Gerencia e detalha as despesas da produção.
+*   **O que recebe (Inputs):** Nenhum filtro visível, apenas visualização.
+*   **O que retorna (Outputs):**
+    *   **Cards de Resumo:** Total gasto por categoria (Fertilizantes, Energia, Defensivos, Preparo do Solo).
+    *   **Tabela de Detalhamento:** Lista de gastos com Data, Lote, Categoria, Descrição, Valor e link para o comprovante (PDF).
+    *   **Custo Total:** Somatório de todos os custos (R$ 175.250,00).
+
+ Modal: Registre um custo
+*   **O que faz:** Adiciona uma nova despesa ao sistema.
+*   **O que recebe (Inputs):** Lote Selecionado, Categoria, Descrição, Valor, Upload de comprovante (arquivo).
+*   **O que retorna (Outputs):** Salva o custo, atualiza os cards de resumo, a tabela de detalhamento e o custo total.
+
+---
+
+ 6. Módulo de Colheita
+
+Tela: Colheita e Receita
+*   **O que faz:** Simula o rendimento financeiro de um lote e registra colheitas.
+*   **O que recebe (Inputs - Simulador):** Lote Selecionado, Produção Bruta (kg), Umidade (%), Desconto por Umidade (%), Preço por Alqueiro (115kg), Taxa da Máquina de Colheita (%).
+*   **O que retorna (Outputs - Simulador):** Ao clicar em "Calcular Receita Estimada", retorna: Produção Líquida (kg), Equivalente em Alqueiro, Receita Bruta Estimada, Despesas Aplicadas e o Saldo final.
+*   **O que retorna (Outputs - Tabela):** Lista de "Lançamentos de Colheitas Recentes" com Lote, Produção Bruta, Preço de Venda e Receita Líquida.
+
+---
+
+7. Módulo de Tarefas
+
+Tela: Tarefas
+*   **O que faz:** Gerencia o cronograma de atividades da fazenda.
+*   **O que recebe (Inputs):** Filtros por status (Todas, Pendentes, Em andamento, Concluídas), busca por tarefa.
+*   **O que retorna (Outputs):**
+    *   **KPIs:** Contadores de Total, Pendentes, Em Andamento e Concluídas.
+    *   **Tabela de Tarefas:** Lista detalhada com Tarefa, Lote, Prazo, Prioridade, Status e Ações (Editar/Excluir).
+
+Modal: Adicionar Nova Tarefa
+*   **O que faz:** Cria uma nova atividade no sistema.
+*   **O que recebe (Inputs):** Nome da Tarefa, Lote, Prazo, Prioridade, Descrição, Responsável, Status.
+*   **O que retorna (Outputs):** Salva a tarefa e atualiza a listagem e os contadores.
+
+---
+
+ 8. Módulo de Análise Financeira
+
+Tela: Análise Financeira
+*   **O que faz:** Fornece relatórios consolidados de lucratividade.
+*   **O que recebe (Inputs):** Safra selecionada (herdada do topo).
+*   **O que retorna (Outputs):**
+    *   **KPIs:** Receita Total, Custos Totais e Lucro Líquido Realizado.
+    *   **Tabela de Balanço por Lote:** Detalha Área, Receita, Custos, Lucro, Rendimento/ha e Margem Líquida (%) para cada lote.
+    *   **Gráfico de Custos por Hectare:** Comparativo visual do custo por hectare entre os lotes.
+
+---
+
+9. Módulo de Histórico
+
+#### Tela: Histórico de Produção
+*   **O que faz:** Permite a análise de dados ao longo dos anos para tomada de decisão.
+*   **O que recebe (Inputs):** Filtro por ano (Todos, 2026, 2025, 2024, 2023).
+*   **O que retorna (Outputs):**
+    *   **Gráficos:** Evolução da Produtividade (ton/ha) e Histórico de Custos Consolidados.
+    *   **Tabela de Safras Consolidadas:** Comparativo ano a ano com Área Total, Produção, Receita, Custo Total, Lucro Estimado e Produtividade (com indicadores de tendência de alta/baixa).
+
