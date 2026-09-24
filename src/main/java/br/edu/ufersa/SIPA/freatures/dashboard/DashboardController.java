@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/SIPA/dashboard")
 public class DashboardController {
 
-    private final DashboardService dashboardService;
+    private final DashboardApplicationService dashboardApplicationService;
 
-    public DashboardController(DashboardService dashboardService) {
-        this.dashboardService = dashboardService;
+    public DashboardController(DashboardApplicationService dashboardApplicationService) {
+        this.dashboardApplicationService = dashboardApplicationService;
     }
     // Mapeia requisicoes HTTP GET para obter o historico no caminho base.
     @GetMapping
     public ResponseEntity<DashboardResponseDTO> obterDashboard(
             @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(dashboardService.obterDashboard());
+        return ResponseEntity.ok(dashboardApplicationService.obterDashboard(userDetails));
     }
 }

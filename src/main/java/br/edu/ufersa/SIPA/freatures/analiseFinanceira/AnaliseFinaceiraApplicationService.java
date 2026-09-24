@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.analiseFinanceira.Application;
 
-import br.edu.ufersa.SIPA.freatures.analiseFinanceira.Application.dto.AnaliseFinaceiraResponseDTO;
+import br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO;
 import br.edu.ufersa.SIPA.freatures.analiseFinanceira.API.mapper.AnaliseFinaceiramapper;
 import br.edu.ufersa.SIPA.freatures.analiseFinanceira.AnaliseFinanceiraService;
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AnaliseFinaceiraAplicationService {
+public class AnaliseFinaceiraApplicationService {
 
 	// Servico responsavel pelos calculos da analise financeira.
 	private final AnaliseFinanceiraService analiseFinanceiraService;
@@ -18,7 +18,7 @@ public class AnaliseFinaceiraAplicationService {
 	private final UsuarioRepository usuarioRepository;
 
 	// O Spring injeta as dependencias necessarias para executar o caso de uso.
-	public AnaliseFinaceiraAplicationService(
+	public AnaliseFinaceiraApplicationService(
 			AnaliseFinanceiraService analiseFinanceiraService,
 			UsuarioRepository usuarioRepository) {
 		this.analiseFinanceiraService = analiseFinanceiraService;
