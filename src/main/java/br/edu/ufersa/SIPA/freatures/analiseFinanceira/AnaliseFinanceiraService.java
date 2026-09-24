@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AnaliseFinanceiraService {
@@ -22,20 +24,31 @@ public class AnaliseFinanceiraService {
     }
 
     @Transactional(readOnly = true)
-    public AnaliseFinanceiraResponseDTO obterAnaliseFinanceira() {
-        Double custoTotal = custoRepository.sumTotalCustos();
-        Long totalPlantios = plantioRepository.countAll();
-        Double custoMedio = totalPlantios > 0 ? custoTotal / totalPlantios : 0.0;
+    public AnaliseFinanceiraResponseDTO obterAnaliseFinanceira(Long usuarioId) {
+        List<Plantio> plantios = plantioRepository.findByUsuarioId(usuarioId);
+        Long totalPlantios = (long) plantios.size();
 
         // Análise por plantio
         List<AnaliseFinanceiraResponseDTO.AnalisePorPlantio> analisePorPlantio = new ArrayList<>();
-        List<Plantio> plantios = plantioRepository.findAll();
+        Map<String, Double> totaisPorCategoria = new LinkedHashMap<>();
+        Map<String, Long> quantidadesPorCategoria = new LinkedHashMap<>();
+        Double custoTotal = 0.0;
+
         for (Plantio plantio : plantios) {
-            Double custoPlantio = custoRepository.findByPlantioId(plantio.getId()).stream()
-                .mapToDouble(c -> c.getValor())
+            Double custoPlantio = plantio.getCustos().stream()
+                .mapToDouble(c -> c.getValor() == null ? 0.0 : c.getValor())
                 .sum();
-            Long qtdCustos = custoRepository.findByPlantioId(plantio.getId()).size();
-            Double custoPorArea = plantio.getArea() > 0 ? custoPlantio / plantio.getArea() : 0.0;
+            Long qtdCustos = (long) plantio.getCustos().size();
+            Double area = plantio.getArea();
+            Double custoPorArea = area != null && area > 0 ? custoPlantio / area : 0.0;
+            custoTotal += custoPlantio;
+
+            plantio.getCustos().forEach(custo -> {
+                String categoria = custo.getCategoria();
+                Double valor = custo.getValor() == null ? 0.0 : custo.getValor();
+                totaisPorCategoria.merge(categoria, valor, Double::sum);
+                quantidadesPorCategoria.merge(categoria, 1L, Long::sum);
+            });
 
             analisePorPlantio.add(new AnaliseFinanceiraResponseDTO.AnalisePorPlantio(
                 plantio.getId(),
@@ -47,15 +60,12 @@ public class AnaliseFinanceiraService {
         }
 
         // Análise por categoria
-        List<Object[]> custosPorCategoria = custoRepository.findCustosPorCategoria();
         List<AnaliseFinanceiraResponseDTO.AnalisePorCategoria> analisePorCategoria = new ArrayList<>();
-        for (Object[] row : custosPorCategoria) {
-            String categoria = (String) row[0];
-            Double total = (Double) row[1];
+        for (Map.Entry<String, Double> entry : totaisPorCategoria.entrySet()) {
+            String categoria = entry.getKey();
+            Double total = entry.getValue();
             Double percentual = custoTotal > 0 ? (total / custoTotal) * 100 : 0.0;
-            Long quantidade = custoRepository.findAll().stream()
-                .filter(c -> c.getCategoria().equals(categoria))
-                .count();
+            Long quantidade = quantidadesPorCategoria.getOrDefault(categoria, 0L);
 
             analisePorCategoria.add(new AnaliseFinanceiraResponseDTO.AnalisePorCategoria(
                 categoria,
@@ -67,7 +77,7 @@ public class AnaliseFinanceiraService {
 
         return new AnaliseFinanceiraResponseDTO(
             custoTotal,
-            custoMedio,
+            totalPlantios > 0 ? custoTotal / totalPlantios : 0.0,
             analisePorPlantio,
             analisePorCategoria
         );
