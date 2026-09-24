@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.plantio;
 
-import br.edu.ufersa.SIPA.freatures.usuario.Usuario;
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.colheita.Colheita;
 import br.edu.ufersa.SIPA.freatures.custo.Custo;
 import jakarta.persistence.*;

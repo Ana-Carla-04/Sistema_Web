@@ -2,7 +2,7 @@ package br.edu.ufersa.SIPA.freatures.login;
 
 //Login e Cadastro - Autenticação
 
-import br.edu.ufersa.SIPA.freatures.usuario.Usuario;
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

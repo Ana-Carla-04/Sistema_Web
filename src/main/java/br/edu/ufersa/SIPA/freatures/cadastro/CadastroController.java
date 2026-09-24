@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.cadastro;
 
-import br.edu.ufersa.SIPA.freatures.usuario.Usuario;
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import org.springframework.web.bind.annotation.*;
 
 // Ainda sem repositório ligado - métodos ainda retornando null

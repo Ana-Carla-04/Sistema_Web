@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.usuario;
+package br.edu.ufersa.SIPA.freatures.auth;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

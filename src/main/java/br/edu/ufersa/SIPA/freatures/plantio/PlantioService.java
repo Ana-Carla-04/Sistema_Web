@@ -2,8 +2,8 @@ package br.edu.ufersa.SIPA.freatures.plantio;
 
 import br.edu.ufersa.SIPA.freatures.plantio.dto.PlantioRequestDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.dto.PlantioResponseDTO;
-import br.edu.ufersa.SIPA.freatures.usuario.Usuario;
-import br.edu.ufersa.SIPA.freatures.usuario.UsuarioRepository;
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
+import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

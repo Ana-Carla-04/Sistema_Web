@@ -1,4 +1,5 @@
 public enum UserRole {
+    //papel do usuario
     ADMIN("ROLE_ADMIN"),
     USER("ROLE_USER");
     private final String roleName;
