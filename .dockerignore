@@ -1,0 +1,16 @@
+# Artefatos gerados localmente
+target/
+.git/
+.gitignore
+
+# Metadados e configuracoes locais do editor
+.vscode/
+.idea/
+*.iml
+
+# Logs e arquivos temporarios
+*.log
+*.tmp
+
+# Documentacao que nao e necessaria para a imagem
+HELP.md

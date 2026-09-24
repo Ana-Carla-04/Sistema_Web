@@ -1,5 +1,6 @@
 package br.edu.ufersa.SIPA.domain.entities;
 
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

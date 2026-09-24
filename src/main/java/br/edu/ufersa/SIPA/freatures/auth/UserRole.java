@@ -1,3 +1,5 @@
+package br.edu.ufersa.SIPA.freatures.auth;
+
 public enum UserRole {
     //papel do usuario
     ADMIN("ROLE_ADMIN"),
