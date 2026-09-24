@@ -1,6 +1,7 @@
 package br.edu.ufersa.SIPA.freatures.tarefa;
 
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
+import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -26,6 +27,11 @@ public class Tarefa {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
+    // Tarefa agora é executada no contexto de um Plantio
+    @ManyToOne
+    @JoinColumn(name = "plantio_id", nullable = false)
+    private Plantio plantio;
+
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -44,4 +50,7 @@ public class Tarefa {
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+
+    public Plantio getPlantio() { return plantio; }
+    public void setPlantio(Plantio plantio) { this.plantio = plantio; }
 }

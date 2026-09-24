@@ -1,11 +1,15 @@
+package br.edu.ufersa.SIPA.freatures.auth;
+
 public enum UserRole {
-    //papel do usuario
     ADMIN("ROLE_ADMIN"),
     USER("ROLE_USER");
+
     private final String roleName;
-    UserRole(String rolenome){
-        this.roleName = rolenome;
+
+    UserRole(String roleName) {
+        this.roleName = roleName;
     }
+
     public String getRoleName() {
         return roleName;
     }

@@ -1,5 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.colheita;
 
+import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaFullResponseDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaRequestDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResponseDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResumoDTO;
@@ -24,7 +25,7 @@ public class ColheitaService {
         this.plantioRepository = plantioRepository;
     }
 
-    // ---------- Cálculos individuais (endpoints GET do simulador) ----------
+    // ---------- Cálculos individuais ----------
 
     public double calcularProducaoLiquida(double producaoBruta, double descontoUmidade) {
         return producaoBruta - (producaoBruta * descontoUmidade / 100);
@@ -46,7 +47,7 @@ public class ColheitaService {
         return receitaBruta - despesas;
     }
 
-    // ---------- Simulador completo (POST /calcular) ----------
+    // ---------- Simulador (POST /colheitas/calcular) ----------
 
     public ColheitaResponseDTO calcularReceita(Long usuarioId, ColheitaRequestDTO request) {
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(request.getPlantioId(), usuarioId)
@@ -59,13 +60,16 @@ public class ColheitaService {
         double despesas = calcularDespesas(receitaBruta, request.getTaxaMaquina());
         double saldo = calcularSaldo(receitaBruta, despesas);
 
-        return new ColheitaResponseDTO(plantio.getNome(), producaoLiquida, equivalenteAlqueire, receitaBruta, despesas, saldo);
+        return new ColheitaResponseDTO(plantio.getNome(), producaoLiquida, equivalenteAlqueire,
+                receitaBruta, despesas, saldo);
     }
 
-    // ---------- CRUD ----------
+    // ---------- CRUD (agora devolve DTO) ----------
 
-    public List<Colheita> listarTodos(Long usuarioId) {
-        return colheitaRepository.findByUsuarioId(usuarioId);
+    public List<ColheitaFullResponseDTO> listarTodos(Long usuarioId) {
+        return colheitaRepository.findByUsuarioId(usuarioId).stream()
+                .map(ColheitaFullResponseDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public List<ColheitaResumoDTO> listarRecentes(Long usuarioId) {
@@ -74,16 +78,19 @@ public class ColheitaService {
                 .collect(Collectors.toList());
     }
 
-    public List<Colheita> listarPorLote(Long usuarioId, Long plantioId) {
-        // valida que o lote pertence ao usuário antes de listar (anti-IDOR)
+    public List<ColheitaFullResponseDTO> listarPorLote(Long usuarioId, Long plantioId) {
         plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Plantio não encontrado para este usuário: " + plantioId));
-        return colheitaRepository.findByLoteId(plantioId);
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Plantio não encontrado para este usuário: " + plantioId));
+        return colheitaRepository.findByLoteId(plantioId).stream()
+                .map(ColheitaFullResponseDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public Colheita adicionar(Long usuarioId, Long plantioId, Colheita colheita) {
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Plantio não encontrado para este usuário: " + plantioId));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Plantio não encontrado para este usuário: " + plantioId));
 
         colheita.setLote(plantio);
         if (colheita.getData() == null) {
@@ -95,7 +102,8 @@ public class ColheitaService {
 
     public Colheita editar(Long usuarioId, Long id, Colheita novosDados) {
         Colheita colheita = colheitaRepository.findByIdAndUsuarioId(id, usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Colheita não encontrada para este usuário: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Colheita não encontrada para este usuário: " + id));
 
         colheita.setData(novosDados.getData());
         colheita.setProducaoBruta(novosDados.getProducaoBruta());
@@ -109,7 +117,8 @@ public class ColheitaService {
 
     public void deletar(Long usuarioId, Long id) {
         Colheita colheita = colheitaRepository.findByIdAndUsuarioId(id, usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Colheita não encontrada para este usuário: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Colheita não encontrada para este usuário: " + id));
         colheitaRepository.delete(colheita);
     }
 

@@ -1,15 +1,27 @@
 package br.edu.ufersa.SIPA.freatures.plantio.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
 // Dados recebidos do frontend ao criar ou editar um plantio.
 // Não expõe a entidade JPA (Plantio) diretamente na API.
 public class PlantioRequestDTO {
 
+    @NotBlank(message = "nome é obrigatório")
     private String nome;
+
     private String variedade;
+
+    @Positive(message = "area deve ser maior que zero")
     private Double area;
+
+    @NotNull(message = "dataPlantio é obrigatória")
     private LocalDate dataPlantio;
+
+    @NotBlank(message = "status é obrigatório")
     private String status;
 
     public PlantioRequestDTO() {}

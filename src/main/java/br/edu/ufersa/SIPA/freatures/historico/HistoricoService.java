@@ -20,32 +20,34 @@ public class HistoricoService {
     }
 
     @Transactional(readOnly = true)
-    public HistoricoResponseDTO obterHistorico() {
+    public HistoricoResponseDTO obterHistorico(Long usuarioId) {
+        // Só os plantios DO USUÁRIO LOGADO, mais recentes primeiro
         List<HistoricoResponseDTO.HistoricoPlantioDTO> plantios = plantioRepository
-            .findAllByOrderByDataPlantioDesc()
-            .stream()
-            .map(p -> new HistoricoResponseDTO.HistoricoPlantioDTO(
-                p.getId(),
-                p.getNome(),
-                p.getStatus(),
-                p.getDataPlantio(),
-                p.getArea()
-            ))
-            .toList();
+                .findByUsuarioIdOrderByDataPlantioDesc(usuarioId)
+                .stream()
+                .map(p -> new HistoricoResponseDTO.HistoricoPlantioDTO(
+                        p.getId(),
+                        p.getNome(),
+                        p.getStatus(),
+                        p.getDataPlantio(),
+                        p.getArea()
+                ))
+                .toList();
 
+        // Só os custos DO USUÁRIO LOGADO (via plantio.usuario.id), mais recentes primeiro
         List<HistoricoResponseDTO.HistoricoCustoDTO> custos = custoRepository
-            .findAllByOrderByDataDesc()
-            .stream()
-            .map(c -> new HistoricoResponseDTO.HistoricoCustoDTO(
-                c.getId(),
-                c.getPlantio().getId(),
-                c.getPlantio().getNome(),
-                c.getData(),
-                c.getCategoria(),
-                c.getDescricao(),
-                c.getValor()
-            ))
-            .toList();
+                .findByUsuarioIdOrderByDataDesc(usuarioId)
+                .stream()
+                .map(c -> new HistoricoResponseDTO.HistoricoCustoDTO(
+                        c.getId(),
+                        c.getPlantio().getId(),
+                        c.getPlantio().getNome(),
+                        c.getData(),
+                        c.getCategoria(),
+                        c.getDescricao(),
+                        c.getValor()
+                ))
+                .toList();
 
         return new HistoricoResponseDTO(plantios, custos);
     }

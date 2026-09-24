@@ -7,9 +7,10 @@ import java.util.Optional;
 
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
-    // garante que a tarefa pertence ao usuário logado
     Optional<Tarefa> findByIdAndUsuarioId(Long id, Long usuarioId);
 
-    // Usado pelo TarefaController para listar as tarefas do usuário
     List<Tarefa> findByUsuarioId(Long usuarioId);
+
+    // Usado pelo TarefaService.listarPorPlantio (depois de validar o plantio)
+    List<Tarefa> findByPlantioId(Long plantioId);
 }

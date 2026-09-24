@@ -21,40 +21,31 @@ public class DashboardService {
     }
 
     @Transactional(readOnly = true)
-    public DashboardResponseDTO obterDashboard() {
-        Long plantiosTotal = plantioRepository.countAll();
-        Long plantiosAtivos = plantioRepository.countByStatusPlantado();
-        Long custosTotal = custoRepository.count();
-        Double custosTotais = custoRepository.sumTotalCustos();
+    public DashboardResponseDTO obterDashboard(Long usuarioId) {
+        Long plantiosTotal = plantioRepository.countByUsuarioId(usuarioId);
+        Long plantiosAtivos = plantioRepository.countByUsuarioIdAndStatusPlantado(usuarioId);
+        Long custosTotal = custoRepository.countByUsuarioId(usuarioId);
+        Double custosTotais = custoRepository.sumTotalCustosByUsuarioId(usuarioId);
 
-        List<Object[]> custosPorCategoria = custoRepository.findCustosPorCategoria();
+        List<Object[]> custosPorCategoria = custoRepository.findCustosPorCategoriaByUsuarioId(usuarioId);
         List<DashboardResponseDTO.ResumoCustoCategoria> categorias = new ArrayList<>();
         for (Object[] row : custosPorCategoria) {
             categorias.add(new DashboardResponseDTO.ResumoCustoCategoria(
-                (String) row[0],
-                (Double) row[1]
+                    (String) row[0],
+                    (Double) row[1]
             ));
         }
 
         List<DashboardResponseDTO.PlantioResumoDTO> ultimosPlantios = plantioRepository
-            .findAllByOrderByDataPlantioDesc()
-            .stream()
-            .limit(5)
-            .map(p -> new DashboardResponseDTO.PlantioResumoDTO(
-                p.getId(),
-                p.getNome(),
-                p.getStatus(),
-                p.getDataPlantio()
-            ))
-            .toList();
+                .findByUsuarioIdOrderByDataPlantioDesc(usuarioId)
+                .stream()
+                .limit(5)
+                .map(p -> new DashboardResponseDTO.PlantioResumoDTO(
+                        p.getId(), p.getNome(), p.getStatus(), p.getDataPlantio()))
+                .toList();
 
         return new DashboardResponseDTO(
-            plantiosTotal,
-            plantiosAtivos,
-            custosTotal,
-            custosTotais,
-            categorias,
-            ultimosPlantios
-        );
+                plantiosTotal, plantiosAtivos, custosTotal, custosTotais,
+                categorias, ultimosPlantios);
     }
 }

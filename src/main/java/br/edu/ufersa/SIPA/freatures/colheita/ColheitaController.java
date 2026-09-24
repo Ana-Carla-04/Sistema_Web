@@ -1,15 +1,22 @@
 package br.edu.ufersa.SIPA.freatures.colheita;
 
+import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaFullResponseDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaRequestDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResponseDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResumoDTO;
+
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/SIPA/{usuarioId}/colheita")
+@RequestMapping("/SIPA")
 public class ColheitaController {
 
     private final ColheitaService colheitaService;
@@ -18,99 +25,90 @@ public class ColheitaController {
         this.colheitaService = colheitaService;
     }
 
-    // Calcular receita completa (POST porque envia vários dados)
-    // Endpoint: POST /SIPA/{usuarioId}/colheita/calcular
-    @PostMapping("/calcular")
-    public ResponseEntity<ColheitaResponseDTO> calcularReceita(
-            @PathVariable Long usuarioId,
-            @RequestBody ColheitaRequestDTO request) {
-        return ResponseEntity.ok(colheitaService.calcularReceita(usuarioId, request));
+    // POST /SIPA/simulacoes-colheita -> simulador completo (não persiste)
+    // Antes era POST /colheitas/calcular, um verbo na URL. Agora "simulação"
+    // é tratada como o próprio recurso criado pela requisição: o cliente
+    // "cria" uma simulação (efêmera, não persistida) e recebe o resultado.
+    @PostMapping("/simulacoes-colheita")
+    public ResponseEntity<ColheitaResponseDTO> criarSimulacao(@Valid @RequestBody ColheitaRequestDTO dto,
+                                                              HttpSession session) {
+        Long usuarioId = getUsuarioLogado(session);
+        return ResponseEntity.ok(colheitaService.calcularReceita(usuarioId, dto));
     }
 
-    // Mostrar produção líquida
-    @GetMapping("/producao-liquida")
-    public ResponseEntity<Double> calcularProducaoLiquida(
-            @RequestParam Double producaoBruta,
-            @RequestParam Double descontoUmidade) {
-        return ResponseEntity.ok(colheitaService.calcularProducaoLiquida(producaoBruta, descontoUmidade));
-    }
-
-    // Mostrar equivalência em alqueire
-    @GetMapping("/equivalencia-alqueire")
-    public ResponseEntity<Double> calcularEquivalenciaAlqueire(@RequestParam Double producaoLiquida) {
-        return ResponseEntity.ok(colheitaService.calcularEquivalenciaAlqueire(producaoLiquida));
-    }
-
-    // Mostrar receita bruta estimada
-    @GetMapping("/receita-bruta")
-    public ResponseEntity<Double> calcularReceitaBruta(
-            @RequestParam Double equivalenteAlqueire,
-            @RequestParam Double precoAlqueire) {
-        return ResponseEntity.ok(colheitaService.calcularReceitaBruta(equivalenteAlqueire, precoAlqueire));
-    }
-
-    // Mostrar despesas
-    @GetMapping("/despesas")
-    public ResponseEntity<Double> calcularDespesas(
-            @RequestParam Double receitaBruta,
-            @RequestParam Double taxaMaquina) {
-        return ResponseEntity.ok(colheitaService.calcularDespesas(receitaBruta, taxaMaquina));
-    }
-
-    // Mostrar saldo
-    @GetMapping("/saldo")
-    public ResponseEntity<Double> calcularSaldo(
-            @RequestParam Double receitaBruta,
-            @RequestParam Double despesas) {
-        return ResponseEntity.ok(colheitaService.calcularSaldo(receitaBruta, despesas));
-    }
-
-    // Listar todas as colheitas do usuário
-    @GetMapping
-    public ResponseEntity<List<Colheita>> listarTodos(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(colheitaService.listarTodos(usuarioId));
-    }
-
-    // Listar colheitas recentes (para a tabela "Lançamentos de Colheitas Recentes")
-    @GetMapping("/recentes")
-    public ResponseEntity<List<ColheitaResumoDTO>> listarRecentes(@PathVariable Long usuarioId) {
+    // GET /SIPA/colheitas/recentes -> lista resumida (não é verbo, é um filtro/coleção)
+    @GetMapping("/colheitas/recentes")
+    public ResponseEntity<List<ColheitaResumoDTO>> listarRecentes(HttpSession session) {
+        Long usuarioId = getUsuarioLogado(session);
         return ResponseEntity.ok(colheitaService.listarRecentes(usuarioId));
     }
 
-    // Listar colheita por lote
-    @GetMapping("/lote")
-    public ResponseEntity<List<Colheita>> listarLote(
-            @PathVariable Long usuarioId,
-            @RequestParam Long plantioId) {
+    // GET /SIPA/colheitas -> todas as colheitas do usuário logado
+    @GetMapping("/colheitas")
+    public ResponseEntity<List<ColheitaFullResponseDTO>> listarTodas(HttpSession session) {
+        Long usuarioId = getUsuarioLogado(session);
+        return ResponseEntity.ok(colheitaService.listarTodos(usuarioId));
+    }
+
+    // GET /SIPA/plantios/{plantioId}/colheitas -> colheitas de um lote específico
+    @GetMapping("/plantios/{plantioId}/colheitas")
+    public ResponseEntity<List<ColheitaFullResponseDTO>> listarPorLote(@PathVariable Long plantioId,
+                                                                       HttpSession session) {
+        Long usuarioId = getUsuarioLogado(session);
         return ResponseEntity.ok(colheitaService.listarPorLote(usuarioId, plantioId));
     }
 
-    // Editar colheita
-    // Endpoint: PUT /SIPA/{usuarioId}/colheita/editar?id=...
-    @PutMapping("/editar")
-    public ResponseEntity<Colheita> editarColheita(
-            @PathVariable Long usuarioId,
-            @RequestParam Long id,
-            @RequestBody Colheita colheita) {
-        return ResponseEntity.ok(colheitaService.editar(usuarioId, id, colheita));
+    // POST /SIPA/plantios/{plantioId}/colheitas -> registra uma colheita para o lote
+    @PostMapping("/plantios/{plantioId}/colheitas")
+    public ResponseEntity<ColheitaFullResponseDTO> adicionar(@PathVariable Long plantioId,
+                                                             @Valid @RequestBody ColheitaRequestDTO dto,
+                                                             HttpSession session) {
+        Long usuarioId = getUsuarioLogado(session);
+        Colheita colheita = paraEntidade(dto);
+        Colheita criada = colheitaService.adicionar(usuarioId, plantioId, colheita);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .replacePath("/SIPA/colheitas/{id}")
+                .buildAndExpand(criada.getId()).toUri();
+        return ResponseEntity.created(location).body(ColheitaFullResponseDTO.fromEntity(criada));
     }
 
-    // Deletar colheita
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deletarColheita(
-            @PathVariable Long usuarioId,
-            @RequestParam Long id) {
+    // PUT /SIPA/colheitas/{id}
+    @PutMapping("/colheitas/{id}")
+    public ResponseEntity<ColheitaFullResponseDTO> atualizar(@PathVariable Long id,
+                                                             @Valid @RequestBody ColheitaRequestDTO dto,
+                                                             HttpSession session) {
+        Long usuarioId = getUsuarioLogado(session);
+        Colheita colheita = paraEntidade(dto);
+        Colheita atualizada = colheitaService.editar(usuarioId, id, colheita);
+        return ResponseEntity.ok(ColheitaFullResponseDTO.fromEntity(atualizada));
+    }
+
+    // DELETE /SIPA/colheitas/{id} -> 204 No Content
+    @DeleteMapping("/colheitas/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id, HttpSession session) {
+        Long usuarioId = getUsuarioLogado(session);
         colheitaService.deletar(usuarioId, id);
         return ResponseEntity.noContent().build();
     }
 
-    // Adicionar colheita
-    // Endpoint: POST /SIPA/{usuarioId}/colheita/adicionar?plantioId=...
-    @PostMapping("/adicionar")
-    public ResponseEntity<Colheita> adicionarColheita(
-            @PathVariable Long usuarioId,
-            @RequestParam Long plantioId,
-            @RequestBody Colheita colheita) {
-        return ResponseEntity.ok(colheitaService.adicionar(usuarioId, plantioId, colheita));
+    // ---- Auxiliares ----
+
+    private Colheita paraEntidade(ColheitaRequestDTO dto) {
+        Colheita colheita = new Colheita();
+        colheita.setData(dto.getData());
+        colheita.setProducaoBruta(dto.getProducaoBruta());
+        colheita.setDescontoUmidade(dto.getDescontoUmidade());
+        colheita.setPrecoAlqueire(dto.getPrecoAlqueire());
+        colheita.setTaxaMaquina(dto.getTaxaMaquina());
+        return colheita;
+    }
+
+    private Long getUsuarioLogado(HttpSession session) {
+        Object attr = session.getAttribute("idUsuario");
+        if (attr == null) {
+            throw new IllegalStateException("Nenhum usuário logado na sessão");
+        }
+        return (attr instanceof Long) ? (Long) attr : Long.valueOf(attr.toString());
     }
 }
