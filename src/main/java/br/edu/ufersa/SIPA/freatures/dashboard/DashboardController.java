@@ -9,23 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/SIPA/dashboard")
 public class DashboardController {
 
-    private final DashboardService dashboardService;
+    private final DashboardApplicationService dashboardApplicationService;
 
-    public DashboardController(DashboardService dashboardService) {
-        this.dashboardService = dashboardService;
+    public DashboardController(DashboardApplicationService dashboardApplicationService) {
+        this.dashboardApplicationService = dashboardApplicationService;
     }
 
     @GetMapping
-    public ResponseEntity<DashboardResponseDTO> obterDashboard(HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
-        return ResponseEntity.ok(dashboardService.obterDashboard(usuarioId));
-    }
-
-    private Long getUsuarioLogado(HttpSession session) {
-        Object attr = session.getAttribute("idUsuario");
-        if (attr == null) {
-            throw new IllegalStateException("Nenhum usuário logado na sessão");
-        }
-        return (attr instanceof Long) ? (Long) attr : Long.valueOf(attr.toString());
+    public ResponseEntity<DashboardResponseDTO> obterDashboard(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(dashboardApplicationService.obterDashboard(userDetails));
     }
 }

@@ -1,0 +1,45 @@
+services:
+  db:
+    # Banco PostgreSQL usado pela aplicacao.
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sipa}
+      POSTGRES_USER: ${POSTGRES_USER:-sipa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no ambiente}
+    ports:
+      # Permite acessar o banco localmente durante o desenvolvimento.
+      - "5432:5432"
+    volumes:
+      # Mantem os dados do banco entre reinicializacoes dos containers.
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # A aplicacao so inicia quando o PostgreSQL aceitar conexoes.
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    # Constroi a imagem a partir do DockerFile deste projeto.
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      # Expone a API na porta 8080 do computador.
+      - "8080:8080"
+    environment:
+      # URL usa o nome do servico db, que funciona dentro da rede Docker.
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-sipa}
+      DB_USER: ${POSTGRES_USER:-sipa}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no ambiente}
+      SERVER_PORT: 8080
+      JPA_DDL_AUTO: update
+      JPA_SHOW_SQL: "false"
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no ambiente}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  # Volume nomeado para persistencia do PostgreSQL.
+  postgres_data:

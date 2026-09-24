@@ -34,12 +34,8 @@ public class Usuario implements UserDetails {
     public Usuario(Long id) {
         this.id = id;
     }
-
-    public Usuario(String email, String senha, UserRole role) {
-        this.email = email;
-        this.senha = senha;
-        this.role = role;
-    }
+    public Usuario(String email, String senha, UserRole role){
+        this.email = email; this.senha = senha; this.role = role;}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -85,13 +81,45 @@ public class Usuario implements UserDetails {
 
     // Getters e Setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
     public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
+    public String getNome() { return nome; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
