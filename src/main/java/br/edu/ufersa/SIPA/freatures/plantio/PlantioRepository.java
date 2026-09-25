@@ -11,7 +11,9 @@ public interface PlantioRepository extends JpaRepository<Plantio, Long> {
 
     // Anti-IDOR: garante que o plantio pertence ao usuário logado
     Optional<Plantio> findByIdAndUsuarioId(Long id, Long usuarioId);
-
+    
+    long countByUsuarioIdAndStatus(Long usuarioId, String status);
+    
     // Usado pelo PlantioService.listar()
     List<Plantio> findByUsuarioId(Long usuarioId);
 

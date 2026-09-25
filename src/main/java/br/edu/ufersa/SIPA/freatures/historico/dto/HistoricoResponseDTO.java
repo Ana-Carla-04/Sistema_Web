@@ -1,40 +1,17 @@
 package br.edu.ufersa.SIPA.freatures.historico.dto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public record HistoricoResponseDTO(
-    List<HistoricoPlantioDTO> plantios,
-    List<HistoricoCustoDTO> custos,
     List<SafraConsolidadaDTO> safras
 ) {
     public record SafraConsolidadaDTO(
-            Integer ano,
-            Double areaTotal,
-            Double receitaTotal,
-            Double custoTotal,
-            Double lucroEstimado,
-            Double produtividade,
-            String tendencia
-    ) {}
-
-    public record HistoricoPlantioDTO(
-        Long id,
-        String nome,
-        String status,
-        LocalDate dataPlantio,
-        Double area
-    ) {}
-
-
-
-    public record HistoricoCustoDTO(
-        Long id,
-        Long plantioId,
-        String nomePlantio,
-        LocalDate data,
-        String categoria,
-        String descricao,
-        Double valor
+        Integer ano,
+        Double areaTotal,
+        Double receitaTotal,
+        Double custoTotal,
+        Double lucroEstimado,
+        Double produtividade,
+        String tendencia
     ) {}
 }
