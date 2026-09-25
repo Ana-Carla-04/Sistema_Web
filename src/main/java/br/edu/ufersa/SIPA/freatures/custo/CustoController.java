@@ -22,7 +22,7 @@ public class CustoController {
         this.custoService = custoService;
     }
 
-    /** Recupera o id do usuário logado a partir da sessão HTTP. */
+
     private Long obterUsuarioLogado(HttpSession session) {
         Object usuarioId = session.getAttribute("usuarioId");
         if (usuarioId == null) {
@@ -31,7 +31,7 @@ public class CustoController {
         return (Long) usuarioId;
     }
 
-    // ---------- Endpoints ----------
+    //  Endpoints
 
     @GetMapping
     public List<CustoResponseDTO> listar(@PathVariable Long plantioId,
@@ -52,11 +52,7 @@ public class CustoController {
                 custoService.buscarPorId(plantioId, custoId, usuarioId));
     }
 
-    // @PostMapping representa uma requisicao HTTP POST.
-    // E usado para criar um novo custo dentro do plantio informado na URL.
-    // Exemplo: POST /SIPA/plantios/10/custos
-    // O @RequestBody recebe os dados do novo custo no corpo da requisicao.
-    // O @PathVariable plantioId recebe o valor 10 que aparece na URL.
+
     @PostMapping
     public ResponseEntity<CustoResponseDTO> criar(@PathVariable Long plantioId,
                                                   @Valid @RequestBody CustoRequestDTO dto,
@@ -68,11 +64,7 @@ public class CustoController {
                         custoService.criar(plantioId, dto, usuarioId)));
     }
 
-    // @PutMapping representa uma requisicao HTTP PUT.
-    // E usado para atualizar ou substituir todos os dados de um custo existente.
-    // Exemplo: PUT /SIPA/plantios/10/custos/25
-    // plantioId identifica o plantio e custoId identifica o custo que sera atualizado.
-    // O @RequestBody recebe a versao completa e atualizada do custo.
+
     @PutMapping("/{custoId}")
     public CustoResponseDTO atualizar(@PathVariable Long plantioId,
                                       @PathVariable Long custoId,

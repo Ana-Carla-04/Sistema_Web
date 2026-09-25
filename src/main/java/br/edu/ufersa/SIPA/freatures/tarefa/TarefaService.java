@@ -25,7 +25,7 @@ public class TarefaService {
         this.plantioRepository = plantioRepository;
     }
 
-    // ---------- Leitura ----------
+    // Leitura
 
     @Transactional(readOnly = true)
     public List<Tarefa> listar(Long usuarioId) {
@@ -34,7 +34,7 @@ public class TarefaService {
 
     @Transactional(readOnly = true)
     public List<Tarefa> listarPorPlantio(Long usuarioId, Long plantioId) {
-        // valida que o plantio pertence ao usuário (anti-IDOR)
+
         plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Plantio não encontrado: " + plantioId));
         return tarefaRepository.findByPlantioId(plantioId);
@@ -46,7 +46,7 @@ public class TarefaService {
                 .orElseThrow(() -> new IllegalArgumentException("Tarefa não encontrada: " + id));
     }
 
-    // ---------- Escrita ----------
+    // Escrita
 
     @Transactional
     public Tarefa criar(Long usuarioId, Long plantioId, TarefaRequestDTO dto) {

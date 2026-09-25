@@ -34,7 +34,7 @@ public class HistoricoService {
                 ))
                 .toList();
 
-        // Só os custos DO USUÁRIO LOGADO (via plantio.usuario.id), mais recentes primeiro
+
         List<HistoricoResponseDTO.HistoricoCustoDTO> custos = custoRepository
                 .findByUsuarioIdOrderByDataDesc(usuarioId)
                 .stream()

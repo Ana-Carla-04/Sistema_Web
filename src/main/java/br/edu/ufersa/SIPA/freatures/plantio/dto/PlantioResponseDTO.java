@@ -4,8 +4,7 @@ import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 
 import java.time.LocalDate;
 
-// Dados devolvidos pela API. Evita expor a entidade Plantio (e, por
-// consequência, o Usuario e as listas de custos/colheitas) diretamente.
+
 public class PlantioResponseDTO {
 
     private Long id;

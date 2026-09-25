@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface PlantioRepository extends JpaRepository<Plantio, Long> {
 
-    // ---------- Anti-IDOR: garante que o plantio pertence ao usuário logado ----------
+    // Anti-IDOR: garante que o plantio pertence ao usuário logado
     Optional<Plantio> findByIdAndUsuarioId(Long id, Long usuarioId);
 
-    // ---------- Usado pelo PlantioService.listar() ----------
+    // Usado pelo PlantioService.listar()
     List<Plantio> findByUsuarioId(Long usuarioId);
 
-    // ---------- Usados pelo DashboardService ----------
+    //  Usados pelo DashboardService
     @Query("SELECT COUNT(p) FROM Plantio p WHERE p.usuario.id = :usuarioId")
     Long countByUsuarioId(@Param("usuarioId") Long usuarioId);
 
@@ -24,6 +24,6 @@ public interface PlantioRepository extends JpaRepository<Plantio, Long> {
 
     List<Plantio> findByUsuarioIdOrderByDataPlantioDesc(Long usuarioId);
 
-    // ---------- Usados pelo HistoricoService ----------
+    // Usados pelo HistoricoService
     List<Plantio> findAllByOrderByDataPlantioDesc();
 }

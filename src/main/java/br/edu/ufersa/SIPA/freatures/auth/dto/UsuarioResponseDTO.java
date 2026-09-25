@@ -2,8 +2,7 @@ package br.edu.ufersa.SIPA.freatures.auth.dto;
 
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 
-// DTO de saída do usuário. Nunca expõe a entidade Usuario (e, por
-// consequência, a senha) diretamente na API.
+
 public class UsuarioResponseDTO {
 
     private Long id;

@@ -4,8 +4,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-// DTO de entrada do cadastro (POST). Não tem "id" nem "role": o cliente não
-// consegue se cadastrar como ADMIN nem escolher o próprio id (over-posting).
 public class CadastroRequestDTO {
 
     @NotBlank(message = "O nome é obrigatório")

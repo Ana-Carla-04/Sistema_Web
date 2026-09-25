@@ -4,9 +4,7 @@ import br.edu.ufersa.SIPA.freatures.colheita.Colheita;
 
 import java.time.LocalDate;
 
-// Representa uma colheita PERSISTIDA (com id e campos calculados).
-// Não expõe a entidade Colheita (nem o Plantio associado) — evita recursão
-// infinita no JSON e vazamento do modelo interno.
+
 public class ColheitaFullResponseDTO {
 
     private Long id;

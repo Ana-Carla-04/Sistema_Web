@@ -23,16 +23,16 @@ public class CustoService {
         this.plantioRepository = plantioRepository;
     }
 
-    // ---------- Validação contextual (anti-IDOR) ----------
+    // Validação contextual (anti-IDOR)
 
-    /** Verifica se o plantio existe E pertence ao usuário logado. */
+
     private Plantio validarPlantioDoUsuario(Long plantioId, Long usuarioId) {
         return plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Plantio não encontrado"));
     }
 
-    /** Busca o custo validando plantio + dono (anti-IDOR). */
+
     private Custo buscarCustoValido(Long plantioId, Long custoId, Long usuarioId) {
         return custoRepository
                 .findByIdAndPlantioIdAndPlantioUsuarioId(custoId, plantioId, usuarioId)
@@ -40,7 +40,7 @@ public class CustoService {
                         HttpStatus.NOT_FOUND, "Custo não encontrado"));
     }
 
-    // ---------- Operações ----------
+    //  Operações
 
     @Transactional(readOnly = true)
     public List<Custo> listar(Long plantioId, Long usuarioId) {
@@ -78,7 +78,7 @@ public class CustoService {
         custo.setDescricao(dto.descricao());
         custo.setValor(dto.valor());
         custo.setComprovante(dto.comprovante());
-        // plantio NÃO muda: vem da URL e já foi validado
+
 
         return custoRepository.save(custo);
     }

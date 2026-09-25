@@ -13,9 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-// Base "/SIPA" (igual ao padrão já usado em ColheitaController) para poder
-// combinar rotas aninhadas (/plantios/{plantioId}/tarefas) com rotas por id
-// (/tarefas/{id}) no mesmo controller.
 @RestController
 @RequestMapping("/SIPA")
 public class TarefaController {

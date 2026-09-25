@@ -3,8 +3,6 @@ package br.edu.ufersa.SIPA.freatures.cadastro.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-// DTO de entrada do PUT (editar perfil). Sem "senha": trocar senha é um
-// fluxo separado (exigiria confirmar a senha atual), não um PUT genérico.
 public class CadastroUpdateRequestDTO {
 
     @NotBlank(message = "O nome é obrigatório")

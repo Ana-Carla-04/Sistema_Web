@@ -27,7 +27,7 @@ public class Tarefa {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    // Tarefa agora é executada no contexto de um Plantio
+
     @ManyToOne
     @JoinColumn(name = "plantio_id", nullable = false)
     private Plantio plantio;

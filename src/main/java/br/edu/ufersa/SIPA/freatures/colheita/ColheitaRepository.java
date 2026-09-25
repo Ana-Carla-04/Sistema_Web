@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface ColheitaRepository extends JpaRepository<Colheita, Long> {
 
-    // Anti-IDOR: só retorna a colheita se o lote (Plantio) pertencer ao usuário logado
     @Query("SELECT c FROM Colheita c WHERE c.id = :id AND c.lote.usuario.id = :usuarioId")
     Optional<Colheita> findByIdAndUsuarioId(@Param("id") Long id, @Param("usuarioId") Long usuarioId);
 

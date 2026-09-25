@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.analiseFinanceira;
 
-import br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO;
+import br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 import br.edu.ufersa.SIPA.freatures.custo.CustoRepository;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
@@ -24,12 +24,12 @@ public class AnaliseFinanceiraService {
     }
 
     @Transactional(readOnly = true)
-    public AnaliseFinanceiraResponseDTO obterAnaliseFinanceira(Long usuarioId) {
+    public AnaliseFinaceiraResponseDTO obterAnaliseFinanceira(Long usuarioId) {
         List<Plantio> plantios = plantioRepository.findByUsuarioId(usuarioId);
         Long totalPlantios = (long) plantios.size();
 
         // Análise por plantio
-        List<AnaliseFinanceiraResponseDTO.AnalisePorPlantio> analisePorPlantio = new ArrayList<>();
+        List<AnaliseFinaceiraResponseDTO.AnalisePorPlantio> analisePorPlantio = new ArrayList<>();
         Map<String, Double> totaisPorCategoria = new LinkedHashMap<>();
         Map<String, Long> quantidadesPorCategoria = new LinkedHashMap<>();
         Double custoTotal = 0.0;
@@ -50,7 +50,7 @@ public class AnaliseFinanceiraService {
                 quantidadesPorCategoria.merge(categoria, 1L, Long::sum);
             });
 
-            analisePorPlantio.add(new AnaliseFinanceiraResponseDTO.AnalisePorPlantio(
+            analisePorPlantio.add(new AnaliseFinaceiraResponseDTO.AnalisePorPlantio(
                 plantio.getId(),
                 plantio.getNome(),
                 custoPlantio,
@@ -60,14 +60,14 @@ public class AnaliseFinanceiraService {
         }
 
         // Análise por categoria
-        List<AnaliseFinanceiraResponseDTO.AnalisePorCategoria> analisePorCategoria = new ArrayList<>();
+        List<AnaliseFinaceiraResponseDTO.AnalisePorCategoria> analisePorCategoria = new ArrayList<>();
         for (Map.Entry<String, Double> entry : totaisPorCategoria.entrySet()) {
             String categoria = entry.getKey();
             Double total = entry.getValue();
             Double percentual = custoTotal > 0 ? (total / custoTotal) * 100 : 0.0;
             Long quantidade = quantidadesPorCategoria.getOrDefault(categoria, 0L);
 
-            analisePorCategoria.add(new AnaliseFinanceiraResponseDTO.AnalisePorCategoria(
+            analisePorCategoria.add(new AnaliseFinaceiraResponseDTO.AnalisePorCategoria(
                 categoria,
                 total,
                 percentual,
@@ -75,7 +75,7 @@ public class AnaliseFinanceiraService {
             ));
         }
 
-        return new AnaliseFinanceiraResponseDTO(
+        return new AnaliseFinaceiraResponseDTO(
             custoTotal,
             totalPlantios > 0 ? custoTotal / totalPlantios : 0.0,
             analisePorPlantio,

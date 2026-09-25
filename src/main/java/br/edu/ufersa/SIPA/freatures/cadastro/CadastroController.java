@@ -26,7 +26,6 @@ public class CadastroController {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // POST /SIPA/usuarios -> 201 Created + Location
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> cadastrar(@Valid @RequestBody CadastroRequestDTO dto) {
         if (usuarioRepository.existsByEmail(dto.getEmail())) {
@@ -37,7 +36,6 @@ public class CadastroController {
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
 
-        // ⚠️ Troque por BCrypt quando integrar o PasswordEncoder.
         usuario.setSenha(dto.getSenha());
 
         usuario.setRole(UserRole.USER);
@@ -49,7 +47,6 @@ public class CadastroController {
         return ResponseEntity.created(location).body(UsuarioResponseDTO.fromEntity(salvo));
     }
 
-    // GET /SIPA/usuarios/{usuarioId}
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long usuarioId, HttpSession session) {
         garantirQueEoProprioUsuario(usuarioId, session);
@@ -58,7 +55,6 @@ public class CadastroController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // PUT /SIPA/usuarios/{usuarioId}
     @PutMapping("/{usuarioId}")
     public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long usuarioId,
                                                         @Valid @RequestBody CadastroUpdateRequestDTO dto,
@@ -80,7 +76,6 @@ public class CadastroController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // DELETE /SIPA/usuarios/{usuarioId} -> 204 No Content
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> excluir(@PathVariable Long usuarioId, HttpSession session) {
         garantirQueEoProprioUsuario(usuarioId, session);
@@ -91,7 +86,6 @@ public class CadastroController {
         return ResponseEntity.noContent().build();
     }
 
-    // Prevenção de IDOR: o id da URL tem que ser o mesmo id guardado na sessão.
     private void garantirQueEoProprioUsuario(Long usuarioId, HttpSession session) {
         Object attr = session.getAttribute("idUsuario");
         if (attr == null) {

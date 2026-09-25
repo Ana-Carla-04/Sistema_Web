@@ -21,8 +21,7 @@ public class PlantioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // GET /plantios?data=...&status=...&nome=...
-    // Um único método para todos os filtros. Parâmetro null = sem filtro.
+
     public List<PlantioResponseDTO> listar(Long usuarioId, LocalDate data, String status, String nome) {
         return plantioRepository.findByUsuarioId(usuarioId).stream()
                 .filter(p -> data == null || data.equals(p.getDataPlantio()))
@@ -32,14 +31,14 @@ public class PlantioService {
                 .collect(Collectors.toList());
     }
 
-    // GET /plantios/{id}
+
     public PlantioResponseDTO buscarPorId(Long id, Long usuarioId) {
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(id, usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Plantio não encontrado para este usuário: " + id));
         return PlantioResponseDTO.fromEntity(plantio);
     }
 
-    // POST /plantios
+
     public PlantioResponseDTO criar(Long usuarioId, PlantioRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + usuarioId));
@@ -56,7 +55,7 @@ public class PlantioService {
         return PlantioResponseDTO.fromEntity(salvo);
     }
 
-    // PUT /plantios/{id}
+
     public PlantioResponseDTO atualizar(Long id, Long usuarioId, PlantioRequestDTO dto) {
         // findByIdAndUsuarioId impede que um usuário edite o plantio de outro (IDOR)
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(id, usuarioId)
@@ -72,7 +71,7 @@ public class PlantioService {
         return PlantioResponseDTO.fromEntity(atualizado);
     }
 
-    // DELETE /plantios/{id}
+
     public void deletar(Long id, Long usuarioId) {
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(id, usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Plantio não encontrado para este usuário: " + id));

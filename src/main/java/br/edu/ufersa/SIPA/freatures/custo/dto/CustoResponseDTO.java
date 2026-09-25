@@ -4,10 +4,7 @@ import br.edu.ufersa.SIPA.freatures.custo.Custo;
 
 import java.time.LocalDate;
 
-/**
- * DTO de saída para Custo.
- * O método estático fromEntity centraliza o mapeamento entidade → DTO.
- */
+
 public record CustoResponseDTO(
         Long id,
         Long plantioId,

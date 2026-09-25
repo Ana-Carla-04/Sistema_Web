@@ -2,7 +2,7 @@ package br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto;
 
 import java.util.List;
 
-public record AnaliseFinanceiraResponseDTO(
+public record AnaliseFinaceiraResponseDTO(
     Double custoTotal,
     Double custoMedioPorPlantio,
     List<AnalisePorPlantio> analisePorPlantio,

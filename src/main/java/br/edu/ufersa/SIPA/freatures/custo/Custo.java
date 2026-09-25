@@ -15,8 +15,7 @@ public class Custo {
     @Column(nullable = false)
     private LocalDate data;
 
-    // Antes era "lote" — renomeado para "plantio" para casar com a URL
-    // /SIPA/plantios/{plantioId}/custos e com os DTOs.
+
     @ManyToOne
     @JoinColumn(name = "plantio_id", nullable = false)
     private Plantio plantio;

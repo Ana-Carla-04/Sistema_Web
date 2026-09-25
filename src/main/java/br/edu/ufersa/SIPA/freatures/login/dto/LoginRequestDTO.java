@@ -3,7 +3,7 @@ package br.edu.ufersa.SIPA.freatures.login.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-// DTO de entrada do login. Só os campos que o usuário informa.
+
 public class LoginRequestDTO {
 
     @NotBlank(message = "O e-mail é obrigatório")

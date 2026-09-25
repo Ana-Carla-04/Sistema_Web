@@ -25,8 +25,7 @@ public class PlantioController {
         this.plantioService = plantioService;
     }
 
-    // GET /SIPA/plantios
-    // GET /SIPA/plantios?data=2026-09-01&status=ATIVO&nome=milho
+
     @GetMapping
     public ResponseEntity<List<PlantioResponseDTO>> listar(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
@@ -37,7 +36,7 @@ public class PlantioController {
         return ResponseEntity.ok(plantioService.listar(usuarioId, data, status, nome));
     }
 
-    // GET /SIPA/plantios/{plantioId}
+
     @GetMapping("/{plantioId}")
     public ResponseEntity<PlantioResponseDTO> buscarPorId(@PathVariable Long plantioId,
                                                           HttpSession session) {
@@ -45,7 +44,7 @@ public class PlantioController {
         return ResponseEntity.ok(plantioService.buscarPorId(plantioId, usuarioId));
     }
 
-    // POST /SIPA/plantios -> 201 Created + Location
+
     @PostMapping
     public ResponseEntity<PlantioResponseDTO> criar(@Valid @RequestBody PlantioRequestDTO dto,
                                                     HttpSession session) {
@@ -56,7 +55,7 @@ public class PlantioController {
         return ResponseEntity.created(location).body(criado);
     }
 
-    // PUT /SIPA/plantios/{plantioId}
+
     @PutMapping("/{plantioId}")
     public ResponseEntity<PlantioResponseDTO> atualizar(@PathVariable Long plantioId,
                                                         @Valid @RequestBody PlantioRequestDTO dto,
@@ -65,7 +64,6 @@ public class PlantioController {
         return ResponseEntity.ok(plantioService.atualizar(plantioId, usuarioId, dto));
     }
 
-    // DELETE /SIPA/plantios/{plantioId} -> 204 No Content
     @DeleteMapping("/{plantioId}")
     public ResponseEntity<Void> deletar(@PathVariable Long plantioId, HttpSession session) {
         Long usuarioId = getUsuarioLogado(session);
@@ -73,9 +71,7 @@ public class PlantioController {
         return ResponseEntity.noContent().build();
     }
 
-    // ---- Método auxiliar privado (substitui o SessaoUtil) ----
-    // IMPORTANTE: "idUsuario" precisa bater EXATAMENTE com o nome usado no
-    // seu LoginController em session.setAttribute(...).
+
     private Long getUsuarioLogado(HttpSession session) {
         Object attr = session.getAttribute("idUsuario");
         if (attr == null) {

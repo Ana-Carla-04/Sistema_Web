@@ -15,11 +15,11 @@ public interface CustoRepository extends JpaRepository<Custo, Long> {
 
     List<Custo> findByPlantioId(Long plantioId);
 
-    // ---------- Usado pelo HistoricoService ----------
+    //  Usado pelo HistoricoService
     @Query("SELECT c FROM Custo c WHERE c.plantio.usuario.id = :usuarioId ORDER BY c.data DESC")
     List<Custo> findByUsuarioIdOrderByDataDesc(@Param("usuarioId") Long usuarioId);
 
-    // ---------- Usados pelo DashboardService ----------
+    // Usados pelo DashboardService
     @Query("SELECT COUNT(c) FROM Custo c WHERE c.plantio.usuario.id = :usuarioId")
     Long countByUsuarioId(@Param("usuarioId") Long usuarioId);
 

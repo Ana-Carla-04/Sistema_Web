@@ -24,12 +24,7 @@ public class LoginController {
         this.usuarioRepository = usuarioRepository;
     }
 
-    /**
-     * Login: autentica e grava o id do usuário na sessão HTTP.
-     * O id guardado na sessão é o que os controllers de Plantio, Custo,
-     * Colheita e Tarefa usam para validar a quem cada recurso pertence
-     * (prevenção de IDOR).
-     */
+
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto,
                                                     HttpServletRequest request) {
@@ -40,15 +35,12 @@ public class LoginController {
 
         Usuario usuario = opt.get();
 
-        // ⚠️ Comparação em texto puro — troque por BCrypt quando integrar
-        // o PasswordEncoder do Spring Security (você já tem Spring Security
-        // no projeto, então o ideal é usar passwordEncoder.matches(...)).
+
         if (!usuario.getSenha().equals(dto.getSenha())) {
             return ResponseEntity.status(401).build();
         }
 
-        // Nome do atributo PRECISA bater com o que os outros controllers usam
-        // no getUsuarioLogado / garantirQueEoProprioUsuario: "idUsuario".
+
         HttpSession session = request.getSession(true);
         session.setAttribute("idUsuario", usuario.getId());
 

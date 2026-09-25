@@ -5,8 +5,19 @@ import java.util.List;
 
 public record HistoricoResponseDTO(
     List<HistoricoPlantioDTO> plantios,
-    List<HistoricoCustoDTO> custos
+    List<HistoricoCustoDTO> custos,
+    List<SafraConsolidadaDTO> safras
 ) {
+    public record SafraConsolidadaDTO(
+            Integer ano,
+            Double areaTotal,
+            Double receitaTotal,
+            Double custoTotal,
+            Double lucroEstimado,
+            Double produtividade,
+            String tendencia
+    ) {}
+
     public record HistoricoPlantioDTO(
         Long id,
         String nome,
@@ -14,6 +25,8 @@ public record HistoricoResponseDTO(
         LocalDate dataPlantio,
         Double area
     ) {}
+
+
 
     public record HistoricoCustoDTO(
         Long id,

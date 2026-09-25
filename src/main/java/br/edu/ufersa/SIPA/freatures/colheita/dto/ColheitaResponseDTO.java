@@ -9,7 +9,7 @@ public class ColheitaResponseDTO {
     private Double despesas;
     private Double saldo;
 
-    // Construtor vazio (obrigatório)
+
     public ColheitaResponseDTO() {}
 
     // Construtor com parâmetros

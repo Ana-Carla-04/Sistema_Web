@@ -6,8 +6,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
-// Dados recebidos do frontend ao criar ou editar um plantio.
-// Não expõe a entidade JPA (Plantio) diretamente na API.
+
 public class PlantioRequestDTO {
 
     @NotBlank(message = "nome é obrigatório")

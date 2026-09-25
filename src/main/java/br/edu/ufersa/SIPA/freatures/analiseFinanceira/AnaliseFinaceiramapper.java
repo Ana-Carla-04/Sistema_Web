@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.analiseFinanceira.API.mapper;
 
-import br.edu.ufersa.SIPA.freatures.analiseFinanceira.Application.dto.AnaliseFinaceiraResponseDTO;
+import br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public final class AnaliseFinaceiramapper {
     }
 
 	    public static AnaliseFinaceiraResponseDTO toApplicationResponse(
-		    br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO response) {
+		    br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO response) {
 	if (response == null) {
 	    return null;
 	}
@@ -37,7 +37,7 @@ public final class AnaliseFinaceiramapper {
     }
 
 	    private static AnaliseFinaceiraResponseDTO.AnalisePorPlantio toApplicationPlantio(
-		    br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO.AnalisePorPlantio item) {
+		    br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO.AnalisePorPlantio item) {
 	return new AnaliseFinaceiraResponseDTO.AnalisePorPlantio(
 		item.plantioId(),
 		item.nomePlantio(),
@@ -47,7 +47,7 @@ public final class AnaliseFinaceiramapper {
     }
 
 	    private static AnaliseFinaceiraResponseDTO.AnalisePorCategoria toApplicationCategoria(
-		    br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO.AnalisePorCategoria item) {
+		    br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO.AnalisePorCategoria item) {
 	return new AnaliseFinaceiraResponseDTO.AnalisePorCategoria(
 		item.categoria(),
 		item.custoTotal(),
@@ -55,22 +55,22 @@ public final class AnaliseFinaceiramapper {
 		item.quantidade());
     }
 
-	    public static br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO toApiResponse(
+	    public static br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO toApiResponse(
 		    AnaliseFinaceiraResponseDTO response) {
 		if (response == null) {
 		    return null;
 		}
 
-		return new br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO(
+		return new br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO(
 			response.custoTotal(),
 			response.custoMedioPorPlantio(),
 			response.analisePorPlantio().stream()
-				.map(item -> new br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO.AnalisePorPlantio(
+				.map(item -> new br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO.AnalisePorPlantio(
 					item.plantioId(), item.nomePlantio(), item.custoTotal(),
 					item.custoPorArea(), item.quantidadeCustos()))
 				.toList(),
 			response.analisePorCategoria().stream()
-				.map(item -> new br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO.AnalisePorCategoria(
+				.map(item -> new br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinaceiraResponseDTO.AnalisePorCategoria(
 					item.categoria(), item.custoTotal(), item.percentual(), item.quantidade()))
 				.toList());
 	    }

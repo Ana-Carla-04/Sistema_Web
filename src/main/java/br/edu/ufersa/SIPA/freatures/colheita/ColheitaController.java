@@ -25,10 +25,6 @@ public class ColheitaController {
         this.colheitaService = colheitaService;
     }
 
-    // POST /SIPA/simulacoes-colheita -> simulador completo (não persiste)
-    // Antes era POST /colheitas/calcular, um verbo na URL. Agora "simulação"
-    // é tratada como o próprio recurso criado pela requisição: o cliente
-    // "cria" uma simulação (efêmera, não persistida) e recebe o resultado.
     @PostMapping("/simulacoes-colheita")
     public ResponseEntity<ColheitaResponseDTO> criarSimulacao(@Valid @RequestBody ColheitaRequestDTO dto,
                                                               HttpSession session) {
@@ -36,21 +32,18 @@ public class ColheitaController {
         return ResponseEntity.ok(colheitaService.calcularReceita(usuarioId, dto));
     }
 
-    // GET /SIPA/colheitas/recentes -> lista resumida (não é verbo, é um filtro/coleção)
     @GetMapping("/colheitas/recentes")
     public ResponseEntity<List<ColheitaResumoDTO>> listarRecentes(HttpSession session) {
         Long usuarioId = getUsuarioLogado(session);
         return ResponseEntity.ok(colheitaService.listarRecentes(usuarioId));
     }
 
-    // GET /SIPA/colheitas -> todas as colheitas do usuário logado
     @GetMapping("/colheitas")
     public ResponseEntity<List<ColheitaFullResponseDTO>> listarTodas(HttpSession session) {
         Long usuarioId = getUsuarioLogado(session);
         return ResponseEntity.ok(colheitaService.listarTodos(usuarioId));
     }
 
-    // GET /SIPA/plantios/{plantioId}/colheitas -> colheitas de um lote específico
     @GetMapping("/plantios/{plantioId}/colheitas")
     public ResponseEntity<List<ColheitaFullResponseDTO>> listarPorLote(@PathVariable Long plantioId,
                                                                        HttpSession session) {
@@ -58,7 +51,6 @@ public class ColheitaController {
         return ResponseEntity.ok(colheitaService.listarPorLote(usuarioId, plantioId));
     }
 
-    // POST /SIPA/plantios/{plantioId}/colheitas -> registra uma colheita para o lote
     @PostMapping("/plantios/{plantioId}/colheitas")
     public ResponseEntity<ColheitaFullResponseDTO> adicionar(@PathVariable Long plantioId,
                                                              @Valid @RequestBody ColheitaRequestDTO dto,
@@ -73,7 +65,6 @@ public class ColheitaController {
         return ResponseEntity.created(location).body(ColheitaFullResponseDTO.fromEntity(criada));
     }
 
-    // PUT /SIPA/colheitas/{id}
     @PutMapping("/colheitas/{id}")
     public ResponseEntity<ColheitaFullResponseDTO> atualizar(@PathVariable Long id,
                                                              @Valid @RequestBody ColheitaRequestDTO dto,
@@ -84,7 +75,6 @@ public class ColheitaController {
         return ResponseEntity.ok(ColheitaFullResponseDTO.fromEntity(atualizada));
     }
 
-    // DELETE /SIPA/colheitas/{id} -> 204 No Content
     @DeleteMapping("/colheitas/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id, HttpSession session) {
         Long usuarioId = getUsuarioLogado(session);
@@ -92,7 +82,7 @@ public class ColheitaController {
         return ResponseEntity.noContent().build();
     }
 
-    // ---- Auxiliares ----
+    // Auxiliares
 
     private Colheita paraEntidade(ColheitaRequestDTO dto) {
         Colheita colheita = new Colheita();

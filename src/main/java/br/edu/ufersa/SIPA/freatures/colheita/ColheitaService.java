@@ -25,7 +25,7 @@ public class ColheitaService {
         this.plantioRepository = plantioRepository;
     }
 
-    // ---------- Cálculos individuais ----------
+    // Cálculos individuais
 
     public double calcularProducaoLiquida(double producaoBruta, double descontoUmidade) {
         return producaoBruta - (producaoBruta * descontoUmidade / 100);
@@ -47,7 +47,7 @@ public class ColheitaService {
         return receitaBruta - despesas;
     }
 
-    // ---------- Simulador (POST /colheitas/calcular) ----------
+    // Simulador (POST /colheitas/calcular)
 
     public ColheitaResponseDTO calcularReceita(Long usuarioId, ColheitaRequestDTO request) {
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(request.getPlantioId(), usuarioId)
@@ -64,7 +64,7 @@ public class ColheitaService {
                 receitaBruta, despesas, saldo);
     }
 
-    // ---------- CRUD (agora devolve DTO) ----------
+    // CRUD (agora devolve DTO)
 
     public List<ColheitaFullResponseDTO> listarTodos(Long usuarioId) {
         return colheitaRepository.findByUsuarioId(usuarioId).stream()
@@ -122,7 +122,7 @@ public class ColheitaService {
         colheitaRepository.delete(colheita);
     }
 
-    // ---------- Auxiliares ----------
+    //  Auxiliares
 
     private void preencherCamposCalculados(Colheita colheita) {
         double producaoLiquida = calcularProducaoLiquida(colheita.getProducaoBruta(), colheita.getDescontoUmidade());
