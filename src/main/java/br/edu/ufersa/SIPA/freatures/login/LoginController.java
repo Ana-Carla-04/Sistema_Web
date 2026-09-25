@@ -40,7 +40,7 @@ public class LoginController {
 
         Usuario usuario = opt.get();
 
-        // ⚠️ Comparação em texto puro — troque por BCrypt quando integrar
+        
         // o PasswordEncoder do Spring Security (você já tem Spring Security
         // no projeto, então o ideal é usar passwordEncoder.matches(...)).
         if (!usuario.getSenha().equals(dto.getSenha())) {
