@@ -1,9 +1,11 @@
-package br.edu.ufersa.SIPA.config;
+package br.edu.ufersa.SIPA.shared.security;
 
 import org.springframework.context.annotation.Bean; // Importa a anotacao @Bean, que indica que o metodo abaixo produz um bean gerenciado pelo Spring.
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 // Esta classe configura a seguranca da aplicacao, definindo quais endpoints sao publicos e quais exigem autenticacao.
@@ -28,5 +30,11 @@ public class SecurityConfig {
             .httpBasic(Customizer.withDefaults());
 
         return http.build();
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }
