@@ -1,60 +1,36 @@
 package br.edu.ufersa.SIPA.freatures.login;
 
-import br.edu.ufersa.SIPA.freatures.auth.Usuario;
-import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
-import br.edu.ufersa.SIPA.freatures.auth.dto.UsuarioResponseDTO;
 import br.edu.ufersa.SIPA.freatures.login.dto.LoginRequestDTO;
+import br.edu.ufersa.SIPA.freatures.login.dto.LoginResponseDTO;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/SIPA/login")
 public class LoginController {
 
-    private final UsuarioRepository usuarioRepository;
+    private final LoginService loginService;
 
-    public LoginController(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
     }
-
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto,
-                                                    HttpServletRequest request) {
-        Optional<Usuario> opt = usuarioRepository.findByEmail(dto.getEmail());
-        if (opt.isEmpty()) {
-            return ResponseEntity.status(401).build();
-        }
-
-        Usuario usuario = opt.get();
-
-        
-        // o PasswordEncoder do Spring Security (você já tem Spring Security
-        // no projeto, então o ideal é usar passwordEncoder.matches(...)).
-        if (!usuario.getSenha().equals(dto.getSenha())) {
-            return ResponseEntity.status(401).build();
-        }
-
-
-        HttpSession session = request.getSession(true);
-        session.setAttribute("idUsuario", usuario.getId());
-
-        return ResponseEntity.ok(UsuarioResponseDTO.fromEntity(usuario));
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
+        return ResponseEntity.ok(loginService.autenticar(dto));
     }
 
+    // Com JWT (stateless), não há sessão no servidor para invalidar: o
+    // "logout" é responsabilidade do cliente, que simplesmente descarta o
+    // token guardado. Este endpoint fica apenas como um contrato de API
+    // estável para o front-end chamar; se no futuro for necessário revogar
+    // tokens antes da expiração, a solução é uma blacklist de tokens
+    // (ex.: tabela ou cache com o jti/expiração), não HttpSession.
     @DeleteMapping
-    public ResponseEntity<Void> logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+    public ResponseEntity<Void> logout() {
         return ResponseEntity.noContent().build();
     }
 }
