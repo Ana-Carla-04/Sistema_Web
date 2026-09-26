@@ -87,5 +87,5 @@ public class CustoService {
     public void deletar(Long plantioId, Long custoId, Long usuarioId) {
         Custo custo = buscarCustoValido(plantioId, custoId, usuarioId);
         custoRepository.delete(custo);
-    }
+     }
 }

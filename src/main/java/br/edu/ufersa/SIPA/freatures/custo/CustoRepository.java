@@ -28,4 +28,4 @@ public interface CustoRepository extends JpaRepository<Custo, Long> {
 
     @Query("SELECT c.categoria, SUM(c.valor) FROM Custo c WHERE c.plantio.usuario.id = :usuarioId GROUP BY c.categoria")
     List<Object[]> findCustosPorCategoriaByUsuarioId(@Param("usuarioId") Long usuarioId);
- }
+}
