@@ -17,5 +17,9 @@ public class LoginResponseDTO {
         this.usuario = usuario;
     }
 
+    public static LoginResponseDTO of (String token, UsuarioResponseDTO usuario){
+        return new LoginResponseDTO(token, "Bearer", usuario);
+    }
 
+    public String getToken(){return token;}
 }
