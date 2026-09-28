@@ -11,7 +11,6 @@ public class TarefaRequestDTO {
 
     private String descricao;
     private LocalDate dataLimite;
-    private boolean concluida;
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -21,7 +20,4 @@ public class TarefaRequestDTO {
 
     public LocalDate getDataLimite() { return dataLimite; }
     public void setDataLimite(LocalDate dataLimite) { this.dataLimite = dataLimite; }
-
-    public boolean isConcluida() { return concluida; }
-    public void setConcluida(boolean concluida) { this.concluida = concluida; }
 }

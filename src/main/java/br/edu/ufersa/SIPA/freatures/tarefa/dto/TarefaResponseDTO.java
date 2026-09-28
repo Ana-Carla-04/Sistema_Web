@@ -9,11 +9,12 @@ public record TarefaResponseDTO(
         String titulo,
         String descricao,
         LocalDate dataLimite,
-        boolean concluida
+        boolean concluida,
+        Long plantioId
 ) {
     public static TarefaResponseDTO fromEntity(Tarefa t) {
         return new TarefaResponseDTO(
                 t.getId(), t.getTitulo(), t.getDescricao(),
-                t.getDataLimite(), t.isConcluida());
+                t.getDataLimite(), t.isConcluida(), t.getPlantio().getId());
     }
 }
