@@ -2,6 +2,7 @@ package br.edu.ufersa.SIPA.shared.security;
 
 import org.springframework.context.annotation.Bean; // Importa a anotacao @Bean, que indica que o metodo abaixo produz um bean gerenciado pelo Spring.
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,10 +32,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                                 // Não precisam de estar autenticados para acessar
                                 .requestMatchers("/SIPA/login/**").permitAll()
-                                // talvez precise ajustar somente o nome dessa rota, mas a ideia é que o cadastro de usuario seja publico
-                                .requestMatchers("/SIPA/usuarios/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/SIPA/usuarios").permitAll()
+                                .requestMatchers("/SIPA/usuarios/**").authenticated()
 
                                 // precisam de estar autenticados para acessar
+                                .requestMatchers("/SIPA/plantios/**").authenticated()
+                                .requestMatchers("/SIPA/tarefas/**").authenticated()
                                 .requestMatchers("/SIPA/dashboard/**").authenticated()
                                 .requestMatchers("/SIPA/analise-financeira/**").authenticated()
                                 .requestMatchers("/SIPA/historico/**").authenticated()
