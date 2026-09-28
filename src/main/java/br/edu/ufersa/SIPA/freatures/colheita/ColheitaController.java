@@ -1,14 +1,15 @@
 package br.edu.ufersa.SIPA.freatures.colheita;
 
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaFullResponseDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaRequestDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResponseDTO;
 import br.edu.ufersa.SIPA.freatures.colheita.dto.ColheitaResumoDTO;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,37 +28,32 @@ public class ColheitaController {
 
     @PostMapping("/simulacoes-colheita")
     public ResponseEntity<ColheitaResponseDTO> criarSimulacao(@Valid @RequestBody ColheitaRequestDTO dto,
-                                                              HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
-        return ResponseEntity.ok(colheitaService.calcularReceita(usuarioId, dto));
+                                                              @AuthenticationPrincipal Usuario usuario) {
+        return ResponseEntity.ok(colheitaService.calcularReceita(usuario.getId(), dto));
     }
 
     @GetMapping("/colheitas/recentes")
-    public ResponseEntity<List<ColheitaResumoDTO>> listarRecentes(HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
-        return ResponseEntity.ok(colheitaService.listarRecentes(usuarioId));
+    public ResponseEntity<List<ColheitaResumoDTO>> listarRecentes(@AuthenticationPrincipal Usuario usuario) {
+        return ResponseEntity.ok(colheitaService.listarRecentes(usuario.getId()));
     }
 
     @GetMapping("/colheitas")
-    public ResponseEntity<List<ColheitaFullResponseDTO>> listarTodas(HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
-        return ResponseEntity.ok(colheitaService.listarTodos(usuarioId));
+    public ResponseEntity<List<ColheitaFullResponseDTO>> listarTodas(@AuthenticationPrincipal Usuario usuario) {
+        return ResponseEntity.ok(colheitaService.listarTodos(usuario.getId()));
     }
 
     @GetMapping("/plantios/{plantioId}/colheitas")
     public ResponseEntity<List<ColheitaFullResponseDTO>> listarPorLote(@PathVariable Long plantioId,
-                                                                       HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
-        return ResponseEntity.ok(colheitaService.listarPorLote(usuarioId, plantioId));
+                                                                       @AuthenticationPrincipal Usuario usuario) {
+        return ResponseEntity.ok(colheitaService.listarPorLote(usuario.getId(), plantioId));
     }
 
     @PostMapping("/plantios/{plantioId}/colheitas")
     public ResponseEntity<ColheitaFullResponseDTO> adicionar(@PathVariable Long plantioId,
                                                              @Valid @RequestBody ColheitaRequestDTO dto,
-                                                             HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
+                                                             @AuthenticationPrincipal Usuario usuario) {
         Colheita colheita = paraEntidade(dto);
-        Colheita criada = colheitaService.adicionar(usuarioId, plantioId, colheita);
+        Colheita criada = colheitaService.adicionar(usuario.getId(), plantioId, colheita);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .replacePath("/SIPA/colheitas/{id}")
@@ -68,21 +64,17 @@ public class ColheitaController {
     @PutMapping("/colheitas/{id}")
     public ResponseEntity<ColheitaFullResponseDTO> atualizar(@PathVariable Long id,
                                                              @Valid @RequestBody ColheitaRequestDTO dto,
-                                                             HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
+                                                             @AuthenticationPrincipal Usuario usuario) {
         Colheita colheita = paraEntidade(dto);
-        Colheita atualizada = colheitaService.editar(usuarioId, id, colheita);
+        Colheita atualizada = colheitaService.editar(usuario.getId(), id, colheita);
         return ResponseEntity.ok(ColheitaFullResponseDTO.fromEntity(atualizada));
     }
 
     @DeleteMapping("/colheitas/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id, HttpSession session) {
-        Long usuarioId = getUsuarioLogado(session);
-        colheitaService.deletar(usuarioId, id);
+    public ResponseEntity<Void> deletar(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
+        colheitaService.deletar(usuario.getId(), id);
         return ResponseEntity.noContent().build();
     }
-
-    // Auxiliares
 
     private Colheita paraEntidade(ColheitaRequestDTO dto) {
         Colheita colheita = new Colheita();
@@ -92,13 +84,5 @@ public class ColheitaController {
         colheita.setPrecoAlqueire(dto.getPrecoAlqueire());
         colheita.setTaxaMaquina(dto.getTaxaMaquina());
         return colheita;
-    }
-
-    private Long getUsuarioLogado(HttpSession session) {
-        Object attr = session.getAttribute("idUsuario");
-        if (attr == null) {
-            throw new IllegalStateException("Nenhum usuário logado na sessão");
-        }
-        return (attr instanceof Long) ? (Long) attr : Long.valueOf(attr.toString());
     }
 }
