@@ -60,6 +60,7 @@ public class CadastroController {
     // Anti-IDOR: só o dono da conta pode ver/editar/excluir os próprios dados.
     private void garantirQueEoProprioUsuario(Long usuarioId, Usuario usuarioLogado) {
         if (!usuarioLogado.getId().equals(usuarioId)) {
+
             throw new IllegalStateException("Usuário autenticado não corresponde ao recurso solicitado");
         }
     }
