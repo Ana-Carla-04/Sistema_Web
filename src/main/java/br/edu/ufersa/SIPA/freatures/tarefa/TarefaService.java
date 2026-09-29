@@ -3,6 +3,7 @@ package br.edu.ufersa.SIPA.freatures.tarefa;
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
+import br.edu.ufersa.SIPA.freatures.plantio.PlantioNotFoundException;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
 import br.edu.ufersa.SIPA.freatures.tarefa.dto.TarefaRequestDTO;
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;
@@ -34,14 +35,14 @@ public class TarefaService {
     @Transactional(readOnly = true)
     public List<Tarefa> listarPorPlantio(Long usuarioId, Long plantioId) {
         plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
-                .orElseThrow(() -> new ResourceNotFoundException("Plantio não encontrado: " + plantioId));
+                .orElseThrow(() -> new PlantioNotFoundException(plantioId));
         return tarefaRepository.findByPlantioId(plantioId);
     }
 
     @Transactional(readOnly = true)
     public Tarefa buscarPorId(Long id, Long usuarioId) {
         return tarefaRepository.findByIdAndUsuarioId(id, usuarioId)
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada: " + id));
+                .orElseThrow(() -> new TarefaNotFoundException(id));
     }
 
     @Transactional
@@ -50,7 +51,7 @@ public class TarefaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + usuarioId));
 
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
-                .orElseThrow(() -> new ResourceNotFoundException("Plantio não encontrado: " + plantioId));
+                .orElseThrow(() -> new PlantioNotFoundException(plantioId));
 
         Tarefa t = new Tarefa();
         t.setTitulo(dto.getTitulo());

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/SIPA/usuarios")
+@RequestMapping("/SIPA/cadastro")
 public class CadastroController {
 
     private final CadastroService cadastroService;

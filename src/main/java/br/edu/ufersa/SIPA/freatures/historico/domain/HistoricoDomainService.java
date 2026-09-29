@@ -1,10 +1,12 @@
 
 package br.edu.ufersa.SIPA.freatures.historico.domain;
+import org.springframework.stereotype.Service;   
 
 import java.util.List;
 
 
 // Domain Service responsável pelas regras de negócio puras do Histórico.
+@Service
 public class HistoricoDomainService {
 
     public String calcularTendencia(Double produtividadeAtual, Double produtividadeAnterior) {
