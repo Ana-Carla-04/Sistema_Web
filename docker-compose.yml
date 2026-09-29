@@ -35,7 +35,7 @@ services:
       SERVER_PORT: 8080
       JPA_DDL_AUTO: update
       JPA_SHOW_SQL: "false"
-      JWT_SECRET: eY8t2vbeEBdNZodn8uB4z5jlFH0NWthTCGJOG1ZGt/I=
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no ambiente}
     depends_on:
       db:
         condition: service_healthy
