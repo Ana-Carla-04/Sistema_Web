@@ -2,12 +2,11 @@ package br.edu.ufersa.SIPA.freatures.custo;
 
 import br.edu.ufersa.SIPA.freatures.custo.dto.CustoRequestDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
+import br.edu.ufersa.SIPA.freatures.plantio.PlantioNotFoundException;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,36 +22,40 @@ public class CustoService {
         this.plantioRepository = plantioRepository;
     }
 
-    // Validação contextual (anti-IDOR)
-
+    // ==========================================
+    // VALIDAÇÕES (anti-IDOR)
+    // ==========================================
 
     private Plantio validarPlantioDoUsuario(Long plantioId, Long usuarioId) {
         return plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Plantio não encontrado"));
+                .orElseThrow(() -> new PlantioNotFoundException(plantioId));
     }
 
-
-    private Custo buscarCustoValido(Long plantioId, Long custoId, Long usuarioId) {
-        return custoRepository
-                .findByIdAndPlantioIdAndPlantioUsuarioId(custoId, plantioId, usuarioId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Custo não encontrado"));
+    private Custo buscarCustoValido(Long custoId, Long usuarioId) {
+        return custoRepository.findByIdAndPlantioUsuarioId(custoId, usuarioId)
+                .orElseThrow(() -> new CustoNotFoundException(custoId));
     }
 
-    //  Operações
+    // GET /SIPA/custos
+    @Transactional(readOnly = true)
+    public List<Custo> listarTodos(Long usuarioId) {
+        return custoRepository.findByPlantioUsuarioId(usuarioId);
+    }
 
+    // GET /SIPA/custos/plantios/{plantioId}
     @Transactional(readOnly = true)
     public List<Custo> listar(Long plantioId, Long usuarioId) {
         validarPlantioDoUsuario(plantioId, usuarioId);
         return custoRepository.findByPlantioIdAndPlantioUsuarioId(plantioId, usuarioId);
     }
 
+    // GET /SIPA/custos/{custoId}
     @Transactional(readOnly = true)
-    public Custo buscarPorId(Long plantioId, Long custoId, Long usuarioId) {
-        return buscarCustoValido(plantioId, custoId, usuarioId);
+    public Custo buscarPorId(Long custoId, Long usuarioId) {
+        return buscarCustoValido(custoId, usuarioId);
     }
 
+    // POST /SIPA/custos/plantios/{plantioId}
     @Transactional
     public Custo criar(Long plantioId, CustoRequestDTO dto, Long usuarioId) {
         Plantio plantio = validarPlantioDoUsuario(plantioId, usuarioId);
@@ -68,10 +71,10 @@ public class CustoService {
         return custoRepository.save(custo);
     }
 
+    // PUT /SIPA/custos/{custoId}
     @Transactional
-    public Custo atualizar(Long plantioId, Long custoId,
-                           CustoRequestDTO dto, Long usuarioId) {
-        Custo custo = buscarCustoValido(plantioId, custoId, usuarioId);
+    public Custo atualizar(Long custoId, CustoRequestDTO dto, Long usuarioId) {
+        Custo custo = buscarCustoValido(custoId, usuarioId);
 
         custo.setData(dto.data());
         custo.setCategoria(dto.categoria());
@@ -79,13 +82,13 @@ public class CustoService {
         custo.setValor(dto.valor());
         custo.setComprovante(dto.comprovante());
 
-
         return custoRepository.save(custo);
     }
 
+    // DELETE /SIPA/custos/{custoId}
     @Transactional
-    public void deletar(Long plantioId, Long custoId, Long usuarioId) {
-        Custo custo = buscarCustoValido(plantioId, custoId, usuarioId);
+    public void deletar(Long custoId, Long usuarioId) {
+        Custo custo = buscarCustoValido(custoId, usuarioId);
         custoRepository.delete(custo);
-     }
+    }
 }
