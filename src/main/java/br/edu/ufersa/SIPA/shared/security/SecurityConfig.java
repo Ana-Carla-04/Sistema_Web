@@ -27,12 +27,14 @@ public class SecurityConfig {
                 // Autenticação é feita via JWT (header Authorization: Bearer ...),
                 // não por sessão/cookie: aqui dizemos ao Spring Security para
                 // nunca criar ou depender de HttpSession para guardar o login.
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                                 // Não precisam de estar autenticados para acessar
-                                .requestMatchers("/SIPA/login/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/SIPA/usuarios").permitAll()
+                                .requestMatchers("/SIPA/login").permitAll()
+                                .requestMatchers("/SIPA/cadastro").permitAll()
+                                .requestMatchers("/SIPA/cadastro/**").permitAll()
                                 .requestMatchers("/SIPA/usuarios/**").authenticated()
 
                                 // precisam de estar autenticados para acessar
