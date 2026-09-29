@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.cadastro;
+package br.edu.ufersa.SIPA.freatures.cadastro.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.ConflictException;
 

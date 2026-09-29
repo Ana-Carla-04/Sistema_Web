@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.historico;
+package br.edu.ufersa.SIPA.freatures.historico.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.UnauthorizedException;
 

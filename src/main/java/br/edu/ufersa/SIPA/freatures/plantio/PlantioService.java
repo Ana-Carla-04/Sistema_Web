@@ -2,6 +2,7 @@ package br.edu.ufersa.SIPA.freatures.plantio;
 
 import br.edu.ufersa.SIPA.freatures.plantio.dto.PlantioRequestDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.dto.PlantioResponseDTO;
+import br.edu.ufersa.SIPA.freatures.plantio.exception.PlantioNotFoundException;
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;

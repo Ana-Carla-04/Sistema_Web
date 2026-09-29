@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.auth;
+package br.edu.ufersa.SIPA.freatures.auth.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;
 

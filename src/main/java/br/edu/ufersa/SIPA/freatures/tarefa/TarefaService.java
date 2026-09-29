@@ -7,7 +7,7 @@ import br.edu.ufersa.SIPA.freatures.plantio.PlantioNotFoundException;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
 import br.edu.ufersa.SIPA.freatures.tarefa.dto.TarefaRequestDTO;
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;
-import br.edu.ufersa.SIPA.freatures.tarefa.TarefaNotFoundException;
+import br.edu.ufersa.SIPA.freatures.tarefa.exception.TarefaNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -5,6 +5,7 @@ import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.freatures.custo.Custo;
 import br.edu.ufersa.SIPA.freatures.custo.CustoRepository;
 import br.edu.ufersa.SIPA.freatures.dashboard.dto.DashboardResponseDTO;
+import br.edu.ufersa.SIPA.freatures.dashboard.exception.DashboardUsuarioNaoIdentificadoException;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
 import org.springframework.security.core.userdetails.UserDetails;

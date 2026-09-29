@@ -1,5 +1,10 @@
 package br.edu.ufersa.SIPA.freatures.colheita.dto;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
 // Dados enviados pelo simulador de receita da tela "Colheita e Receita",
@@ -7,12 +12,29 @@ import java.time.LocalDate;
 // plantioId referencia o lote já cadastrado (selecionado no dropdown "Lote Selecionado").
 public class ColheitaRequestDTO {
 
+    @NotNull(message = "O plantio (lote) é obrigatório")
     private Long plantioId;
+
     private LocalDate data; // usado apenas no CRUD (POST/PUT); opcional no simulador
+
+    @NotNull(message = "A produção bruta é obrigatória")
+    @Positive(message = "A produção bruta deve ser maior que zero")
     private Double producaoBruta;
+
     private Double umidade;
+
+    @NotNull(message = "O desconto de umidade é obrigatório")
+    @DecimalMin(value = "0.0", message = "O desconto de umidade não pode ser negativo")
+    @DecimalMax(value = "100.0", message = "O desconto de umidade não pode passar de 100")
     private Double descontoUmidade; // ex: 16,5% - 3,5% = 13% (arroz)
+
+    @NotNull(message = "O preço por alqueire é obrigatório")
+    @Positive(message = "O preço por alqueire deve ser maior que zero")
     private Double precoAlqueire;
+
+    @NotNull(message = "A taxa da máquina é obrigatória")
+    @DecimalMin(value = "0.0", message = "A taxa da máquina não pode ser negativa")
+    @DecimalMax(value = "100.0", message = "A taxa da máquina não pode passar de 100")
     private Double taxaMaquina;
 
     public ColheitaRequestDTO() {}

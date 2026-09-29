@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.login;
+package br.edu.ufersa.SIPA.freatures.login.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.UnauthorizedException;
 

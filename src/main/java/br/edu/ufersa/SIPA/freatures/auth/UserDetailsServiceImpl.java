@@ -1,5 +1,5 @@
 package br.edu.ufersa.SIPA.freatures.auth;
-
+import br.edu.ufersa.SIPA.freatures.auth.exception.UsuarioNaoEncontradoException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;

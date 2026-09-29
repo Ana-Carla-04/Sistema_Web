@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.custo;
+package br.edu.ufersa.SIPA.freatures.custo.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;
 

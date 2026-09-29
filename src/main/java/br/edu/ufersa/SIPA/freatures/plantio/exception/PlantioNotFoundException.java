@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.plantio;
+package br.edu.ufersa.SIPA.freatures.plantio.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;
 

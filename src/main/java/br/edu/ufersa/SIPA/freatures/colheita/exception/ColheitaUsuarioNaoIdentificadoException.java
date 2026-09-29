@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.colheita;
+package br.edu.ufersa.SIPA.freatures.colheita.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.UnauthorizedException;
 

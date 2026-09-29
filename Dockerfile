@@ -14,7 +14,8 @@ RUN mvn -B clean package -DskipTests
 FROM eclipse-temurin:21-jre
 
 # Define o diretorio de trabalho do container de execucao.
-WORKDIR /app
+WORKDIR /app 
+
 
 # Copia somente o artefato gerado para a imagem final.
 COPY --from=build /app/target/*.jar app.jar

@@ -1,6 +1,7 @@
 package br.edu.ufersa.SIPA.freatures.analiseFinanceira;
 
 import br.edu.ufersa.SIPA.freatures.analiseFinanceira.dto.AnaliseFinanceiraResponseDTO;
+import br.edu.ufersa.SIPA.freatures.analiseFinanceira.exception.AnaliseFinanceiraUsuarioNaoIdentificadoException;
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import org.springframework.security.core.userdetails.UserDetails;

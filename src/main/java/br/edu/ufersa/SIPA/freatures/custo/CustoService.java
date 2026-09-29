@@ -2,7 +2,7 @@ package br.edu.ufersa.SIPA.freatures.custo;
 
 import br.edu.ufersa.SIPA.freatures.custo.dto.CustoRequestDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
-import br.edu.ufersa.SIPA.freatures.plantio.PlantioNotFoundException;
+import br.edu.ufersa.SIPA.freatures.custo.exception.CustoNotFoundException;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
 
 import org.springframework.stereotype.Service;

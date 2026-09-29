@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.dashboard;
+package br.edu.ufersa.SIPA.freatures.dashboard.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.UnauthorizedException;
 

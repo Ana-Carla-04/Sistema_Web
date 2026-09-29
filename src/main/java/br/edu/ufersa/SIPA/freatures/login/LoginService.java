@@ -5,6 +5,7 @@ import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.freatures.auth.dto.UsuarioResponseDTO;
 import br.edu.ufersa.SIPA.freatures.login.dto.LoginRequestDTO;
+import br.edu.ufersa.SIPA.freatures.login.exception.LoginCredenciaisInvalidasException;
 import br.edu.ufersa.SIPA.freatures.login.dto.LoginResponseDTO;
 
 import org.springframework.security.crypto.password.PasswordEncoder;

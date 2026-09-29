@@ -1,6 +1,7 @@
 package br.edu.ufersa.SIPA.freatures.historico;
 
 import br.edu.ufersa.SIPA.freatures.historico.domain.HistoricoDomainService;
+import br.edu.ufersa.SIPA.freatures.historico.exception.HistoricoUsuarioNaoIdentificadoException;
 import br.edu.ufersa.SIPA.freatures.historico.dto.HistoricoResponseDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;

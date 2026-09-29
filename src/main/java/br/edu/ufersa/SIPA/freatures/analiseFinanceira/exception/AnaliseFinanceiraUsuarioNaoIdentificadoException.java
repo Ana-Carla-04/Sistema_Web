@@ -1,4 +1,4 @@
-package br.edu.ufersa.SIPA.freatures.analiseFinanceira;
+package br.edu.ufersa.SIPA.freatures.analiseFinanceira.exception;
 
 import br.edu.ufersa.SIPA.shared.exeception.UnauthorizedException;
 
