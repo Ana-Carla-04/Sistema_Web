@@ -1,0 +1,26 @@
+FROM maven:3.9.9-eclipse-temurin-21 AS build
+
+# Define o diretorio de trabalho dentro do container de compilacao.
+WORKDIR /app
+
+# Copia primeiro o pom para aproveitar o cache das dependencias Maven.
+COPY pom.xml .
+RUN mvn -B dependency:go-offline
+
+# Copia o codigo-fonte e gera o JAR executavel do Spring Boot.
+COPY src ./src
+RUN mvn -B clean package -DskipTests
+
+FROM eclipse-temurin:21-jre
+
+# Define o diretorio de trabalho do container de execucao.
+WORKDIR /app
+
+# Copia somente o artefato gerado para a imagem final.
+COPY --from=build /app/target/*.jar app.jar
+
+# Documenta a porta HTTP usada pelo Spring Boot.
+EXPOSE 8080
+
+# Inicia a aplicacao Spring Boot quando o container for executado.
+ENTRYPOINT ["java", "-jar", "app.jar"]
