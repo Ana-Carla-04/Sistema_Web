@@ -63,5 +63,6 @@ public class CadastroService {
             throw new ResourceNotFoundException("Usuário não encontrado: " + usuarioId);
         }
         usuarioRepository.deleteById(usuarioId);
+
     }
 }
