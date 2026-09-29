@@ -29,4 +29,6 @@ public interface PlantioRepository extends JpaRepository<Plantio, Long> {
 
     List<Plantio> findByUsuarioIdOrderByDataPlantioDesc(Long usuarioId);
 
+    // Usados pelo HistoricoService
+    List<Plantio> findAllByOrderByDataPlantioDesc();
 }
