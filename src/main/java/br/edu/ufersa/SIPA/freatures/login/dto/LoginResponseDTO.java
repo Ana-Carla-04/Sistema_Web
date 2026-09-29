@@ -31,3 +31,4 @@ public class LoginResponseDTO {
     public void setUsuario(UsuarioResponseDTO usuario){this.usuario = usuario;}
 
 }
+
