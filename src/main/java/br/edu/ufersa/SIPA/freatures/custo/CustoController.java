@@ -1,14 +1,14 @@
 package br.edu.ufersa.SIPA.freatures.custo;
 
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.custo.dto.CustoRequestDTO;
 import br.edu.ufersa.SIPA.freatures.custo.dto.CustoResponseDTO;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,22 +22,10 @@ public class CustoController {
         this.custoService = custoService;
     }
 
-
-    private Long obterUsuarioLogado(HttpSession session) {
-        Object usuarioId = session.getAttribute("usuarioId");
-        if (usuarioId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário não autenticado");
-        }
-        return (Long) usuarioId;
-    }
-
-    //  Endpoints
-
     @GetMapping
     public List<CustoResponseDTO> listar(@PathVariable Long plantioId,
-                                         HttpSession session) {
-        Long usuarioId = obterUsuarioLogado(session);
-        return custoService.listar(plantioId, usuarioId)
+                                         @AuthenticationPrincipal Usuario usuario) {
+        return custoService.listar(plantioId, usuario.getId())
                 .stream()
                 .map(CustoResponseDTO::fromEntity)
                 .toList();
@@ -46,41 +34,35 @@ public class CustoController {
     @GetMapping("/{custoId}")
     public CustoResponseDTO buscarPorId(@PathVariable Long plantioId,
                                         @PathVariable Long custoId,
-                                        HttpSession session) {
-        Long usuarioId = obterUsuarioLogado(session);
+                                        @AuthenticationPrincipal Usuario usuario) {
         return CustoResponseDTO.fromEntity(
-                custoService.buscarPorId(plantioId, custoId, usuarioId));
+                custoService.buscarPorId(plantioId, custoId, usuario.getId()));
     }
-
 
     @PostMapping
     public ResponseEntity<CustoResponseDTO> criar(@PathVariable Long plantioId,
                                                   @Valid @RequestBody CustoRequestDTO dto,
-                                                  HttpSession session) {
-        Long usuarioId = obterUsuarioLogado(session);
+                                                  @AuthenticationPrincipal Usuario usuario) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(CustoResponseDTO.fromEntity(
-                        custoService.criar(plantioId, dto, usuarioId)));
+                        custoService.criar(plantioId, dto, usuario.getId())));
     }
-
 
     @PutMapping("/{custoId}")
     public CustoResponseDTO atualizar(@PathVariable Long plantioId,
                                       @PathVariable Long custoId,
                                       @Valid @RequestBody CustoRequestDTO dto,
-                                      HttpSession session) {
-        Long usuarioId = obterUsuarioLogado(session);
+                                      @AuthenticationPrincipal Usuario usuario) {
         return CustoResponseDTO.fromEntity(
-                custoService.atualizar(plantioId, custoId, dto, usuarioId));
+                custoService.atualizar(plantioId, custoId, dto, usuario.getId()));
     }
 
     @DeleteMapping("/{custoId}")
     public ResponseEntity<Void> deletar(@PathVariable Long plantioId,
                                         @PathVariable Long custoId,
-                                        HttpSession session) {
-        Long usuarioId = obterUsuarioLogado(session);
-        custoService.deletar(plantioId, custoId, usuarioId);
+                                        @AuthenticationPrincipal Usuario usuario) {
+        custoService.deletar(plantioId, custoId, usuario.getId());
         return ResponseEntity.noContent().build();
     }
  }

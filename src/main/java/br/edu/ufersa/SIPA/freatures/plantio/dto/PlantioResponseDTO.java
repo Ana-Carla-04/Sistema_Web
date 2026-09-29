@@ -4,7 +4,7 @@ import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 
 import java.time.LocalDate;
 
-
+//o que sai
 public class PlantioResponseDTO {
 
     private Long id;
@@ -18,6 +18,8 @@ public class PlantioResponseDTO {
 
     public PlantioResponseDTO(Long id, String nome, String variedade, Double area,
                               LocalDate dataPlantio, String status) {
+        //aqui sao os campus que queremos expor no entity
+        //tirando o usuario, o custo e a colheita
         this.id = id;
         this.nome = nome;
         this.variedade = variedade;
@@ -26,6 +28,9 @@ public class PlantioResponseDTO {
         this.status = status;
     }
 
+    //construtor usado pelo fromEntity,q é métodoeestatico criado para converter um objeto Entity em um Model de domínio
+    //Ele lê os campos da entidade e os utiliza para construir um novo objeto do modelo de domínio
+    //Converte Entity para DTO
     public static PlantioResponseDTO fromEntity(Plantio plantio) {
         return new PlantioResponseDTO(
                 plantio.getId(),

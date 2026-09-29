@@ -7,6 +7,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+//anti-IDOR É nunca usar o id e verificar se ele esta autenticado
+
+//O Spring Data JPA GERA a implementação em tempo de execução.
 public interface PlantioRepository extends JpaRepository<Plantio, Long> {
 
     // Anti-IDOR: garante que o plantio pertence ao usuário logado
