@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity //esse entity diz ao hibernate: isso é uma classe no banco de dados
 @Table(name = "plantios")
 public class Plantio {
 
@@ -29,12 +29,14 @@ public class Plantio {
     @Column(nullable = false)
     private String status;
 
-    @ManyToOne
+    @ManyToOne //muitos plantios pra um usuario
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
+    //um plantio tem muitos custos
     @OneToMany(mappedBy = "plantio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Custo> custos = new ArrayList<>();
+
 
 
     @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, orphanRemoval = true)

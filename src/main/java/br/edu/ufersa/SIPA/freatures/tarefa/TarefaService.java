@@ -5,6 +5,7 @@ import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
 import br.edu.ufersa.SIPA.freatures.tarefa.dto.TarefaRequestDTO;
+import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,6 @@ public class TarefaService {
         this.plantioRepository = plantioRepository;
     }
 
-    // Leitura
-
     @Transactional(readOnly = true)
     public List<Tarefa> listar(Long usuarioId) {
         return tarefaRepository.findByUsuarioId(usuarioId);
@@ -34,33 +33,29 @@ public class TarefaService {
 
     @Transactional(readOnly = true)
     public List<Tarefa> listarPorPlantio(Long usuarioId, Long plantioId) {
-
         plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Plantio não encontrado: " + plantioId));
+                .orElseThrow(() -> new ResourceNotFoundException("Plantio não encontrado: " + plantioId));
         return tarefaRepository.findByPlantioId(plantioId);
     }
 
     @Transactional(readOnly = true)
     public Tarefa buscarPorId(Long id, Long usuarioId) {
         return tarefaRepository.findByIdAndUsuarioId(id, usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Tarefa não encontrada: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada: " + id));
     }
-
-    // Escrita
 
     @Transactional
     public Tarefa criar(Long usuarioId, Long plantioId, TarefaRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + usuarioId));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + usuarioId));
 
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(plantioId, usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Plantio não encontrado: " + plantioId));
+                .orElseThrow(() -> new ResourceNotFoundException("Plantio não encontrado: " + plantioId));
 
         Tarefa t = new Tarefa();
         t.setTitulo(dto.getTitulo());
         t.setDescricao(dto.getDescricao());
         t.setDataLimite(dto.getDataLimite());
-        t.setConcluida(dto.isConcluida());
         t.setUsuario(usuario);
         t.setPlantio(plantio);
         return tarefaRepository.save(t);
@@ -72,7 +67,6 @@ public class TarefaService {
         t.setTitulo(dto.getTitulo());
         t.setDescricao(dto.getDescricao());
         t.setDataLimite(dto.getDataLimite());
-        t.setConcluida(dto.isConcluida());
         return tarefaRepository.save(t);
     }
 

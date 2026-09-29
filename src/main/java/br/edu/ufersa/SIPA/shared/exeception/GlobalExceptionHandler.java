@@ -24,6 +24,16 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ProblemDetail tratarNaoEncontrado(ResourceNotFoundException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ProblemDetail tratarConflito(ConflictException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, exception.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail tratarErroInterno(Exception exception) {
         return ProblemDetail.forStatusAndDetail(

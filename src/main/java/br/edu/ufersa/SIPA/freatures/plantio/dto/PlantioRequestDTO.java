@@ -6,9 +6,10 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
-
+//o que entra
 public class PlantioRequestDTO {
 
+    //validações
     @NotBlank(message = "nome é obrigatório")
     private String nome;
 
@@ -23,6 +24,7 @@ public class PlantioRequestDTO {
     @NotBlank(message = "status é obrigatório")
     private String status;
 
+    //construtor
     public PlantioRequestDTO() {}
 
     public String getNome() { return nome; }
