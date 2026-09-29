@@ -17,7 +17,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/SIPA")
+@RequestMapping("/SIPA/colheita")
 public class ColheitaController {
 
     private final ColheitaService colheitaService;

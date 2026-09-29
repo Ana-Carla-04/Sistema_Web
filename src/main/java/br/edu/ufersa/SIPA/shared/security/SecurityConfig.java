@@ -1,6 +1,6 @@
 package br.edu.ufersa.SIPA.shared.security;
 
-import org.springframework.context.annotation.Bean; // Importa a anotacao @Bean, que indica que o metodo abaixo produz um bean gerenciado pelo Spring.
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// Esta classe configura a seguranca da aplicacao, definindo quais endpoints sao publicos e quais exigem autenticacao.
 @Configuration
 public class SecurityConfig {
 
@@ -20,42 +19,45 @@ public class SecurityConfig {
         this.securityFilter = securityFilter;
     }
 
-    // Define a cadeia de filtros de seguranca, especificando as regras de autorizacao para diferentes endpoints.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Autenticação é feita via JWT (header Authorization: Bearer ...),
-                // não por sessão/cookie: aqui dizemos ao Spring Security para
-                // nunca criar ou depender de HttpSession para guardar o login.
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                // Não precisam de estar autenticados para acessar
-                                .requestMatchers("/SIPA/login").permitAll()
-                                .requestMatchers("/SIPA/cadastro").permitAll()
-                                .requestMatchers("/SIPA/cadastro/**").permitAll()
-                                .requestMatchers("/SIPA/usuarios/**").authenticated()
+                        // ==========================================
+                        // ENDPOINTS PÚBLICOS (não precisam de login)
+                        // ==========================================
+                        .requestMatchers("/SIPA/login").permitAll()
+                        .requestMatchers("/SIPA/login/**").permitAll()          
+                        .requestMatchers("/SIPA/cadastro").permitAll()
+                        .requestMatchers("/SIPA/cadastro/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/SIPA/usuarios").permitAll()
 
-                                // precisam de estar autenticados para acessar
-                                .requestMatchers("/SIPA/plantios/**").authenticated()
-                                .requestMatchers("/SIPA/tarefas/**").authenticated()
-                                .requestMatchers("/SIPA/dashboard/**").authenticated()
-                                .requestMatchers("/SIPA/analise-financeira/**").authenticated()
-                                .requestMatchers("/SIPA/historico/**").authenticated()
-                        // .anyRequest().permitAll()// permite qualquer outra requisicao sem autenticacao
+                        // ==========================================
+                        // ENDPOINTS PROTEGIDOS (precisam de login)
+                        // ==========================================
+                        .requestMatchers("/SIPA/plantios/**").authenticated()
+                        .requestMatchers("/SIPA/custos/**").authenticated()
+                        .requestMatchers("/SIPA/tarefas/**").authenticated()
+                        .requestMatchers("/SIPA/dashboard/**").authenticated()
+                        .requestMatchers("/SIPA/analise-financeira/**").authenticated()
+                        .requestMatchers("/SIPA/historico/**").authenticated()
+                        .requestMatchers("/SIPA/colheita/**").authenticated()   
+
+                        // ==========================================
+                        // QUALQUER OUTRA REQUISIÇÃO (fallback seguro)
+                        // ==========================================
+                        .anyRequest().authenticated()                           
                 )
-                // Registra o filtro que lê e valida o JWT do header Authorization
-                // antes do filtro padrão de login por usuário/senha do Spring
-                // Security, para que o token seja checado em toda requisição.
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

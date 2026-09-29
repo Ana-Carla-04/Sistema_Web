@@ -19,7 +19,7 @@ public class TokenService {
                 .withIssuer("API do SIPA")
                 .withSubject(user.getId().toString())
                 .withClaim("role", user.getRole().getRoleName())
-                .withExpiresAt(Instant.now().plus(15,ChronoUnit.MINUTES))
+                .withExpiresAt(Instant.now().plus(180,ChronoUnit.MINUTES))
                 .sign(algorithm);
     }
     public String validateToken(String token){

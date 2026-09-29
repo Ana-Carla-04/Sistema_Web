@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/SIPA/plantios/{plantioId}/custos")
+@RequestMapping("/SIPA/custos")
 public class CustoController {
 
     private final CustoService custoService;
@@ -23,8 +23,16 @@ public class CustoController {
     }
 
     @GetMapping
-    public List<CustoResponseDTO> listar(@PathVariable Long plantioId,
-                                         @AuthenticationPrincipal Usuario usuario) {
+    public List<CustoResponseDTO> listarTodos(@AuthenticationPrincipal Usuario usuario) {
+        return custoService.listarTodos(usuario.getId())
+                .stream()
+                .map(CustoResponseDTO::fromEntity)
+                .toList();
+    }
+
+    @GetMapping("/plantios/{plantioId}")
+    public List<CustoResponseDTO> listarPorPlantio(@PathVariable Long plantioId,
+                                                   @AuthenticationPrincipal Usuario usuario) {
         return custoService.listar(plantioId, usuario.getId())
                 .stream()
                 .map(CustoResponseDTO::fromEntity)
@@ -32,14 +40,13 @@ public class CustoController {
     }
 
     @GetMapping("/{custoId}")
-    public CustoResponseDTO buscarPorId(@PathVariable Long plantioId,
-                                        @PathVariable Long custoId,
+    public CustoResponseDTO buscarPorId(@PathVariable Long custoId,
                                         @AuthenticationPrincipal Usuario usuario) {
         return CustoResponseDTO.fromEntity(
-                custoService.buscarPorId(plantioId, custoId, usuario.getId()));
+                custoService.buscarPorId(custoId, usuario.getId()));
     }
 
-    @PostMapping
+    @PostMapping("/plantios/{plantioId}")
     public ResponseEntity<CustoResponseDTO> criar(@PathVariable Long plantioId,
                                                   @Valid @RequestBody CustoRequestDTO dto,
                                                   @AuthenticationPrincipal Usuario usuario) {
@@ -50,19 +57,17 @@ public class CustoController {
     }
 
     @PutMapping("/{custoId}")
-    public CustoResponseDTO atualizar(@PathVariable Long plantioId,
-                                      @PathVariable Long custoId,
+    public CustoResponseDTO atualizar(@PathVariable Long custoId,
                                       @Valid @RequestBody CustoRequestDTO dto,
                                       @AuthenticationPrincipal Usuario usuario) {
         return CustoResponseDTO.fromEntity(
-                custoService.atualizar(plantioId, custoId, dto, usuario.getId()));
+                custoService.atualizar(custoId, dto, usuario.getId()));
     }
 
     @DeleteMapping("/{custoId}")
-    public ResponseEntity<Void> deletar(@PathVariable Long plantioId,
-                                        @PathVariable Long custoId,
+    public ResponseEntity<Void> deletar(@PathVariable Long custoId,
                                         @AuthenticationPrincipal Usuario usuario) {
-        custoService.deletar(plantioId, custoId, usuario.getId());
+        custoService.deletar(custoId, usuario.getId());
         return ResponseEntity.noContent().build();
     }
- }
+}

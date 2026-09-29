@@ -9,8 +9,6 @@ import br.edu.ufersa.SIPA.freatures.login.dto.LoginResponseDTO;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 @Service
 public class LoginService {
@@ -26,18 +24,14 @@ public class LoginService {
     }
 
     public LoginResponseDTO autenticar(LoginRequestDTO dto){
-        Usuario usuario = usuarioRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos"
-        ));
+        Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())
+                .orElseThrow(LoginCredenciaisInvalidasException::new);
+
         if(!passwordEncoder.matches(dto.getSenha(), usuario.getSenha())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos");
+            throw new LoginCredenciaisInvalidasException();
         }
+
         String token = tokenService.generateToken(usuario);
         return LoginResponseDTO.of(token, UsuarioResponseDTO.fromEntity(usuario));
-
     }
-
-
-
-
 }

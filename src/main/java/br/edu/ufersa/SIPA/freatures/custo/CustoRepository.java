@@ -9,13 +9,18 @@ import java.util.Optional;
 
 public interface CustoRepository extends JpaRepository<Custo, Long> {
 
-    List<Custo> findByPlantioIdAndPlantioUsuarioId(Long plantioId, Long usuarioId);
+    // Busca todos os custos de um usuário (novo modelo)
+    List<Custo> findByPlantioUsuarioId(Long usuarioId);
 
-    Optional<Custo> findByIdAndPlantioIdAndPlantioUsuarioId(Long id, Long plantioId, Long usuarioId);
+    // Busca um custo específico de um usuário (anti-IDOR)
+    Optional<Custo> findByIdAndPlantioUsuarioId(Long id, Long usuarioId);
+
+    // Busca custos de um plantio específico, validando o dono
+    List<Custo> findByPlantioIdAndPlantioUsuarioId(Long plantioId, Long usuarioId);
 
     List<Custo> findByPlantioId(Long plantioId);
 
-    //  Usado pelo HistoricoService
+    // Usado pelo HistoricoService
     @Query("SELECT c FROM Custo c WHERE c.plantio.usuario.id = :usuarioId ORDER BY c.data DESC")
     List<Custo> findByUsuarioIdOrderByDataDesc(@Param("usuarioId") Long usuarioId);
 
