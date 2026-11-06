@@ -1,9 +1,9 @@
 package br.edu.ufersa.SIPA.freatures.tarefa;
 
+import br.edu.ufersa.SIPA.freatures.plantio.exception.PlantioNotFoundException;
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
-import br.edu.ufersa.SIPA.freatures.plantio.PlantioNotFoundException;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
 import br.edu.ufersa.SIPA.freatures.tarefa.dto.TarefaRequestDTO;
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;

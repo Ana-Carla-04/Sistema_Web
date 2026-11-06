@@ -1,5 +1,5 @@
 package br.edu.ufersa.SIPA.freatures.custo;
-
+import br.edu.ufersa.SIPA.freatures.plantio.exception.PlantioNotFoundException;
 import br.edu.ufersa.SIPA.freatures.custo.dto.CustoRequestDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 import br.edu.ufersa.SIPA.freatures.custo.exception.CustoNotFoundException;

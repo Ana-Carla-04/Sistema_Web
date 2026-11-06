@@ -1,5 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.cadastro;
 
+import br.edu.ufersa.SIPA.freatures.cadastro.exception.CadastroUsuarioNaoAutorizadoException;
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.auth.dto.UsuarioResponseDTO;
 import br.edu.ufersa.SIPA.freatures.cadastro.dto.CadastroRequestDTO;
