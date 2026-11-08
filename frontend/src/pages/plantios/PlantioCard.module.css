@@ -1,0 +1,115 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+/* "foto" do lote: faixas de plantio vistas de cima, só com CSS */
+.field {
+  height: 94px;
+}
+
+.fieldA {
+  background:
+    linear-gradient(180deg, #9db9c7 0 14%, transparent 14%),
+    repeating-linear-gradient(100deg, #4f9a3a 0 14px, #5fa843 14px 28px);
+}
+
+.fieldB {
+  background:
+    linear-gradient(180deg, #a9c1cf 0 14%, transparent 14%),
+    repeating-linear-gradient(80deg, #5aa03d 0 18px, #6cb04a 18px 36px);
+}
+
+.fieldC {
+  background:
+    linear-gradient(180deg, #a3bccb 0 14%, transparent 14%),
+    repeating-linear-gradient(170deg, #7c9a6b 0 10px, #8fae7b 10px 20px);
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.title {
+  overflow: hidden;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.statusPlantado {
+  color: var(--status-plantado-text);
+  background: var(--status-plantado-bg);
+}
+
+.statusCrescendo {
+  color: var(--status-crescendo-text);
+  background: var(--status-crescendo-bg);
+}
+
+.statusColhido {
+  color: var(--status-colhido-text);
+  background: var(--status-colhido-bg);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-xs);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.row dt {
+  color: var(--color-muted);
+}
+
+.row dd {
+  font-weight: 700;
+  text-align: right;
+}
+
+.editButton {
+  margin-top: auto;
+  padding: 8px;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s;
+}
+
+.editButton:hover {
+  background: var(--color-field);
+}

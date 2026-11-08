@@ -1,1 +1,20 @@
-/* nada ainda */
+body {
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    color: var(--color-text);
+    background: var(--color-bg);
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
