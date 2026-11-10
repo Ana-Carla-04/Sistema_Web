@@ -23,3 +23,44 @@ export function validatePlantio(values) {
 
   return errors;
 }
+
+// Validação do formulário de Login (espelha LoginRequestDTO)
+export function validateLogin(values) {
+  const errors = {};
+
+  if (!values.email || !values.email.trim()) {
+    errors.email = 'O e-mail é obrigatório.';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+    errors.email = 'Informe um e-mail válido.';
+  }
+
+  if (!values.senha) {
+    errors.senha = 'A senha é obrigatória.';
+  }
+
+  return errors;
+}
+
+// Validação do formulário de Cadastro (espelha CadastroRequestDTO)
+export function validateCadastro(values) {
+  const errors = {};
+
+  if (!values.nome || !values.nome.trim()) {
+    errors.nome = 'O nome é obrigatório.';
+  }
+
+  if (!values.email || !values.email.trim()) {
+    errors.email = 'O e-mail é obrigatório.';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+    errors.email = 'Informe um e-mail válido.';
+  }
+
+  if (!values.senha) {
+    errors.senha = 'A senha é obrigatória.';
+  } else if (values.senha.length < 6) {
+    errors.senha = 'A senha deve ter no mínimo 6 caracteres.';
+  }
+
+  return errors;
+}
+

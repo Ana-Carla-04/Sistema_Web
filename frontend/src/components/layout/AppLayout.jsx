@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../context/AuthContext.jsx';
 import { formatSafra, getCurrentSafraStartYear } from '../../utils/plantio.js';
-import Icon from '../Icons/Icon.jsx';
+import Icon from '../icons/Icon.jsx';
 import styles from './AppLayout.module.css';
 
 const NAV_ITEMS = [
@@ -15,20 +16,25 @@ const NAV_ITEMS = [
   { to: '/historico', label: 'Histórico', icon: 'history' },
 ];
 
-function getInitial(name) {
-  return name ? name.trim().charAt(0).toUpperCase() : '?';
-}
-
 export default function AppLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [globalSearch, setGlobalSearch] = useState('');
 
-  // Ajuste os campos conforme o que o seu login devolve para o usuário.
-  const displayName = user?.nome ?? user?.name ?? user?.email ?? 'Usuário';
+  // Dados do usuário autenticado no backend
+  const displayName = user?.nome ?? user?.name ?? user?.email ?? 'Produtor';
+  const displayRole = user?.email ?? user?.cargo ?? 'Produtor Rural';
 
   function handleLogout() {
     logout();
     navigate('/login', { replace: true });
+  }
+
+  function handleSearchSubmit(event) {
+    event.preventDefault();
+    const term = globalSearch.trim();
+    if (!term) return;
+    navigate(`/plantios?busca=${encodeURIComponent(term)}`);
   }
 
   return (
@@ -54,27 +60,53 @@ export default function AppLayout() {
               {item.label}
             </NavLink>
           ))}
-          <button type="button" className={styles.navItem} onClick={handleLogout}>
-            <Icon name="logout" size={16} />
-            Sair
-          </button>
         </nav>
 
-        <div className={styles.user}>
-          <span className={styles.avatar}>{getInitial(displayName)}</span>
-          <span className={styles.userName}>{displayName}</span>
+        <div className={styles.userSection}>
+          <div className={styles.user}>
+            <span className={styles.avatar}>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+              </svg>
+            </span>
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>{displayName}</span>
+              <span className={styles.userRole}>{displayRole}</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            className={styles.logoutButton}
+            onClick={handleLogout}
+            title="Encerrar sessão"
+          >
+            <Icon name="logout" size={16} />
+            <span>Sair</span>
+          </button>
         </div>
       </aside>
 
       <div className={styles.main}>
         <header className={styles.topbar}>
-          <label className={styles.globalSearch}>
+          <form className={styles.globalSearch} onSubmit={handleSearchSubmit}>
             <Icon name="search" size={14} />
-            <input type="search" placeholder="Pesquisar no sistema..." />
-          </label>
+            <input
+              type="search"
+              value={globalSearch}
+              onChange={(event) => setGlobalSearch(event.target.value)}
+              placeholder="Pesquisar no sistema..."
+            />
+          </form>
 
           <div className={styles.topbarRight}>
-            <button type="button" className={styles.bell} aria-label="Notificações">
+            <button
+              type="button"
+              className={styles.bell}
+              aria-label="Notificações"
+              onClick={() => navigate('/tarefas')}
+              title="Ver tarefas e alertas"
+            >
               <Icon name="bell" size={16} />
             </button>
             <span className={styles.safraLabel}>
@@ -84,7 +116,7 @@ export default function AppLayout() {
         </header>
 
         <main className={styles.content}>
-          <Outlet />
+          <Outlet context={{ globalSearch }} />
         </main>
       </div>
     </div>

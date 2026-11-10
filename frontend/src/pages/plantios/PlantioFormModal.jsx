@@ -4,7 +4,7 @@ import useForm from '../../hooks/useForm.js';
 import { plantioService } from '../../services/plantioService.js';
 import { STATUS_OPTIONS } from '../../utils/plantio.js';
 import { validatePlantio } from '../../utils/validators.js';
-import Icon from '../../components/Icons/Icon.jsx';
+import Icon from '../../components/icons/Icon.jsx';
 import styles from './PlantioFormModal.module.css';
 
 function toFormValues(plantio) {

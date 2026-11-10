@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import Icon from '../../components/Icons/Icon.jsx';
+import Icon from '../../components/icons/Icon.jsx';
 import useDebounce from '../../hooks/useDebounce.js';
 import usePlantios from '../../hooks/usePlantios.js';
 import { STATUS_OPTIONS, buildSafraOptions, getCurrentSafraStartYear, isInSafra } from '../../utils/plantio.js';
@@ -12,7 +13,9 @@ const SAFRA_OPTIONS = buildSafraOptions(4);
 const ALL_SAFRAS = 'todas';
 
 export default function PlantiosPage() {
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const initialQuery = searchParams.get('lote') || searchParams.get('busca') || '';
+  const [search, setSearch] = useState(initialQuery);
   const [safra, setSafra] = useState(String(getCurrentSafraStartYear()));
   const [status, setStatus] = useState('');
   // null = fechado | { plantio: null } = novo | { plantio } = editar

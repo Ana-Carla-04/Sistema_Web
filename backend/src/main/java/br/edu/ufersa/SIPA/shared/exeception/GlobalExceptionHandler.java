@@ -78,10 +78,9 @@ public class GlobalExceptionHandler {
     // ==========================================
     @ExceptionHandler(Exception.class)
     public ProblemDetail tratarErroInterno(Exception exception) {
-        // ⚠️ Em produção, logue a exceção completa:
-        // log.error("Erro interno não tratado", exception);
+        exception.printStackTrace();
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Erro interno do servidor.");
+                exception.getMessage() != null ? exception.getMessage() : "Erro interno do servidor.");
     }
 }

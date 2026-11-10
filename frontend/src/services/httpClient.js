@@ -41,11 +41,12 @@ async function request(endpoint, options = {}) {
     return response.json();
 }
 
-// Métodos HTTP
+    // Métodos HTTP
 const httpClient = {
     get: (url, options) => request(url, { ...options, method: 'GET' }),
     post: (url, body, options) => request(url, { ...options, method: 'POST', body: JSON.stringify(body) }),
     put: (url, body, options) => request(url, { ...options, method: 'PUT', body: JSON.stringify(body) }),
+    patch: (url, body, options) => request(url, { ...options, method: 'PATCH', ...(body !== undefined && { body: JSON.stringify(body) }) }),
     delete: (url, options) => request(url, { ...options, method: 'DELETE' }),
 };
 

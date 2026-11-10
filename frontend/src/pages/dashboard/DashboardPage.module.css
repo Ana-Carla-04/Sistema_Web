@@ -1,0 +1,934 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1200px;
+}
+
+.pageTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+/* ---- 1. KPIs ---- */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 20px;
+  background: var(--color-surface);
+  border: 1px solid #e6ece7;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.kpiCard:hover {
+  transform: translateY(-1px);
+  border-color: #c5d6cb;
+  box-shadow: 0 4px 12px rgba(18, 41, 29, 0.08);
+}
+
+.kpiLabel {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #5b675f;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.kpiValueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.kpiNumber {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #17241c;
+}
+
+.kpiUnit {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #5b675f;
+}
+
+/* ---- Cards base ---- */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px;
+  background: var(--color-surface);
+  border: 1px solid #e6ece7;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cardHeaderWithBadge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cardTitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1c2820;
+}
+
+/* ---- 2. Gráficos de Barras ---- */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.safraChartArea {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 16px;
+  padding: 8px 16px 2px;
+  min-height: 150px;
+}
+
+.custosChartArea {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 10px;
+  padding: 8px 4px 2px;
+  min-height: 150px;
+}
+
+.chartColumnBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 4px 2px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.chartColumnBtn:hover {
+  background-color: #f4f8f5;
+  transform: translateY(-2px);
+}
+
+.chartColumnSelected {
+  background-color: #ebf3ee;
+}
+
+.barTrack {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 112px;
+  width: 100%;
+}
+
+.barFill {
+  width: 42px;
+  background-color: #2d6a4f;
+  border-radius: 2px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6px;
+  transition: height 0.25s ease, background-color 0.15s ease;
+}
+
+.chartColumnBtn:hover .barFill {
+  background-color: #23533d;
+}
+
+.barValueInside {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.barCaption {
+  font-size: 0.75rem;
+  color: #46534b;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.barCaptionMultiline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 30px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  color: #46534b;
+  text-align: center;
+}
+
+.captionLine {
+  display: block;
+  white-space: nowrap;
+}
+
+/* ---- 3. Status dos Lotes + Clima ---- */
+.middleGrid {
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.grayPillBadge {
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4a574f;
+  background: #f0f3f0;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+
+.grayPillBadge:hover {
+  background: #e2e8e3;
+}
+
+.lotesList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loteItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #e9eee9;
+  border-left-width: 3px;
+  border-radius: 10px;
+  text-align: left;
+  transition: background-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.loteItem:hover {
+  background: #f9fbf9;
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(18, 41, 29, 0.05);
+}
+
+.loteItem_PLANTADO {
+  border-left-color: #2d6a4f;
+}
+
+.loteItem_CRESCIMENTO {
+  border-left-color: #65a30d;
+}
+
+.loteItem_COLHEITA {
+  border-left-color: #d97706;
+}
+
+.loteItem_PREPARACAO {
+  border-left-color: #7c8b83;
+}
+
+.loteLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.statusDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot_PLANTADO {
+  background-color: #2d6a4f;
+}
+
+.dot_CRESCIMENTO {
+  background-color: #65a30d;
+}
+
+.dot_COLHEITA {
+  background-color: #d97706;
+}
+
+.dot_PREPARACAO {
+  background-color: #7c8b83;
+}
+
+.loteTexts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.loteName {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #1c2820;
+}
+
+.loteArea {
+  font-size: 0.75rem;
+  color: #6c7a70;
+}
+
+.loteStatusText {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.text_PLANTADO {
+  color: #2d6a4f;
+}
+
+.text_CRESCIMENTO {
+  color: #5b8c15;
+}
+
+.text_COLHEITA {
+  color: #b45309;
+}
+
+.text_PREPARACAO {
+  color: #4b5563;
+}
+
+.lotesLegend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #edf1ed;
+}
+
+.legendBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #526057;
+  padding: 3px 6px;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.legendBtn:hover {
+  background-color: #f1f5f2;
+  color: #17241c;
+}
+
+.legendBtnActive {
+  background-color: #e4ede7;
+  font-weight: 600;
+  color: #17241c;
+}
+
+.legendDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+/* ---- Card de Clima ---- */
+.weatherTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.weatherLocation {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #5a675e;
+  letter-spacing: 0.02em;
+}
+
+.weatherMinMax {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.tempMin {
+  color: #2563eb;
+}
+
+.tempDivider {
+  color: #9ca3af;
+}
+
+.tempMax {
+  color: #dc2626;
+}
+
+.weatherMainTemp {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #17241c;
+  margin-bottom: 4px;
+}
+
+.weatherCondition {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #d97706;
+  margin-bottom: 4px;
+}
+
+.weatherConditionDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #d97706;
+}
+
+.weatherSubtitle {
+  font-size: 0.75rem;
+  color: #5a675e;
+}
+
+.weatherDivider {
+  border: none;
+  border-top: 1px solid #edf1ed;
+  margin: 12px 0;
+}
+
+.weatherMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.weatherMetricBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 6px;
+  background: #f5f7f5;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.weatherMetricValue {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #17241c;
+}
+
+.weatherMetricLabel {
+  font-size: 0.68rem;
+  color: #6b786f;
+}
+
+.forecastSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.forecastHeading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #5a675e;
+  letter-spacing: 0.03em;
+}
+
+.forecastGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.forecastDayBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 4px;
+  background: #ffffff;
+  border: 1px solid #e7ece8;
+  border-radius: 8px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.forecastDayBox:hover {
+  border-color: #b7ccc0;
+  background: #f8fbf9;
+}
+
+.forecastDayActive {
+  border-color: #2d6a4f;
+  background: #f1f7f3;
+}
+
+.forecastDayName {
+  font-size: 0.7rem;
+  color: #5a675e;
+}
+
+.forecastDayTemp {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #17241c;
+}
+
+.forecastDayCond {
+  font-size: 0.65rem;
+  color: #6b786f;
+}
+
+.weatherAlertBanner {
+  padding: 10px 12px;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: #274032;
+  background: #eaf3ed;
+  border-radius: 8px;
+}
+
+.weatherAlertHighlight {
+  color: #2d6a4f;
+  font-weight: 700;
+}
+
+/* ---- 4. Próximas Tarefas ---- */
+.tasksSection {
+  width: 100%;
+}
+
+.greenPillBadge {
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #2d6a4f;
+  background: #e6f2eb;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+
+.greenPillBadge:hover {
+  background: #d3e8dc;
+}
+
+.tasksList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.taskRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f9fbf9;
+  border: 1px solid #ecf0ec;
+  border-radius: 10px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.taskRow:hover {
+  background: #f3f7f4;
+  border-color: #dce5de;
+}
+
+.taskRowDone .taskTitle {
+  text-decoration: line-through;
+  color: #7c8b83;
+}
+
+.taskLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.taskCheckBtn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: #2d6a4f;
+  background: #e9f0eb;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.taskCheckBtn:hover {
+  background: #d4e4d9;
+  transform: scale(1.04);
+}
+
+.taskCheckBtnActive {
+  background: #2d6a4f;
+  color: #ffffff;
+}
+
+.taskInfoBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  min-width: 0;
+}
+
+.taskTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #1c2820;
+}
+
+.taskMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.74rem;
+}
+
+.taskDate {
+  color: #526057;
+}
+
+.taskLote {
+  color: #88968d;
+}
+
+.taskBadge {
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
+.taskBadge:hover {
+  opacity: 0.85;
+}
+
+.badge_prioritario {
+  background: #fcf3e3;
+  color: #9a5b13;
+}
+
+.badge_pendente {
+  background: #e8effd;
+  color: #1e40af;
+}
+
+.badge_agendado {
+  background: #fcf3e3;
+  color: #b45309;
+}
+
+.badge_planejado {
+  background: #eef1ef;
+  color: #374151;
+}
+
+.tasksFooter {
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.verTodasBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2d6a4f;
+  background: #e8f2ec;
+  border-radius: 999px;
+  transition: background-color 0.15s ease, transform 0.12s ease;
+}
+
+.verTodasBtn:hover {
+  background: #d5e8dd;
+  transform: translateX(2px);
+}
+
+.emptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.emptyStateText {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+}
+
+.emptyStateBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2d6a4f;
+  background: #e8f2ec;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+
+.emptyStateBtn:hover {
+  background: #d5e8dd;
+}
+
+/* ---- Loading State ---- */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+  gap: 16px;
+  background: var(--color-surface);
+  border: 1px solid #e6ece7;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 40px;
+  text-align: center;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid #e8f2ec;
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.loadingSubtext {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+/* ---- Empty State Global do Dashboard ---- */
+.emptyDashboardCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 56px 24px;
+  background: var(--color-surface);
+  border: 1px dashed #b5cebc;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  gap: 16px;
+  max-width: 620px;
+  margin: 40px auto;
+}
+
+.emptyDashboardIcon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  background: #e8f2ec;
+  color: var(--color-primary);
+  border-radius: 50%;
+}
+
+.emptyDashboardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.emptyDashboardText {
+  font-size: 0.9375rem;
+  color: #4a5568;
+  max-width: 460px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.emptyDashboardActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.primaryActionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-primary);
+  border-radius: 8px;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+.primaryActionBtn:hover {
+  background: #245740;
+  transform: translateY(-1px);
+}
+
+.secondaryActionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: #e8f2ec;
+  border: 1px solid #c5d6cb;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+.secondaryActionBtn:hover {
+  background: #d5e8dd;
+  transform: translateY(-1px);
+}
+
+/* ---- Error Banner ---- */
+.errorBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  background: #fdf2f2;
+  border: 1px solid #f8b4b4;
+  border-radius: 10px;
+  color: #9b1c1c;
+  font-size: 0.875rem;
+  margin-bottom: 8px;
+}
+
+.retryBtn {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9b1c1c;
+  background: #fee2e2;
+  border-radius: 6px;
+  border: 1px solid #f8b4b4;
+  cursor: pointer;
+}
+
+.retryBtn:hover {
+  background: #fbd5d5;
+}
+
+.chartEmptyNotice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 16px;
+}
+
+/* ---- Responsividade ---- */
+@media (max-width: 1024px) {
+  .kpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chartsGrid,
+  .middleGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .weatherMetricsGrid,
+  .forecastGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -14,6 +14,10 @@ const PATHS = {
   chart: 'M3 17l6-6 4 4 8-8 M15 7h6v6',
   history: 'M3 12a9 9 0 1 0 3-6.700L3 8 M3 3v5h5 M12 7v5l3 2',
   logout: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9',
+  pin: 'M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z',
+  check: 'M20 6L9 17l-5-5',
+  arrowRight: 'M5 12h14 M13 6l6 6-6 6',
+  user: 'M20 21a8 8 0 0 0-16 0 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z',
 };
 
 export default function Icon({ name, size = 18, strokeWidth = 1.8, className }) {
