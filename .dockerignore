@@ -1,11 +1,21 @@
+# .dockerignore unico (o contexto de build e a raiz para backend e frontend)
+
 # Artefatos gerados localmente
 target/
+frontend/node_modules/
+frontend/dist/
 .git/
 .gitignore
+
+# Variaveis de ambiente locais (nunca vao para a imagem)
+.env
+frontend/.env
+frontend/.env.local
 
 # Metadados e configuracoes locais do editor
 .vscode/
 .idea/
+.github/
 *.iml
 
 # Logs e arquivos temporarios
@@ -14,3 +24,4 @@ target/
 
 # Documentacao que nao e necessaria para a imagem
 HELP.md
+*.md
