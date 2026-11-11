@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 import Icon from '../../components/icons/Icon.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import useForm from '../../hooks/useForm.js';
 import { authService } from '../../services/authService.js';
 import { validateCadastro } from '../../utils/validators.js';
-import styles from '../login/LoginPage.module.css';
 import TextField from '../login/TextField.jsx';
+import styles from './CadastroPage.module.css';
 
 const INITIAL_VALUES = { nome: '', email: '', senha: '' };
 
 export default function CadastroPage() {
-  const { login } = useAuth();
+  const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,6 +21,11 @@ export default function CadastroPage() {
     initialValues: INITIAL_VALUES,
     validate: validateCadastro,
   });
+
+  // Quem já está autenticado (ou acabou de se cadastrar) não deve ver o formulário.
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   function handleFieldChange(event) {
     if (submitError) setSubmitError('');
@@ -32,13 +37,24 @@ export default function CadastroPage() {
 
     setSubmitError('');
     setIsSubmitting(true);
+
     try {
-      await authService.cadastrar({ nome, email, senha });
-      // Realiza o login automaticamente após cadastrar
-      await login(email, senha);
-      navigate('/dashboard', { replace: true });
+      await authService.cadastrar({ nome: nome.trim(), email: email.trim(), senha });
     } catch (error) {
-      setSubmitError(error.message);
+      setSubmitError(
+        error instanceof TypeError
+          ? 'Não foi possível conectar ao servidor. Tente novamente.'
+          : error.message
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Cadastro feito: entra automaticamente. Se o login falhar, segue para a tela de login.
+    try {
+      await login(email.trim(), senha);
+    } catch {
+      navigate('/login', { replace: true });
     } finally {
       setIsSubmitting(false);
     }
@@ -51,15 +67,15 @@ export default function CadastroPage() {
           <Icon name="leaf" strokeWidth={2.8} className={styles.logoIcon} />
         </div>
 
-        <h1 className={styles.title}>Criar conta</h1>
-        <p className={styles.subtitle}>Preencha seus dados para acessar o SIPA.</p>
+        <h1 className={styles.title}>Cadastro</h1>
+        <p className={styles.subtitle}>Cadastre suas informações para começar.</p>
 
         <form className={styles.form} onSubmit={onSubmit} noValidate>
           <TextField
-            label="Nome completo"
+            label="Nome de usuário"
             name="nome"
             type="text"
-            autoComplete="name"
+            autoComplete="username"
             value={values.nome}
             error={errors.nome}
             onChange={handleFieldChange}
@@ -77,12 +93,12 @@ export default function CadastroPage() {
             onBlur={handleBlur}
           />
           <TextField
-            label="Senha (mínimo 6 caracteres)"
+            label="Senha"
             name="senha"
             type="password"
             autoComplete="new-password"
             value={values.senha}
-            error={errors.senha}
+            error={errors.senha}b
             onChange={handleFieldChange}
             onBlur={handleBlur}
           />
@@ -92,17 +108,21 @@ export default function CadastroPage() {
           </p>
 
           <button type="submit" className={styles.submit} disabled={isSubmitting}>
-            {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
+            {isSubmitting ? 'Cadastrando...' : 'Cadastrar-se'}
           </button>
         </form>
 
-        <p className={styles.signup}>
-          Já possui uma conta?{' '}
-          <Link to="/login" className={styles.signupLink}>
-            Fazer login
+        <p className={styles.signin}>
+          Já tem uma conta?{' '}
+          <Link to="/login" className={styles.signinLink}>
+            Entrar
           </Link>
         </p>
       </main>
+
+      <p className={styles.copyright}>
+        Copyright © {new Date().getFullYear()}, SIGA, Todos os direitos reservados.
+      </p>
     </div>
   );
 }
