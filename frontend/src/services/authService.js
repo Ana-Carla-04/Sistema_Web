@@ -31,4 +31,5 @@ export const authService = {
   // Cadastro de novo usuário (/SIPA/cadastro)
   cadastrar: ({ nome, email, senha }) =>
     httpClient.post('/SIPA/cadastro', { nome, email, senha }),
+
 };
