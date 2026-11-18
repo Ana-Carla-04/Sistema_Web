@@ -57,8 +57,10 @@ export function validateCadastro(values) {
 
   if (!values.senha) {
     errors.senha = 'A senha é obrigatória.';
-  } else if (values.senha.length < 6) {
-    errors.senha = 'A senha deve ter no mínimo 6 caracteres.';
+  } else if (values.senha.length < 8) {
+    errors.senha = 'A senha deve ter no mínimo 8 caracteres.';
+  } else if (!/^(?=.*[A-Za-z])(?=.*\d).+$/.test(values.senha)) {
+    errors.senha = 'A senha deve conter pelo menos uma letra e um número.';
   }
 
   return errors;

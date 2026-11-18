@@ -1,5 +1,8 @@
 package br.edu.ufersa.SIPA.shared.exeception;
 
+import br.edu.ufersa.SIPA.freatures.colheita.exception.ColheitaValidacaoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,6 +16,8 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // ==========================================
     // ERROS DE VALIDAÇÃO (400)
@@ -29,6 +34,12 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler({ColheitaValidacaoException.class, IllegalArgumentException.class})
+    public ProblemDetail tratarRegraDeNegocioInvalida(RuntimeException exception) {
+        log.warn("Validação de negócio falhou: {}", exception.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
     // ==========================================
     // RECURSO NÃO ENCONTRADO (404)
     // ==========================================
@@ -42,6 +53,7 @@ public class GlobalExceptionHandler {
     // ==========================================
     @ExceptionHandler(ConflictException.class)
     public ProblemDetail tratarConflito(ConflictException exception) {
+        log.info("Conflito de negócio: {}", exception.getMessage());
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, exception.getMessage());
     }
 
@@ -50,6 +62,7 @@ public class GlobalExceptionHandler {
     // ==========================================
     @ExceptionHandler(UnauthorizedException.class)
     public ProblemDetail tratarNaoAutorizado(UnauthorizedException exception) {
+        log.warn("Falha de autenticação/autorização: {}", exception.getMessage());
         return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
@@ -58,6 +71,7 @@ public class GlobalExceptionHandler {
     // ==========================================
     @ExceptionHandler(AccessDeniedException.class)
     public ProblemDetail tratarAcessoNegado(AccessDeniedException exception) {
+        log.warn("Acesso negado: {}", exception.getMessage());
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.FORBIDDEN,
                 "Você não tem permissão para acessar este recurso.");
@@ -68,19 +82,20 @@ public class GlobalExceptionHandler {
     // ==========================================
     @ExceptionHandler(BadCredentialsException.class)
     public ProblemDetail tratarCredenciaisInvalidas(BadCredentialsException exception) {
+        log.warn("Tentativa de login com credenciais inválidas.");
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.UNAUTHORIZED,
                 "Email ou senha incorretos.");
     }
 
     // ==========================================
-    // ERRO INTERNO (500) — fallback
+    // ERRO INTERNO (500) — fallback seguro (sem vazar detalhes internos)
     // ==========================================
     @ExceptionHandler(Exception.class)
     public ProblemDetail tratarErroInterno(Exception exception) {
-        exception.printStackTrace();
+        log.error("Erro interno não tratado na aplicação", exception);
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                exception.getMessage() != null ? exception.getMessage() : "Erro interno do servidor.");
+                "Erro interno do servidor.");
     }
 }

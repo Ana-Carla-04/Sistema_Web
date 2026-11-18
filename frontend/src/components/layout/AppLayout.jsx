@@ -20,12 +20,14 @@ export default function AppLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [globalSearch, setGlobalSearch] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Dados do usuário autenticado no backend
   const displayName = user?.nome ?? user?.name ?? user?.email ?? 'Produtor';
   const displayRole = user?.email ?? user?.cargo ?? 'Produtor Rural';
 
   function handleLogout() {
+    setMobileMenuOpen(false);
     logout();
     navigate('/login', { replace: true });
   }
@@ -39,12 +41,32 @@ export default function AppLayout() {
 
   return (
     <div className={styles.shell}>
-      <aside className={styles.sidebar}>
-        <div className={styles.brand}>
-          <span className={styles.brandMark}>
-            <Icon name="leaf" size={18} />
-          </span>
-          <span className={styles.brandName}>SIPA</span>
+      {/* Backdrop escuro para menu mobile */}
+      {mobileMenuOpen && (
+        <div
+          className={styles.mobileBackdrop}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.sidebarOpen : ''}`}>
+        <div className={styles.brandRow}>
+          <div className={styles.brand}>
+            <span className={styles.brandMark}>
+              <Icon name="leaf" size={18} />
+            </span>
+            <span className={styles.brandName}>SIPA</span>
+          </div>
+
+          <button
+            type="button"
+            className={styles.closeDrawerBtn}
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Fechar menu"
+          >
+            <Icon name="close" size={18} />
+          </button>
         </div>
 
         <nav className={styles.nav} aria-label="Navegação principal">
@@ -52,6 +74,7 @@ export default function AppLayout() {
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={() => setMobileMenuOpen(false)}
               className={({ isActive }) =>
                 isActive ? `${styles.navItem} ${styles.navItemActive}` : styles.navItem
               }
@@ -89,15 +112,26 @@ export default function AppLayout() {
 
       <div className={styles.main}>
         <header className={styles.topbar}>
-          <form className={styles.globalSearch} onSubmit={handleSearchSubmit}>
-            <Icon name="search" size={14} />
-            <input
-              type="search"
-              value={globalSearch}
-              onChange={(event) => setGlobalSearch(event.target.value)}
-              placeholder="Pesquisar no sistema..."
-            />
-          </form>
+          <div className={styles.topbarLeft}>
+            <button
+              type="button"
+              className={styles.menuButton}
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Abrir menu de navegação"
+            >
+              <Icon name="menu" size={20} />
+            </button>
+
+            <form className={styles.globalSearch} onSubmit={handleSearchSubmit}>
+              <Icon name="search" size={14} />
+              <input
+                type="search"
+                value={globalSearch}
+                onChange={(event) => setGlobalSearch(event.target.value)}
+                placeholder="Pesquisar no sistema..."
+              />
+            </form>
+          </div>
 
           <div className={styles.topbarRight}>
             <button

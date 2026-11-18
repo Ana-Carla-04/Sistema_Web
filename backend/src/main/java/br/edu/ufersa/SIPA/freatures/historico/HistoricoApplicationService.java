@@ -1,7 +1,6 @@
 package br.edu.ufersa.SIPA.freatures.historico;
 
 import br.edu.ufersa.SIPA.freatures.historico.domain.HistoricoDomainService;
-import br.edu.ufersa.SIPA.freatures.historico.exception.HistoricoUsuarioNaoIdentificadoException;
 import br.edu.ufersa.SIPA.freatures.historico.dto.HistoricoResponseDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.Plantio;
 import br.edu.ufersa.SIPA.freatures.plantio.PlantioRepository;
@@ -9,6 +8,7 @@ import br.edu.ufersa.SIPA.freatures.custo.Custo;
 import br.edu.ufersa.SIPA.freatures.custo.CustoRepository;
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
 import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
+import br.edu.ufersa.SIPA.shared.exeception.UnauthorizedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,11 +116,11 @@ public class HistoricoApplicationService {
     private Long obterUsuarioId(UserDetails userDetails) {
         if (userDetails == null || userDetails.getUsername() == null
                 || userDetails.getUsername().isBlank()) {
-            throw new IllegalStateException("Usuário autenticado não identificado");
+            throw new UnauthorizedException("Usuário autenticado não identificado.");
         }
 
         Usuario usuario = usuarioRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new IllegalStateException("Usuário autenticado não encontrado"));
+                .orElseThrow(() -> new UnauthorizedException("Usuário autenticado não encontrado."));
         return usuario.getId();
     }
 

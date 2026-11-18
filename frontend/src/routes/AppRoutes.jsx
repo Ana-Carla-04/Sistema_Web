@@ -1,7 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout.jsx';
+import AnaliseFinanceiraPage from '../pages/analise-financeira/AnaliseFinanceiraPage.jsx';
 import CadastroPage from '../pages/cadastro/CadastroPage.jsx';
 import DashboardPage from '../pages/dashboard/DashboardPage.jsx';
+import HistoricoPage from '../pages/historico/HistoricoPage.jsx';
 import LoginPage from '../pages/login/LoginPage.jsx';
 import PlantiosPage from '../pages/plantios/PlantiosPage.jsx';
 import FuturePagePlaceholder from '../pages/shared/FuturePagePlaceholder.jsx';
@@ -50,26 +52,8 @@ export function AppRoutes() {
               />
             }
           />
-          <Route
-            path="/analise-financeira"
-            element={
-              <FuturePagePlaceholder
-                title="Análise Financeira"
-                subtitle="Balanço consolidado de custos, receitas e lucro líquido"
-                endpoint="GET /SIPA/analise-financeira"
-              />
-            }
-          />
-          <Route
-            path="/historico"
-            element={
-              <FuturePagePlaceholder
-                title="Histórico de Produção"
-                subtitle="Comparativo de safras consolidadas ano a ano"
-                endpoint="GET /SIPA/historico"
-              />
-            }
-          />
+          <Route path="/analise-financeira" element={<AnaliseFinanceiraPage />} />
+          <Route path="/historico" element={<HistoricoPage />} />
         </Route>
       </Route>
 

@@ -1,12 +1,14 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 1200px;
+  gap: 18px;
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
 }
 
 .pageTitle {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: 2px;
@@ -16,7 +18,8 @@
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
+  width: 100%;
 }
 
 .kpiCard {
@@ -25,7 +28,8 @@
   align-items: flex-start;
   justify-content: center;
   gap: 6px;
-  padding: 16px 20px;
+  min-height: 92px;
+  padding: 18px 22px;
   background: var(--color-surface);
   border: 1px solid #e6ece7;
   border-radius: 12px;
@@ -35,34 +39,34 @@
 }
 
 .kpiCard:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: #c5d6cb;
-  box-shadow: 0 4px 12px rgba(18, 41, 29, 0.08);
+  box-shadow: 0 6px 16px rgba(18, 41, 29, 0.08);
 }
 
 .kpiLabel {
   font-size: 0.72rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #5b675f;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
 .kpiValueRow {
   display: flex;
   align-items: baseline;
-  gap: 5px;
+  gap: 6px;
 }
 
 .kpiNumber {
-  font-size: 1.05rem;
+  font-size: clamp(1.15rem, 1.4vw, 1.4rem);
   font-weight: 700;
   color: #17241c;
 }
 
 .kpiUnit {
   font-size: 0.85rem;
-  font-weight: 400;
+  font-weight: 500;
   color: #5b675f;
 }
 
@@ -70,7 +74,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  padding: 18px 20px;
+  height: 100%;
+  padding: 20px 22px;
   background: var(--color-surface);
   border: 1px solid #e6ece7;
   border-radius: 12px;
@@ -88,11 +93,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
 .cardTitle {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #1c2820;
 }
@@ -101,25 +107,31 @@
 .chartsGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
+  width: 100%;
+  align-items: stretch;
 }
 
 .safraChartArea {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: end;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  flex: 1;
   gap: 16px;
-  padding: 8px 16px 2px;
-  min-height: 150px;
+  padding: 12px 12px 4px;
+  min-height: 160px;
 }
 
 .custosChartArea {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  align-items: end;
-  gap: 10px;
-  padding: 8px 4px 2px;
-  min-height: 150px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  flex: 1;
+  gap: 12px;
+  padding: 12px 8px 4px;
+  min-height: 160px;
 }
 
 .chartColumnBtn {
@@ -127,10 +139,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  flex: 1;
+  min-width: 68px;
+  max-width: 124px;
   gap: 10px;
   background: transparent;
   border: none;
-  padding: 4px 2px;
+  padding: 6px 4px;
   border-radius: 8px;
   transition: background-color 0.15s ease, transform 0.15s ease;
 }
@@ -201,9 +216,10 @@
 /* ---- 3. Status dos Lotes + Clima ---- */
 .middleGrid {
   display: grid;
-  grid-template-columns: 1.65fr 1fr;
-  gap: 16px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 18px;
+  width: 100%;
+  align-items: stretch;
 }
 
 .grayPillBadge {
@@ -223,7 +239,9 @@
 .lotesList {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 10px;
+  margin-bottom: 16px;
 }
 
 .loteItem {
@@ -334,8 +352,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 14px;
-  margin-top: 18px;
-  padding-top: 14px;
+  margin-top: auto;
+  padding-top: 16px;
   border-top: 1px solid #edf1ed;
 }
 
@@ -528,6 +546,7 @@
 }
 
 .weatherAlertBanner {
+  margin-top: auto;
   padding: 10px 12px;
   font-size: 0.74rem;
   line-height: 1.4;
@@ -903,7 +922,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 120px;
+  flex: 1;
+  min-height: 150px;
   font-size: 0.85rem;
   color: var(--color-muted);
   text-align: center;
@@ -911,7 +931,7 @@
 }
 
 /* ---- Responsividade ---- */
-@media (max-width: 1024px) {
+@media (max-width: 1120px) {
   .kpiGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -923,12 +943,42 @@
 }
 
 @media (max-width: 600px) {
+  .dashboard {
+    gap: 14px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
   .kpiGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .kpiCard {
+    padding: 14px 16px;
+    min-height: 80px;
   }
 
   .weatherMetricsGrid,
   .forecastGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .taskRow {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .loteItem {
+    padding: 12px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
   }
 }

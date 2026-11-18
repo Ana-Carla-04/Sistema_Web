@@ -7,6 +7,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -17,6 +19,9 @@ import java.io.IOException;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(SecurityFilter.class);
+
     private final TokenService tokenService;
     private final UsuarioRepository usuarioRepository;
 
@@ -34,7 +39,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (authorization != null && authorization.startsWith("Bearer ")
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String token = authorization.substring(7);
+            String token = authorization.substring(7).trim();
             String subject = tokenService.validateToken(token);
 
             if (subject != null) {
@@ -49,10 +54,16 @@ public class SecurityFilter extends OncePerRequestFilter {
                         authentication.setDetails(
                                 new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
+                    } else {
+                        log.warn("Token JWT válido, mas usuário id={} não encontrado no banco (URI={})",
+                                usuarioId, request.getRequestURI());
                     }
-                } catch (NumberFormatException ignored) {
-                    // Token invalido: a cadeia continuara sem autenticacao.
+                } catch (NumberFormatException ex) {
+                    log.warn("Subject inválido no token JWT para URI={}", request.getRequestURI());
                 }
+            } else {
+                log.warn("Tentativa de acesso com token JWT inválido ou expirado (URI={}, IP={})",
+                        request.getRequestURI(), request.getRemoteAddr());
             }
         }
 

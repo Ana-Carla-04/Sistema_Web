@@ -1,12 +1,13 @@
 package br.edu.ufersa.SIPA.freatures.plantio;
 
+import br.edu.ufersa.SIPA.freatures.auth.Usuario;
+import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.freatures.plantio.dto.PlantioRequestDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.dto.PlantioResponseDTO;
 import br.edu.ufersa.SIPA.freatures.plantio.exception.PlantioNotFoundException;
-import br.edu.ufersa.SIPA.freatures.auth.Usuario;
-import br.edu.ufersa.SIPA.freatures.auth.UsuarioRepository;
 import br.edu.ufersa.SIPA.shared.exeception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +24,7 @@ public class PlantioService {
         this.usuarioRepository = usuarioRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<PlantioResponseDTO> listar(Long usuarioId, LocalDate data, String status, String nome) {
         return plantioRepository.findByUsuarioId(usuarioId).stream()
                 .filter(p -> data == null || data.equals(p.getDataPlantio()))
@@ -32,18 +34,20 @@ public class PlantioService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public PlantioResponseDTO buscarPorId(Long id, Long usuarioId) {
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(id, usuarioId)
                 .orElseThrow(() -> new PlantioNotFoundException(id));
         return PlantioResponseDTO.fromEntity(plantio);
     }
 
+    @Transactional
     public PlantioResponseDTO criar(Long usuarioId, PlantioRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + usuarioId));
 
         Plantio plantio = new Plantio();
-        plantio.setNome(dto.getNome());
+        plantio.setNome(dto.getNome().trim());
         plantio.setVariedade(dto.getVariedade());
         plantio.setArea(dto.getArea());
         plantio.setDataPlantio(dto.getDataPlantio());
@@ -54,12 +58,13 @@ public class PlantioService {
         return PlantioResponseDTO.fromEntity(salvo);
     }
 
+    @Transactional
     public PlantioResponseDTO atualizar(Long id, Long usuarioId, PlantioRequestDTO dto) {
         // findByIdAndUsuarioId impede que um usuário edite o plantio de outro (IDOR)
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(id, usuarioId)
                 .orElseThrow(() -> new PlantioNotFoundException(id));
 
-        plantio.setNome(dto.getNome());
+        plantio.setNome(dto.getNome().trim());
         plantio.setVariedade(dto.getVariedade());
         plantio.setArea(dto.getArea());
         plantio.setDataPlantio(dto.getDataPlantio());
@@ -69,6 +74,7 @@ public class PlantioService {
         return PlantioResponseDTO.fromEntity(atualizado);
     }
 
+    @Transactional
     public void deletar(Long id, Long usuarioId) {
         Plantio plantio = plantioRepository.findByIdAndUsuarioId(id, usuarioId)
                 .orElseThrow(() -> new PlantioNotFoundException(id));

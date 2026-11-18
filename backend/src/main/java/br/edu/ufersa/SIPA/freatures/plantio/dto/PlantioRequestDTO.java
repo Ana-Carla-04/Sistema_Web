@@ -3,18 +3,20 @@ package br.edu.ufersa.SIPA.freatures.plantio.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-//o que entra
 public class PlantioRequestDTO {
 
-    //validações
     @NotBlank(message = "nome é obrigatório")
+    @Size(max = 120, message = "nome deve ter no máximo 120 caracteres")
     private String nome;
 
+    @Size(max = 100, message = "variedade deve ter no máximo 100 caracteres")
     private String variedade;
 
+    @NotNull(message = "area é obrigatória")
     @Positive(message = "area deve ser maior que zero")
     private Double area;
 
@@ -22,9 +24,9 @@ public class PlantioRequestDTO {
     private LocalDate dataPlantio;
 
     @NotBlank(message = "status é obrigatório")
+    @Size(max = 40, message = "status deve ter no máximo 40 caracteres")
     private String status;
 
-    //construtor
     public PlantioRequestDTO() {}
 
     public String getNome() { return nome; }

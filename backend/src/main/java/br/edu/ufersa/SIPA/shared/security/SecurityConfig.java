@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
 public class SecurityConfig {
@@ -24,22 +25,27 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.deny())
+                        .contentTypeOptions(contentType -> {})
+                        .referrerPolicy(referrer -> referrer
+                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // ==========================================
-                        // ENDPOINTS PÚBLICOS (não precisam de login)
+                        // ENDPOINTS PÚBLICOS (apenas autenticação e criação de conta)
                         // ==========================================
                         .requestMatchers(HttpMethod.POST, "/SIPA/login").permitAll()
-                        .requestMatchers("/SIPA/login/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/SIPA/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/SIPA/cadastro").permitAll()
-                        .requestMatchers("/SIPA/cadastro/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/SIPA/usuarios").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // ==========================================
-                        // ENDPOINTS PROTEGIDOS (precisam de login)
+                        // ENDPOINTS PROTEGIDOS (exigem JWT válido)
                         // ==========================================
+                        .requestMatchers("/SIPA/cadastro/**").authenticated()
                         .requestMatchers("/SIPA/plantios", "/SIPA/plantios/**").authenticated()
                         .requestMatchers("/SIPA/custos", "/SIPA/custos/**").authenticated()
                         .requestMatchers("/SIPA/tarefas", "/SIPA/tarefas/**").authenticated()

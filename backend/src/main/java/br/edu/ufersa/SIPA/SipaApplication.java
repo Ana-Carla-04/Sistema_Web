@@ -1,5 +1,7 @@
 package br.edu.ufersa.SIPA;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -7,9 +9,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
-
 @SpringBootApplication
 public class SipaApplication {
+
+	private static final Logger log = LoggerFactory.getLogger(SipaApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(SipaApplication.class, args);
@@ -20,8 +23,9 @@ public class SipaApplication {
 		@Value("${var1:valor default na classe SipaApplication}")
 		String teste;
 
-		public void run(ApplicationArguments args) throws Exception {
-			System.out.println("Rodou corretamente! com " + teste);
+		@Override
+		public void run(ApplicationArguments args) {
+			log.info("SIPA iniciado corretamente com configuração: {}", teste);
 		}
 	}
 }

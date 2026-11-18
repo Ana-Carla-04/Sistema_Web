@@ -8,57 +8,53 @@
 # ==============================================
 FROM maven:3.9.9-eclipse-temurin-21 AS backend-build
 
-# Define o diretorio de trabalho dentro do container de compilacao.
 WORKDIR /app
 
-# Copia primeiro o pom para aproveitar o cache das dependencias Maven.
 COPY pom.xml .
 RUN mvn -B dependency:go-offline
 
-# Copia o codigo-fonte (agora em backend/) e gera o JAR executavel do Spring Boot.
 COPY backend ./backend
 RUN mvn -B clean package -DskipTests
 
 # ==============================================
-# BACKEND - execucao
+# BACKEND - execucao (Non-root Hardened - OWASP A02)
 # ==============================================
 FROM eclipse-temurin:21-jre AS backend
 
-# Define o diretorio de trabalho do container de execucao.
 WORKDIR /app
 
-# Copia somente o artefato gerado para a imagem final.
-COPY --from=backend-build /app/target/*.jar app.jar
+# Cria grupo e usuario sem privilegios de root para rodar a JVM com seguranca
+RUN groupadd --system sipa && useradd --system --gid sipa --no-create-home sipa
 
-# Documenta a porta HTTP usada pelo Spring Boot.
+COPY --from=backend-build --chown=sipa:sipa /app/target/*.jar app.jar
+
+USER sipa
+
 EXPOSE 8080
 
-# Inicia a aplicacao Spring Boot quando o container for executado.
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # ==============================================
-# FRONTEND - build (Vite)
+# FRONTEND - build (Vite - Lockfile Estrito OWASP A03/A08)
 # ==============================================
 FROM node:22-alpine AS frontend-build
 
 WORKDIR /app
 
-# Copia primeiro os manifests para aproveitar o cache do npm.
-COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm ci || npm install
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
 
 COPY frontend/ ./
 
-# Com Nginx fazendo proxy reverso, a API fica na mesma origem em /SIPA.
 ARG VITE_API_BASE_URL=/SIPA
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 RUN npm run build
 
 # ==============================================
-# FRONTEND - execucao (Nginx)
+# FRONTEND - execucao (Nginx com versao fixa)
 # ==============================================
-FROM nginx:alpine AS frontend
+FROM nginx:1.27-alpine AS frontend
 
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=frontend-build /app/dist /usr/share/nginx/html
