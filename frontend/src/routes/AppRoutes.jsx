@@ -8,6 +8,7 @@ import LoginPage from '../pages/login/LoginPage.jsx';
 import PlantiosPage from '../pages/plantios/PlantiosPage.jsx';
 import FuturePagePlaceholder from '../pages/shared/FuturePagePlaceholder.jsx';
 import { PrivateRoute } from './PrivateRoute.jsx';
+import ColheitaPage from '../pages/colheita/ColheitaPage.jsx';
 
 export function AppRoutes() {
   return (
@@ -32,16 +33,8 @@ export function AppRoutes() {
               />
             }
           />
-          <Route
-            path="/colheita"
-            element={
-              <FuturePagePlaceholder
-                title="Colheita e Receita"
-                subtitle="Simulador de rendimento por alqueire (115kg) e lançamentos"
-                endpoint="POST /SIPA/colheita/simulacoes-colheita"
-              />
-            }
-          />
+          <Route path="/colheita" element={<ColheitaPage />} />
+
           <Route
             path="/tarefas"
             element={

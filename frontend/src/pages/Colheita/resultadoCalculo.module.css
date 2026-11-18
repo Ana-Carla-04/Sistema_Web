@@ -1,0 +1,64 @@
+.card {
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.title {
+    margin-bottom: var(--space-5);
+    font-size: var(--text-md);
+    font-weight: 700;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.row dt {
+    color: var(--color-muted);
+}
+
+.row dd {
+    font-weight: 700;
+    text-align: right;
+}
+
+.negative {
+    color: var(--color-danger);
+}
+
+.saldo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--status-colhido-text);
+    background: var(--status-colhido-bg);
+    border-radius: var(--radius-sm);
+}
+
+.saldoNegativo {
+    color: var(--color-danger);
+    background: var(--color-danger-bg);
+}
+
+.aviso {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+}
