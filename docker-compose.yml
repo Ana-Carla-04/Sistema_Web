@@ -20,12 +20,13 @@ services:
       retries: 10
 
   app:
-    # Constroi a imagem a partir do DockerFile deste projeto.
+    # API Spring Boot: estagio "backend" do Dockerfile unico da raiz.
     build:
       context: .
-      dockerfile: DockerFile
+      dockerfile: Dockerfile
+      target: backend
     ports:
-      # Expone a API na porta 8080 do computador.
+      # Expoe a API na porta 8080 do computador.
       - "8080:8080"
     environment:
       # URL usa o nome do servico db, que funciona dentro da rede Docker.
@@ -39,6 +40,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  frontend:
+    # React + Nginx: estagio "frontend" do Dockerfile unico da raiz.
+    # O Nginx faz proxy reverso de /SIPA/ para o servico "app" (sem CORS).
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+    ports:
+      # Expoe o front-end na porta 3001 do computador.
+      - "3001:80"
+    depends_on:
+      - app
 
 volumes:
   # Volume nomeado para persistencia do PostgreSQL.

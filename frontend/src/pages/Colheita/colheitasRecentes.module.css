@@ -1,0 +1,76 @@
+.card {
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.title {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-md);
+    font-weight: 700;
+}
+
+.tableWrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.table {
+    width: 100%;
+    min-width: 560px;
+    font-size: var(--text-sm);
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background: var(--color-field);
+}
+
+.table th,
+.table td {
+    padding: 12px 10px;
+}
+
+.table thead th {
+    font-weight: 500;
+    color: var(--color-muted);
+}
+
+.table tbody tr + tr {
+    border-top: 1px solid var(--color-border);
+}
+
+.table tbody th {
+    font-weight: 700;
+}
+
+.right {
+    text-align: right !important;
+}
+
+.receita {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    text-align: center;
+}
+
+.retry {
+    padding: 8px var(--space-4);
+    font-weight: 600;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+}
