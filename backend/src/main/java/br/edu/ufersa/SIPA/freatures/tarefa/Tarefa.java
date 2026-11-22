@@ -23,6 +23,19 @@ public class Tarefa {
     @Column(nullable = false)
     private boolean concluida = false;
 
+    // Campos opcionais: o Hibernate (ddl-auto=update) cria as colunas sozinho
+    // e as tarefas que já existem no banco continuam válidas (valor nulo).
+    @Column(length = 120)
+    private String responsavel;
+
+    // PRIORITARIA | AGENDADO | PLANEJADO
+    @Column(length = 40)
+    private String prioridade;
+
+    // PENDENTE | EM_ANDAMENTO | CONCLUIDA
+    @Column(length = 40)
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
@@ -47,6 +60,15 @@ public class Tarefa {
 
     public boolean isConcluida() { return concluida; }
     public void setConcluida(boolean concluida) { this.concluida = concluida; }
+
+    public String getResponsavel() { return responsavel; }
+    public void setResponsavel(String responsavel) { this.responsavel = responsavel; }
+
+    public String getPrioridade() { return prioridade; }
+    public void setPrioridade(String prioridade) { this.prioridade = prioridade; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }

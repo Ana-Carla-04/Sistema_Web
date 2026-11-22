@@ -16,6 +16,9 @@ import java.util.List;
 @Service
 public class TarefaService {
 
+    private static final String STATUS_PENDENTE = "PENDENTE";
+    private static final String STATUS_CONCLUIDA = "CONCLUIDA";
+
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;
     private final PlantioRepository plantioRepository;
@@ -58,6 +61,9 @@ public class TarefaService {
         t.setTitulo(dto.getTitulo());
         t.setDescricao(dto.getDescricao());
         t.setDataLimite(dto.getDataLimite());
+        t.setResponsavel(dto.getResponsavel());
+        t.setPrioridade(dto.getPrioridade());
+        aplicarStatus(t, dto.getStatus() != null ? dto.getStatus() : STATUS_PENDENTE);
         t.setUsuario(usuario);
         t.setPlantio(plantio);
         return tarefaRepository.save(t);
@@ -69,13 +75,18 @@ public class TarefaService {
         t.setTitulo(dto.getTitulo());
         t.setDescricao(dto.getDescricao());
         t.setDataLimite(dto.getDataLimite());
+        t.setResponsavel(dto.getResponsavel());
+        t.setPrioridade(dto.getPrioridade());
+        if (dto.getStatus() != null) {
+            aplicarStatus(t, dto.getStatus());
+        }
         return tarefaRepository.save(t);
     }
 
     @Transactional
     public Tarefa concluir(Long id, Long usuarioId) {
         Tarefa t = buscarPorId(id, usuarioId);
-        t.setConcluida(true);
+        aplicarStatus(t, STATUS_CONCLUIDA);
         return tarefaRepository.save(t);
     }
 
@@ -83,5 +94,11 @@ public class TarefaService {
     public void deletar(Long id, Long usuarioId) {
         Tarefa t = buscarPorId(id, usuarioId);
         tarefaRepository.delete(t);
+    }
+
+    // Mantém o status e o flag "concluida" sempre coerentes entre si.
+    private void aplicarStatus(Tarefa t, String status) {
+        t.setStatus(status);
+        t.setConcluida(STATUS_CONCLUIDA.equals(status));
     }
 }
