@@ -1,5 +1,5 @@
 import { formatAlqueires, formatBRL, formatKg } from '../../utils/colheita.js';
-import styles from './ResultadoCalculo.module.css';
+import styles from './resultadoCalculo.module.css';
 
 export default function ResultadoCalculo({ resultado }) {
     const saldoNegativo = resultado ? resultado.saldo < 0 : false;

@@ -27,12 +27,17 @@ async function request(endpoint, options = {}) {
     });
 
     if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 && !options.skipAuthRedirect) {
             storage.removeToken(); // Token expirado
             window.location.href = '/login'; // Redireciona pro login
         }
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Erro na requisição');
+        const fieldErrors = errorData.erros
+            ? Object.values(errorData.erros).join(' ')
+            : '';
+        throw new Error(
+            fieldErrors || errorData.detail || errorData.message || 'Erro na requisição',
+        );
     }
 
     // Se a resposta for 204 (No Content), não tenta ler o JSON

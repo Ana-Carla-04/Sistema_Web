@@ -1,8 +1,8 @@
-import Icon from '../../components/Icons/Icon.jsx';
+import Icon from '../../components/icons/Icon.jsx';
 import useForm from '../../hooks/useForm.js';
 import { KG_POR_ALQUEIRE } from '../../utils/colheita.js';
 import { validateSimulacao } from '../../utils/validators.js';
-import styles from './SimuladorRendimento.module.css';
+import styles from './simuladorRendimento.module.css';
 
 const INITIAL_VALUES = {
     producaoBruta: '',

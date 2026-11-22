@@ -9,7 +9,7 @@ import PlantiosPage from '../pages/plantios/PlantiosPage.jsx';
 import TarefasPage from '../pages/tarefas/TarefasPage.jsx';
 import FuturePagePlaceholder from '../pages/shared/FuturePagePlaceholder.jsx';
 import { PrivateRoute } from './PrivateRoute.jsx';
-import ColheitaPage from '../pages/colheita/ColheitaPage.jsx';
+import ColheitaPage from '../pages/Colheita/ColheitaPage.jsx';
 
 export function AppRoutes() {
   return (

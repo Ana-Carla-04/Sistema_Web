@@ -4,10 +4,10 @@ import useColheitas from '../../hooks/useColheitas.js';
 import usePlantios from '../../hooks/usePlantios.js';
 import { colheitaService } from '../../services/colheitaService.js';
 import { calcularRendimento, parseDecimal } from '../../utils/colheita.js';
-import ColheitasRecentes from './ColheitasRecentes.jsx';
-import styles from './ColheitaPage.module.css';
-import ResultadoCalculo from './ResultadoCalculo.jsx';
-import SimuladorRendimento from './SimuladorRendimento.jsx';
+import ColheitasRecentes from './colheitasRecentes.jsx';
+import styles from './colheitaPage.module.css';
+import ResultadoCalculo from './resultadoCalculo.jsx';
+import SimuladorRendimento from './simuladorRendimento.jsx';
 
 export default function ColheitaPage() {
     // Os lotes do select são os plantios do usuário.
