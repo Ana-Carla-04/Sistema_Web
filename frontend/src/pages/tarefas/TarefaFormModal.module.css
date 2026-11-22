@@ -1,0 +1,247 @@
+/*
+ * Pop-up de adicionar/editar tarefa. Fica na frente da tela, sobre um fundo escurecido
+ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  padding: 4.5rem 1rem 1.5rem;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.26);
+}
+
+.modal {
+  --u: clamp(0.5px, 0.05vw, 0.8px);
+  --label-size: max(0.75rem, calc(18 * var(--u)));
+  --text-size: max(0.8125rem, calc(20 * var(--u)));
+  --green: #1f8a4c;
+
+  position: relative;
+  width: min(100%, calc(1548 * var(--u)));
+  margin: auto;
+  padding: calc(35 * var(--u)) calc(34 * var(--u)) calc(36 * var(--u));
+  background: #ffffff;
+  border: 1px solid #e3e8e4;
+  border-radius: calc(16 * var(--u));
+  box-shadow: 0 calc(20 * var(--u)) calc(50 * var(--u)) rgba(0, 0, 0, 0.18);
+}
+
+/* botão "X" verde no canto superior direito, meio para fora do pop-up */
+.close {
+  position: absolute;
+  top: calc(-60 * var(--u));
+  right: calc(-10 * var(--u));
+  display: grid;
+  place-items: center;
+  width: max(2.25rem, calc(74 * var(--u)));
+  height: max(2.25rem, calc(74 * var(--u)));
+  font-size: max(1rem, calc(34 * var(--u)));
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+  background: var(--color-primary);
+  border-radius: 50%;
+  transition: background-color 0.15s;
+}
+
+.close:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.title {
+  margin-bottom: max(1rem, calc(28 * var(--u)));
+  font-size: max(1rem, calc(24 * var(--u)));
+  font-weight: 600;
+  line-height: calc(30 * var(--u));
+  color: #1a1f1c;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: max(0.875rem, calc(27.5 * var(--u)));
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  margin-bottom: max(0.25rem, calc(9 * var(--u)));
+  font-size: var(--label-size);
+  font-weight: 500;
+  line-height: max(1.125rem, calc(24 * var(--u)));
+  color: #5f7266;
+}
+
+.control {
+  width: 100%;
+  height: max(2.25rem, calc(55 * var(--u)));
+  padding: 0 calc(21 * var(--u));
+  font-size: var(--text-size);
+  color: var(--color-text);
+  background: #f7f9f8;
+  border: 1px solid #e2e8e3;
+  border-radius: calc(11 * var(--u));
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.control::placeholder {
+  color: #a3aea8;
+  opacity: 1;
+}
+
+.control:focus {
+  background: #ffffff;
+  border-color: var(--green);
+  outline: none;
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* o "▾" do desenho vem no próprio texto da opção "Selecionar"; sem seta do navegador */
+.select {
+  cursor: pointer;
+  appearance: none;
+}
+
+.empty {
+  color: #a3aea8;
+}
+
+.select option {
+  color: var(--color-text);
+}
+
+.textarea {
+  height: calc(110 * var(--u));
+  min-height: 4.5rem;
+  padding-top: calc(20 * var(--u));
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.threeColumns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(23 * var(--u));
+}
+
+.responsavel {
+  width: 49.3%;
+}
+
+.status {
+  width: 24.3%;
+}
+
+.error,
+.hint {
+  margin-top: 4px;
+  font-size: var(--text-xs);
+  line-height: 1.25;
+  color: var(--color-danger);
+}
+
+.hint {
+  color: var(--color-muted);
+}
+
+.submitError {
+  padding: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+  border-radius: var(--radius-sm);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: calc(17 * var(--u));
+  margin-top: calc(6.5 * var(--u));
+}
+
+.cancel,
+.save {
+  height: max(2.25rem, calc(54 * var(--u)));
+  font-size: var(--text-size);
+  border-radius: calc(11 * var(--u));
+  transition: background-color 0.15s;
+}
+
+.cancel {
+  min-width: calc(151 * var(--u));
+  padding: 0 calc(20 * var(--u));
+  color: #5f7266;
+  background: #ffffff;
+  border: 1px solid #dfe5e0;
+}
+
+.cancel:hover:not(:disabled) {
+  background: #f4f7f5;
+}
+
+.save {
+  min-width: calc(186 * var(--u));
+  padding: 0 calc(20 * var(--u));
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--green);
+}
+
+.save:hover:not(:disabled) {
+  background: #197a42;
+}
+
+.cancel:disabled,
+.save:disabled,
+.close:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ---- telas estreitas: campos empilhados, sem larguras parciais ---- */
+@media (max-width: 720px) {
+  .overlay {
+    padding-top: 3.5rem;
+  }
+
+  .threeColumns {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .form {
+    gap: 1rem;
+  }
+
+  .responsavel,
+  .status {
+    width: 100%;
+  }
+
+  .close {
+    top: -2.75rem;
+    right: 0;
+  }
+
+  .modal {
+    padding: 1.25rem 1rem 1.25rem;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+  }
+}
