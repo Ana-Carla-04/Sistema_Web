@@ -6,6 +6,7 @@ import DashboardPage from '../pages/dashboard/DashboardPage.jsx';
 import HistoricoPage from '../pages/historico/HistoricoPage.jsx';
 import LoginPage from '../pages/login/LoginPage.jsx';
 import PlantiosPage from '../pages/plantios/PlantiosPage.jsx';
+import TarefasPage from '../pages/tarefas/TarefasPage.jsx';
 import FuturePagePlaceholder from '../pages/shared/FuturePagePlaceholder.jsx';
 import { PrivateRoute } from './PrivateRoute.jsx';
 import ColheitaPage from '../pages/colheita/ColheitaPage.jsx';
@@ -35,16 +36,7 @@ export function AppRoutes() {
           />
           <Route path="/colheita" element={<ColheitaPage />} />
 
-          <Route
-            path="/tarefas"
-            element={
-              <FuturePagePlaceholder
-                title="Cronograma de Tarefas"
-                subtitle="Atividades prioritárias, pendentes, agendadas e concluídas"
-                endpoint="GET /SIPA/tarefas"
-              />
-            }
-          />
+          <Route path="/tarefas" element={<TarefasPage />} />
           <Route path="/analise-financeira" element={<AnaliseFinanceiraPage />} />
           <Route path="/historico" element={<HistoricoPage />} />
         </Route>
