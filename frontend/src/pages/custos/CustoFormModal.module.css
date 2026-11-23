@@ -1,0 +1,247 @@
+/*
+ * Pop-up de adicionar/editar custo. Fica na frente de toda a tela (inclusive menu e
+ * barra superior), sobre um fundo escurecido, com o "X" verde saindo pelo canto.
+ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  padding: 3.5rem 1rem 1.5rem;
+  overflow-y: auto;
+  background: rgba(80, 80, 80, 0.38);
+}
+
+.modal {
+  position: relative;
+  width: min(100%, 440px);
+  padding: 22px 20px 40px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 11px;
+  box-shadow: var(--shadow-modal);
+}
+
+/* botão "X" verde no canto superior direito, acima do pop-up */
+.close {
+  position: absolute;
+  top: -48px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+  background: var(--color-primary);
+  border-radius: 50%;
+  transition: background-color 0.15s;
+}
+
+.close:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.title {
+  margin-bottom: 48px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 13px;
+  row-gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  margin-bottom: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #4e5c52;
+}
+
+.control {
+  width: 100%;
+  height: 31px;
+  padding: 0 10px;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  background: #ffffff;
+  border: 1px solid #e3e8e4;
+  border-radius: 6px;
+  transition: border-color 0.15s;
+}
+
+.control::placeholder {
+  color: #a3aea8;
+  opacity: 1;
+}
+
+.control:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  background: #f7f9f8;
+  opacity: 0.8;
+}
+
+/* select sem a seta do navegador: o chevron é um ícone por cima */
+.selectWrap {
+  position: relative;
+}
+
+.select {
+  padding-right: 28px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.empty {
+  color: #a3aea8;
+}
+
+.select option {
+  color: var(--color-text);
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  color: #3a4640;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* campo de arquivo: caixa pequena com o texto "adicionar arquivo" */
+.fileBox {
+  display: flex;
+  align-items: center;
+  width: 76%;
+  height: 31px;
+  padding: 0 10px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #ffffff;
+  border: 1px solid #e3e8e4;
+  border-radius: 6px;
+  transition: border-color 0.15s;
+}
+
+.fileBox:hover,
+.fileBox:focus-within {
+  border-color: var(--color-primary);
+}
+
+.filePlaceholder,
+.fileName {
+  overflow: hidden;
+  font-size: 0.6875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filePlaceholder {
+  color: #9aa59f;
+}
+
+.fileName {
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+/* o input de arquivo fica invisível, mas continua acessível pelo teclado */
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  opacity: 0;
+}
+
+.error,
+.hint {
+  margin-top: 4px;
+  font-size: var(--text-xs);
+  line-height: 1.25;
+  color: var(--color-danger);
+}
+
+.hint {
+  color: var(--color-muted);
+}
+
+.submitError {
+  padding: var(--space-3);
+  margin-top: 16px;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+  border-radius: var(--radius-sm);
+}
+
+.save {
+  width: 100%;
+  height: 36px;
+  margin-top: 46px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: var(--color-primary);
+  border-radius: 6px;
+  transition: background-color 0.15s;
+}
+
+.save:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.save:disabled,
+.close:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ---- telas estreitas: campos empilhados ---- */
+@media (max-width: 520px) {
+  .overlay {
+    padding-top: 3.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fileBox {
+    width: 100%;
+  }
+
+  .title {
+    margin-bottom: 28px;
+  }
+
+  .save {
+    margin-top: 28px;
+  }
+}
