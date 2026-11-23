@@ -23,6 +23,15 @@ export function AuthProvider({ children }) {
     return usuario;
   }
 
+  // Atualiza os dados do usuário logado na sessão e no localStorage em tempo real
+  function updateUser(updatedFields) {
+    setUser((prev) => {
+      const nextUser = { ...(prev || {}), ...updatedFields };
+      storage.setUser(nextUser);
+      return nextUser;
+    });
+  }
+
   async function logout() {
     await authService.logout();
     storage.clear();
@@ -31,7 +40,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

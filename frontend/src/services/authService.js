@@ -13,7 +13,9 @@ export const authService = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Credenciais inválidas. Verifique seu e-mail e senha.');
+      throw new Error(
+        errorData.detail || errorData.message || 'Credenciais inválidas. Verifique seu e-mail e senha.',
+      );
     }
 
     return response.json(); // { token, tipo, usuario: { id, nome, email } }
@@ -29,7 +31,42 @@ export const authService = {
   },
 
   // Cadastro de novo usuário (/SIPA/cadastro)
-  cadastrar: ({ nome, email, senha }) =>
-    httpClient.post('/SIPA/cadastro', { nome, email, senha }),
+  cadastrar: async ({ nome, email, senha }) => {
+    const response = await fetch('http://localhost:8080/SIPA/cadastro', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ nome, email, senha }),
+    });
 
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const fieldErrors = errorData.erros ? Object.values(errorData.erros).join(' ') : '';
+      throw new Error(fieldErrors || errorData.detail || errorData.message || 'Erro ao realizar cadastro.');
+    }
+
+    return response.json(); // UsuarioResponseDTO
+  },
+
+  // Busca os dados atuais do usuário autenticado no banco
+  obterMeuPerfil: async (usuarioId) => {
+    const endpoint = usuarioId ? `/SIPA/cadastro/${usuarioId}` : '/SIPA/cadastro/me';
+    return httpClient.get(endpoint, { skipAuthRedirect: true });
+  },
+
+  // Atualiza os dados do usuário mediante confirmação de segurança (senhaAtual)
+  atualizarMeuPerfil: async (usuarioId, { nome, email, senhaAtual, novaSenha }) => {
+    const endpoint = usuarioId ? `/SIPA/cadastro/${usuarioId}` : '/SIPA/cadastro/me';
+    return httpClient.put(
+      endpoint,
+      {
+        nome,
+        email,
+        senhaAtual,
+        ...(novaSenha ? { novaSenha } : {}),
+      },
+      { skipAuthRedirect: true },
+    );
+  },
 };

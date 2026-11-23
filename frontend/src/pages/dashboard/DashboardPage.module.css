@@ -8,7 +8,7 @@
 }
 
 .pageTitle {
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: 2px;
@@ -28,8 +28,8 @@
   align-items: flex-start;
   justify-content: center;
   gap: 6px;
-  min-height: 92px;
-  padding: 18px 22px;
+  min-height: 98px;
+  padding: 20px 24px;
   background: var(--color-surface);
   border: 1px solid #e6ece7;
   border-radius: 12px;
@@ -45,7 +45,7 @@
 }
 
 .kpiLabel {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #5b675f;
   letter-spacing: 0.03em;
@@ -59,13 +59,13 @@
 }
 
 .kpiNumber {
-  font-size: clamp(1.15rem, 1.4vw, 1.4rem);
+  font-size: clamp(1.3rem, 1.65vw, 1.6rem);
   font-weight: 700;
   color: #17241c;
 }
 
 .kpiUnit {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 500;
   color: #5b675f;
 }
@@ -98,7 +98,7 @@
 }
 
 .cardTitle {
-  font-size: 0.9rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: #1c2820;
 }
@@ -316,18 +316,18 @@
 }
 
 .loteName {
-  font-size: 0.8125rem;
+  font-size: 0.94rem;
   font-weight: 700;
   color: #1c2820;
 }
 
 .loteArea {
-  font-size: 0.75rem;
+  font-size: 0.84rem;
   color: #6c7a70;
 }
 
 .loteStatusText {
-  font-size: 0.75rem;
+  font-size: 0.84rem;
   font-weight: 600;
 }
 
@@ -361,9 +361,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.75rem;
+  font-size: 0.84rem;
   color: #526057;
-  padding: 3px 6px;
+  padding: 4px 8px;
   border-radius: 6px;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
@@ -398,14 +398,14 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #5a675e;
   letter-spacing: 0.02em;
 }
 
 .weatherMinMax {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
@@ -422,7 +422,7 @@
 }
 
 .weatherMainTemp {
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: #17241c;
   margin-bottom: 4px;
@@ -432,21 +432,21 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #d97706;
   margin-bottom: 4px;
 }
 
 .weatherConditionDot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background-color: #d97706;
 }
 
 .weatherSubtitle {
-  font-size: 0.75rem;
+  font-size: 0.84rem;
   color: #5a675e;
 }
 
@@ -476,13 +476,13 @@
 }
 
 .weatherMetricValue {
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #17241c;
 }
 
 .weatherMetricLabel {
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   color: #6b786f;
 }
 
@@ -494,7 +494,7 @@
 }
 
 .forecastHeading {
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: #5a675e;
   letter-spacing: 0.03em;
@@ -530,26 +530,26 @@
 }
 
 .forecastDayName {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   color: #5a675e;
 }
 
 .forecastDayTemp {
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #17241c;
 }
 
 .forecastDayCond {
-  font-size: 0.65rem;
+  font-size: 0.74rem;
   color: #6b786f;
 }
 
 .weatherAlertBanner {
   margin-top: auto;
-  padding: 10px 12px;
-  font-size: 0.74rem;
-  line-height: 1.4;
+  padding: 11px 13px;
+  font-size: 0.82rem;
+  line-height: 1.45;
   color: #274032;
   background: #eaf3ed;
   border-radius: 8px;
@@ -646,7 +646,7 @@
 }
 
 .taskTitle {
-  font-size: 0.8125rem;
+  font-size: 0.94rem;
   font-weight: 700;
   color: #1c2820;
 }
@@ -655,7 +655,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.74rem;
+  font-size: 0.82rem;
 }
 
 .taskDate {

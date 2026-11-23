@@ -37,6 +37,24 @@ public class CadastroController {
         return ResponseEntity.created(location).body(UsuarioResponseDTO.fromEntity(salvo));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioResponseDTO> buscarMeuPerfil(@AuthenticationPrincipal Usuario usuarioLogado) {
+        if (usuarioLogado == null || usuarioLogado.getId() == null) {
+            throw new UnauthorizedException("Autenticação obrigatória para acessar este recurso.");
+        }
+        return ResponseEntity.ok(UsuarioResponseDTO.fromEntity(cadastroService.buscarPorId(usuarioLogado.getId())));
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UsuarioResponseDTO> atualizarMeuPerfil(
+            @Valid @RequestBody CadastroUpdateRequestDTO dto,
+            @AuthenticationPrincipal Usuario usuarioLogado) {
+        if (usuarioLogado == null || usuarioLogado.getId() == null) {
+            throw new UnauthorizedException("Autenticação obrigatória para acessar este recurso.");
+        }
+        return ResponseEntity.ok(UsuarioResponseDTO.fromEntity(cadastroService.atualizar(usuarioLogado.getId(), dto)));
+    }
+
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long usuarioId,
                                                           @AuthenticationPrincipal Usuario usuarioLogado) {
