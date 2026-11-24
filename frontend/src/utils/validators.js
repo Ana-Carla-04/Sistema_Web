@@ -24,18 +24,21 @@ export function validatePlantio(values) {
   return errors;
 }
 
-// Validação do formulário de Login (espelha LoginRequestDTO)
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Espelha as validações do LoginRequestDTO do back-end (e-mail e senha obrigatórios).
 export function validateLogin(values) {
   const errors = {};
+  const email = values.email.trim();
 
-  if (!values.email || !values.email.trim()) {
-    errors.email = 'O e-mail é obrigatório.';
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+  if (!email) {
+    errors.email = 'Informe seu e-mail.';
+  } else if (!EMAIL_PATTERN.test(email)) {
     errors.email = 'Informe um e-mail válido.';
   }
 
   if (!values.senha) {
-    errors.senha = 'A senha é obrigatória.';
+    errors.senha = 'Informe sua senha.';
   }
 
   return errors;
@@ -90,7 +93,10 @@ export function validateSimulacao(values) {
 
   // Desconto de Umidade
   const desconto = parseNumero(values.descontoUmidade);
-  if (values.descontoUmidade !== '' && (Number.isNaN(desconto) || desconto < 0 || desconto > 100)) {
+  if (
+    values.descontoUmidade !== '' &&
+    (Number.isNaN(desconto) || desconto < 0 || desconto > 100)
+  ) {
     errors.descontoUmidade = 'O desconto deve estar entre 0 e 100%.';
   }
 

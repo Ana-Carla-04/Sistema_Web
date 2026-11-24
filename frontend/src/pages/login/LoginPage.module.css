@@ -15,7 +15,7 @@
   min-height: 100vh;
   min-height: 100dvh;
   font-family: 'DM Sans', var(--font-sans);
-  background: #3b5a3c url('./login-bg.jpg') center / cover no-repeat;
+  background: #3b5a3c url('login-bg.jpg') center / cover no-repeat;
 }
 
 /* ---- painel branco central ---- */

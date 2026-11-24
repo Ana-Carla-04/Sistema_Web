@@ -98,7 +98,7 @@ export default function CadastroPage() {
             type="password"
             autoComplete="new-password"
             value={values.senha}
-            error={errors.senha}
+            error={errors.senha}b
             onChange={handleFieldChange}
             onBlur={handleBlur}
           />

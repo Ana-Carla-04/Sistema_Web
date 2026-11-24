@@ -28,7 +28,8 @@
   font-size: var(--field-font-size, var(--text-md));
   color: var(--color-text);
   background: var(--color-surface);
-  border: var(--field-border-width, 1px) solid var(--field-border-color, var(--color-border));
+  border: var(--field-border-width, 1px) solid
+    var(--field-border-color, var(--color-border));
   border-radius: var(--field-radius, 0);
   transition: border-color 0.15s;
 }
