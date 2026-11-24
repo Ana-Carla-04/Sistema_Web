@@ -6,9 +6,9 @@ import { custoService } from '../../services/custoService.js';
 import { CATEGORIA_OPTIONS, formatValorInput, validateCusto } from '../../utils/custo.js';
 import styles from './CustoFormModal.module.css';
 
-function toFormValues(custo) {
+function toFormValues(custo, defaultPlantioId) {
   return {
-    plantioId: custo ? String(custo.plantioId) : '',
+    plantioId: custo ? String(custo.plantioId) : (defaultPlantioId ? String(defaultPlantioId) : ''),
     categoria: custo?.categoria ?? '',
     descricao: custo?.descricao ?? '',
     valor: formatValorInput(custo?.valor),
@@ -17,13 +17,13 @@ function toFormValues(custo) {
 }
 
 // `custo` = null -> adicionar | `custo` = objeto -> editar
-export default function CustoFormModal({ custo, plantios, onClose, onSaved }) {
+export default function CustoFormModal({ custo, defaultPlantioId, plantios, onClose, onSaved }) {
   const isEditing = Boolean(custo);
   const [submitError, setSubmitError] = useState('');
   const [saving, setSaving] = useState(false);
 
   const { values, errors, handleChange, handleBlur, handleSubmit } = useForm({
-    initialValues: toFormValues(custo),
+    initialValues: toFormValues(custo, defaultPlantioId),
     validate: validateCusto,
   });
 

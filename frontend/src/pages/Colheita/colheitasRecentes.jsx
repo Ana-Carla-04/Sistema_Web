@@ -1,6 +1,6 @@
 import { formatBRL, formatKg } from '../../utils/colheita.js';
-import Icon from '../../components/Icons/Icon.jsx'; // Importando o ícone se você tiver um de lixeira
-import styles from './ColheitasRecentes.module.css';
+import Icon from '../../components/icons/Icon.jsx';
+import styles from './colheitasRecentes.module.css';
 
 const LIMITE = 10;
 

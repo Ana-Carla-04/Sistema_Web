@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
 
 import useCustos from '../../hooks/useCustos.js';
 import usePlantios from '../../hooks/usePlantios.js';
@@ -170,7 +170,12 @@ function DeleteDialog({ custo, loteNome, onCancel, onDeleted }) {
 }
 
 export default function CustosPage() {
-  // null = fechado | { custo: null } = adicionar | { custo } = editar
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoriaParam = searchParams.get('categoria') || '';
+  const plantioIdParam = searchParams.get('plantioId') || '';
+  const novoParam = searchParams.get('novo') === 'true' || searchParams.get('adicionar') === 'true';
+
+  // null = fechado | { custo: null, defaultPlantioId } = adicionar | { custo } = editar
   const [modal, setModal] = useState(null);
   const [toDelete, setToDelete] = useState(null);
 
@@ -181,6 +186,13 @@ export default function CustosPage() {
   const { custos, loading, error, reload } = useCustos();
   const { plantios } = usePlantios({});
 
+  // Abre automaticamente o modal se a URL tiver ?novo=true
+  useEffect(() => {
+    if (novoParam) {
+      setModal({ custo: null, defaultPlantioId: plantioIdParam });
+    }
+  }, [novoParam, plantioIdParam]);
+
   const loteNomes = useMemo(
     () => new Map(plantios.map((plantio) => [plantio.id, plantio.nome])),
     [plantios]
@@ -190,32 +202,92 @@ export default function CustosPage() {
     [loteNomes]
   );
 
-  // Os cartões mostram o total de cada categoria; a tabela e o "Custo Total" seguem a busca.
+  // Os cartões mostram o total de cada categoria no universo do produtor
   const categoriaTotals = useMemo(() => totalsByCategoria(custos), [custos]);
 
-  const visible = useMemo(
-    () =>
-      sortByDataDesc(custos).filter((custo) =>
-        matchesSearch(custo, getLoteNome(custo), search)
-      ),
-    [custos, getLoteNome, search]
-  );
-  const total = useMemo(() => sumValores(visible), [visible]);
+  // Filtra por busca textual, categoria vinda de URL/clique, e plantioId
+  const visible = useMemo(() => {
+    let list = sortByDataDesc(custos);
 
+    if (search) {
+      list = list.filter((custo) =>
+        matchesSearch(custo, getLoteNome(custo), search)
+      );
+    }
+
+    if (categoriaParam) {
+      list = list.filter(
+        (custo) =>
+          String(custo.categoria || '').toLowerCase().trim() ===
+          categoriaParam.toLowerCase().trim()
+      );
+    }
+
+    if (plantioIdParam) {
+      list = list.filter((custo) => String(custo.plantioId) === String(plantioIdParam));
+    }
+
+    return list;
+  }, [custos, getLoteNome, search, categoriaParam, plantioIdParam]);
+
+  const total = useMemo(() => sumValores(visible), [visible]);
   const initialLoading = loading && custos.length === 0;
 
-  const closeModal = useCallback(() => setModal(null), []);
+  // Alterna o filtro de categoria ao clicar nos cartões de resumo
+  const handleCategoryClick = useCallback(
+    (catValue) => {
+      const next = new URLSearchParams(searchParams);
+      if (categoriaParam.toLowerCase().trim() === catValue.toLowerCase().trim()) {
+        next.delete('categoria');
+      } else {
+        next.set('categoria', catValue);
+      }
+      setSearchParams(next);
+    },
+    [categoriaParam, searchParams, setSearchParams]
+  );
+
+  // Limpa um filtro específico
+  const removeFilter = useCallback(
+    (key) => {
+      const next = new URLSearchParams(searchParams);
+      next.delete(key);
+      setSearchParams(next);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  // Limpa todos os filtros da URL
+  const clearAllFilters = useCallback(() => {
+    const next = new URLSearchParams();
+    setSearchParams(next);
+  }, [setSearchParams]);
+
+  const closeModal = useCallback(() => {
+    setModal(null);
+    if (novoParam) {
+      const next = new URLSearchParams(searchParams);
+      next.delete('novo');
+      next.delete('adicionar');
+      setSearchParams(next, { replace: true });
+    }
+  }, [novoParam, searchParams, setSearchParams]);
+
   const closeDelete = useCallback(() => setToDelete(null), []);
 
   const handleSaved = useCallback(() => {
-    setModal(null);
+    closeModal();
     reload();
-  }, [reload]);
+  }, [closeModal, reload]);
 
   const handleDeleted = useCallback(() => {
     setToDelete(null);
     reload();
   }, [reload]);
+
+  const nomeLoteFiltro = plantioIdParam
+    ? loteNomes.get(Number(plantioIdParam)) || `Lote #${plantioIdParam}`
+    : '';
 
   return (
     <section>
@@ -224,25 +296,94 @@ export default function CustosPage() {
         <button
           type="button"
           className={styles.newButton}
-          onClick={() => setModal({ custo: null })}
+          onClick={() => setModal({ custo: null, defaultPlantioId: plantioIdParam })}
         >
           <span aria-hidden="true">+</span> Adicionar Custo
         </button>
       </header>
 
+      {/* Cartões de resumo por categoria (interativos: clicar filtra a listagem) */}
       <div className={styles.summary}>
-        {categoriaTotals.map((item) => (
-          <div key={item.value} className={styles.summaryCard}>
-            <span className={`${styles.summaryLabel} ${CATEGORIA_CLASS[item.value]}`}>
-              {item.label}
-            </span>
-            <strong className={styles.summaryValue}>{formatCurrency(item.total)}</strong>
-          </div>
-        ))}
+        {categoriaTotals.map((item) => {
+          const isActive =
+            categoriaParam.toLowerCase().trim() === item.value.toLowerCase().trim();
+          return (
+            <div
+              key={item.value}
+              className={`${styles.summaryCard} ${styles.summaryCardInteractive} ${
+                isActive ? styles.summaryCardActive : ''
+              }`}
+              onClick={() => handleCategoryClick(item.value)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleCategoryClick(item.value);
+                }
+              }}
+              title={
+                isActive
+                  ? `Filtro ativo: ${item.label} (clique para remover)`
+                  : `Filtrar tabela por ${item.label}`
+              }
+              aria-pressed={isActive}
+            >
+              <span className={`${styles.summaryLabel} ${CATEGORIA_CLASS[item.value]}`}>
+                {item.label}
+              </span>
+              <strong className={styles.summaryValue}>{formatCurrency(item.total)}</strong>
+            </div>
+          );
+        })}
       </div>
 
       <div className={styles.tableCard}>
-        <h2 className={styles.tableTitle}>Detalhamento de Gastos</h2>
+        <div className={styles.tableCardHeader}>
+          <h2 className={styles.tableTitle}>Detalhamento de Gastos</h2>
+
+          {/* Barra de filtros ativos conectados com Dashboard / Plantios / Categorias */}
+          {(categoriaParam || plantioIdParam) && (
+            <div className={styles.activeFilters}>
+              <span className={styles.activeFiltersLabel}>Filtros ativos:</span>
+              {categoriaParam && (
+                <span className={styles.filterChip}>
+                  Categoria: <strong>{categoriaParam}</strong>
+                  <button
+                    type="button"
+                    className={styles.filterChipRemove}
+                    onClick={() => removeFilter('categoria')}
+                    aria-label="Remover filtro de categoria"
+                    title="Remover filtro de categoria"
+                  >
+                    ✕
+                  </button>
+                </span>
+              )}
+              {plantioIdParam && (
+                <span className={styles.filterChip}>
+                  Lote: <strong>{nomeLoteFiltro}</strong>
+                  <button
+                    type="button"
+                    className={styles.filterChipRemove}
+                    onClick={() => removeFilter('plantioId')}
+                    aria-label="Remover filtro de lote"
+                    title="Remover filtro de lote"
+                  >
+                    ✕
+                  </button>
+                </span>
+              )}
+              <button
+                type="button"
+                className={styles.clearAllBtn}
+                onClick={clearAllFilters}
+              >
+                Limpar filtros
+              </button>
+            </div>
+          )}
+        </div>
 
         {initialLoading && <p className={styles.feedback}>Carregando custos...</p>}
 
@@ -260,17 +401,27 @@ export default function CustosPage() {
             <p>
               {custos.length === 0
                 ? 'Você ainda não registrou custos.'
-                : `Nenhum custo encontrado para "${search}".`}
+                : categoriaParam || plantioIdParam || search
+                ? `Nenhum custo encontrado para os filtros aplicados.`
+                : `Nenhum custo encontrado.`}
             </p>
-            {custos.length === 0 && (
+            {custos.length === 0 ? (
               <button
                 type="button"
                 className={styles.retry}
-                onClick={() => setModal({ custo: null })}
+                onClick={() => setModal({ custo: null, defaultPlantioId: plantioIdParam })}
               >
                 Adicionar custo
               </button>
-            )}
+            ) : (categoriaParam || plantioIdParam || search) ? (
+              <button
+                type="button"
+                className={styles.retry}
+                onClick={clearAllFilters}
+              >
+                Limpar filtros
+              </button>
+            ) : null}
           </div>
         )}
 
@@ -352,7 +503,9 @@ export default function CustosPage() {
         {!initialLoading && !error && (
           <p className={styles.total}>
             Custo Total: <strong>{formatCurrencyFull(total)}</strong>
-            {search && <span className={styles.totalNote}> (resultado da busca)</span>}
+            {(search || categoriaParam || plantioIdParam) && (
+              <span className={styles.totalNote}> (filtrado)</span>
+            )}
           </p>
         )}
       </div>
@@ -361,6 +514,7 @@ export default function CustosPage() {
         <CustoFormModal
           key={modal.custo?.id ?? 'novo'}
           custo={modal.custo}
+          defaultPlantioId={modal.defaultPlantioId}
           plantios={plantios}
           onClose={closeModal}
           onSaved={handleSaved}

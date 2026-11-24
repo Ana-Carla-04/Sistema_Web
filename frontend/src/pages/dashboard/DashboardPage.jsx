@@ -533,11 +533,26 @@ export default function DashboardPage() {
             <h2 className={styles.cardTitle}>
               Distribuição de Custos – {custoTotalLabel}
             </h2>
+            <button
+              type="button"
+              className={styles.verTudoBtn}
+              onClick={() => navigate('/custos')}
+              title="Acessar tela completa de Custos"
+            >
+              Ver custos
+            </button>
           </header>
 
           {distribuicaoCustos.length === 0 ? (
-            <div className={styles.chartEmptyNotice}>
-              Nenhum custo por categoria cadastrado no momento.
+            <div className={styles.chartEmptyNoticeCol}>
+              <p>Nenhum custo por categoria cadastrado no momento.</p>
+              <button
+                type="button"
+                className={styles.chartEmptyActionBtn}
+                onClick={() => navigate('/custos?novo=true')}
+              >
+                + Registrar Custo
+              </button>
             </div>
           ) : (
             <div className={styles.custosChartArea}>

@@ -264,7 +264,16 @@ export default function AnaliseFinanceiraPage() {
                       {lote.area.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} ha
                     </td>
                     <td className={styles.cellDark}>{formatBRL(lote.receita)}</td>
-                    <td className={styles.cellCost}>{formatBRL(lote.custos)}</td>
+                    <td className={styles.cellCost}>
+                      <button
+                        type="button"
+                        className={styles.linkCostBtn}
+                        onClick={() => navigate(`/custos?plantioId=${lote.id}`)}
+                        title={`Ver custos do lote ${lote.nome}`}
+                      >
+                        {formatBRL(lote.custos)}
+                      </button>
+                    </td>
                     <td className={lote.lucro >= 0 ? styles.cellProfit : styles.cellCost}>
                       {formatBRL(lote.lucro)}
                     </td>
@@ -291,7 +300,20 @@ export default function AnaliseFinanceiraPage() {
             const widthPercent = lote.custoPorHa > 0 ? Math.max(ratio, 8) : 2;
 
             return (
-              <div key={lote.id} className={styles.barRow}>
+              <div
+                key={lote.id}
+                className={`${styles.barRow} ${styles.barRowClickable}`}
+                onClick={() => navigate(`/custos?plantioId=${lote.id}`)}
+                title={`Ver custos do lote ${lote.nome} (${formatBRL(lote.custoPorHa)}/ha)`}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    navigate(`/custos?plantioId=${lote.id}`);
+                  }
+                }}
+              >
                 <span className={styles.barLabel}>{lote.nome}</span>
 
                 <div className={styles.barTrack}>

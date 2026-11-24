@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { formatArea, formatDate, getStatusLabel } from '../../utils/plantio.js';
 import styles from './PlantioCard.module.css';
 
@@ -16,6 +17,7 @@ const STATUS_CLASS = {
 const FIELD_IMAGES = [img1, img2, img3];
 
 export default function PlantioCard({ plantio, onEdit }) {
+  const navigate = useNavigate();
   const statusClass = STATUS_CLASS[String(plantio.status).toUpperCase()] ?? styles.statusPlantado;
 
   // 3. Usando o nome correto da variável (FIELD_IMAGES)
@@ -55,9 +57,24 @@ export default function PlantioCard({ plantio, onEdit }) {
             </div>
           </dl>
 
-          <button type="button" className={styles.editButton} onClick={() => onEdit(plantio)}>
-            Editar
-          </button>
+          <div className={styles.cardActions}>
+            <button
+              type="button"
+              className={styles.custoButton}
+              onClick={() => navigate(`/custos?plantioId=${plantio.id}`)}
+              title={`Ver custos do ${plantio.nome}`}
+            >
+              Custos
+            </button>
+            <button
+              type="button"
+              className={styles.editButton}
+              onClick={() => onEdit(plantio)}
+              title={`Editar lote ${plantio.nome}`}
+            >
+              Editar
+            </button>
+          </div>
         </div>
       </article>
   );
