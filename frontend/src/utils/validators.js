@@ -60,10 +60,68 @@ export function validateCadastro(values) {
 
   if (!values.senha) {
     errors.senha = 'A senha é obrigatória.';
-  } else if (values.senha.length < 8) {
-    errors.senha = 'A senha deve ter no mínimo 8 caracteres.';
+  } else if (values.senha.length < 6) {
+    errors.senha = 'A senha deve ter no mínimo 6 caracteres.';
+  } else if (!/^[A-Za-z0-9]+$/.test(values.senha)) {
+    errors.senha = 'A senha deve conter apenas letras e números.';
   } else if (!/^(?=.*[A-Za-z])(?=.*\d).+$/.test(values.senha)) {
     errors.senha = 'A senha deve conter pelo menos uma letra e um número.';
+  }
+
+  return errors;
+}
+
+// Avaliação de força de senha:
+// Mínimo 6 caracteres + apenas letras e números (ao menos uma letra e um número)
+export function evaluatePasswordStrength(password = '', email = '') {
+  const pwd = String(password || '');
+  const minLength = pwd.length >= 6;
+  const hasLetter = /[A-Za-z]/.test(pwd);
+  const hasDigit = /[0-9]/.test(pwd);
+  const onlyAlphanumeric = /^[A-Za-z0-9]+$/.test(pwd);
+
+  return {
+    minLength,
+    hasLetter,
+    hasDigit,
+    onlyAlphanumeric,
+    isValid: minLength && hasLetter && hasDigit && onlyAlphanumeric,
+  };
+}
+
+// Etapa 1: Solicitação do link de recuperação por e-mail
+export function validateForgotPassword(values) {
+  const errors = {};
+  const email = (values.email || '').trim();
+
+  if (!email) {
+    errors.email = 'O e-mail é obrigatório.';
+  } else if (!EMAIL_PATTERN.test(email)) {
+    errors.email = 'Informe um e-mail válido.';
+  }
+
+  return errors;
+}
+
+// Etapa 2: Definição de nova senha via token seguro
+export function validateRecuperarSenha(values) {
+  const errors = {};
+  const pwd = values.novaSenha || '';
+
+  if (!pwd) {
+    errors.novaSenha = 'A nova senha é obrigatória.';
+  } else if (pwd.length < 6) {
+    errors.novaSenha = 'A senha deve ter no mínimo 6 caracteres.';
+  } else if (!/^[A-Za-z0-9]+$/.test(pwd)) {
+    errors.novaSenha = 'A senha deve conter apenas letras e números.';
+  } else if (!/^(?=.*[A-Za-z])(?=.*\d).+$/.test(pwd)) {
+    errors.novaSenha = 'A senha deve conter pelo menos uma letra e um número.';
+  }
+
+  if (!values.confirmarSenha) {
+    errors.confirmarSenha = 'Confirme sua nova senha.';
+  } else if (values.confirmarSenha !== values.novaSenha) {
+    errors.confirmarSenha = 'As senhas não coincidem.';
   }
 
   return errors;
