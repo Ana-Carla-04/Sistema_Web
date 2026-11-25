@@ -1,16 +1,41 @@
-# Artefatos gerados localmente
-target/
-.git/
+# .dockerignore otimizado para o monorepo SIPA (Backend + Frontend)
+
+# Controle de versao
+.git
 .gitignore
+.gitattributes
 
-# Metadados e configuracoes locais do editor
-.vscode/
+# Artefatos de build Java / Maven
+**/target/
+.mvn/
+mvnw
+mvnw.cmd
+
+# Dependencias e build Node / Vite
+**/node_modules/
+**/dist/
+npm-debug.log*
+
+# Variaveis de ambiente e segredos locais
+.env
+.env.*
+frontend/.env*
+
+# Configuracoes de IDEs e editores
 .idea/
+.vscode/
+.github/
 *.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+.sts4-cache/
 
-# Logs e arquivos temporarios
+# Arquivos do próprio Docker e documentacao (evita invalidar cache do contexto)
+Dockerfile
+docker-compose*.yml
+*.md
 *.log
 *.tmp
-
-# Documentacao que nao e necessaria para a imagem
-HELP.md

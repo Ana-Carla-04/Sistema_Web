@@ -1,0 +1,129 @@
+.card {
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.title {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-md);
+    font-weight: 700;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.inputWrap,
+.selectWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.inputWrap:focus-within,
+.selectWrap:focus-within {
+    border-color: var(--color-primary);
+}
+
+.invalid {
+    border-color: var(--color-danger);
+}
+
+.inputWrap input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 0;
+    font-size: var(--text-sm);
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.adornment {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+}
+
+.selectWrap select {
+    width: 100%;
+    padding: 11px 24px 11px 0;
+    font-size: var(--text-sm);
+    appearance: none;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.selectWrap svg {
+    position: absolute;
+    right: 12px;
+    color: var(--color-muted);
+    pointer-events: none;
+}
+
+.error {
+    font-size: var(--text-xs);
+    color: var(--color-danger);
+}
+
+.alert {
+    padding: var(--space-3);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-danger);
+    background: var(--color-danger-bg);
+    border-radius: var(--radius-sm);
+}
+
+.hint {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+}
+
+.submit {
+    width: 100%;
+    padding: 13px;
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--color-primary);
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s;
+}
+
+.submit:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+}
+
+.submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+@media (max-width: 560px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

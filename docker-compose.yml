@@ -1,34 +1,32 @@
 services:
   db:
-    # Banco PostgreSQL usado pela aplicacao.
     image: postgres:16-alpine
+    pull_policy: missing
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-sipa}
       POSTGRES_USER: ${POSTGRES_USER:-sipa}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no ambiente}
     ports:
-      # Permite acessar o banco localmente durante o desenvolvimento.
       - "5432:5432"
     volumes:
-      # Mantem os dados do banco entre reinicializacoes dos containers.
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      # A aplicacao so inicia quando o PostgreSQL aceitar conexoes.
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 10s
 
   app:
-    # Constroi a imagem a partir do DockerFile deste projeto.
     build:
       context: .
-      dockerfile: DockerFile
+      dockerfile: Dockerfile
+      target: backend
+      pull: false
+    pull_policy: build
     ports:
-      # Expone a API na porta 8080 do computador.
       - "8080:8080"
     environment:
-      # URL usa o nome do servico db, que funciona dentro da rede Docker.
       DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-sipa}
       DB_USER: ${POSTGRES_USER:-sipa}
       DB_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no ambiente}
@@ -39,7 +37,38 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      # Verifica via socket TCP nativo do bash se o Tomcat ja esta aceitando conexoes na 8080
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/8080'"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 15s
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend
+        - action: rebuild
+          path: ./pom.xml
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+      pull: false
+    pull_policy: build
+    ports:
+      - "3001:80"
+    depends_on:
+      app:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend/src
+        - action: rebuild
+          path: ./frontend/package.json
 
 volumes:
-  # Volume nomeado para persistencia do PostgreSQL.
   postgres_data:

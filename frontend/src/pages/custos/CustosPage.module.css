@@ -1,0 +1,483 @@
+/* Cores locais desta tela (iguais às do desenho de referência). */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.newButton {
+  height: 40px;
+  padding: 0 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s;
+}
+
+.newButton:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ---- cartões de resumo por categoria ---- */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+  margin-bottom: 20px;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 13px;
+  background: var(--color-surface);
+  border: 1px solid #e8eee9;
+  border-radius: 9px;
+  box-shadow: var(--shadow-card);
+}
+
+.summaryCardInteractive {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  user-select: none;
+}
+
+.summaryCardInteractive:hover {
+  transform: translateY(-2px);
+  border-color: #b7cebf;
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.08);
+}
+
+.summaryCardActive {
+  border-color: var(--color-primary);
+  background-color: #f3f7f4;
+  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.18), 0 4px 12px rgba(45, 106, 79, 0.1);
+}
+
+.summaryLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.summaryValue {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+/* cor de cada categoria (cartões e tabela) */
+.catFertilizantes {
+  color: #2d6a4f;
+}
+
+.catEnergia {
+  color: #2a5bc0;
+}
+
+.catDefensivos {
+  color: #cf8a10;
+}
+
+.catPreparo {
+  color: #b42318;
+}
+
+/* ---- tabela ---- */
+.tableCard {
+  min-width: 0;
+  padding: 16px 16px 22px;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 13px;
+  box-shadow: var(--shadow-card);
+}
+
+.tableCardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.tableTitle {
+  margin: 4px 0 4px 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Barra de filtros ativos */
+.activeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f4f7f4;
+  border: 1px solid #dce6de;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.activeFiltersLabel {
+  font-weight: 600;
+  color: #3b5042;
+  margin-right: 4px;
+}
+
+.filterChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #ffffff;
+  border: 1px solid #cfdcd2;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  color: #243328;
+}
+
+.filterChipRemove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  color: #7a8c80;
+  padding: 2px 4px;
+  border-radius: 50%;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.filterChipRemove:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.clearAllBtn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: auto;
+}
+
+.clearAllBtn:hover {
+  color: var(--color-primary-hover);
+}
+
+.scroll {
+  position: relative;
+  overflow-x: auto;
+  border: 1px solid #e6ebe7;
+  border-radius: 6px;
+}
+
+.table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.colData {
+  width: 12%;
+}
+
+.colLote {
+  width: 12%;
+}
+
+.colCategoria {
+  width: 16%;
+}
+
+.colDescricao {
+  width: 20%;
+}
+
+.colValor {
+  width: 13%;
+}
+
+.colComprovante {
+  width: 18%;
+}
+
+.colAcoes {
+  width: 9%;
+}
+
+.table th {
+  height: 44px;
+  padding: 0 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-align: left;
+  color: #4e5c52;
+  background: var(--color-field);
+}
+
+.table td {
+  height: 48px;
+  padding: 0 10px;
+  font-size: 0.95rem;
+  border-top: 1px solid #e3e7e4;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: 14px;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.table td:last-child {
+  padding: 0 6px;
+}
+
+.table th.alignRight,
+.table td.alignRight {
+  padding-right: 14px;
+  text-align: right;
+}
+
+.muted {
+  color: #5a625d;
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.categoria {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.clip {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.file svg {
+  flex-shrink: 0;
+}
+
+.fileLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.file:hover .fileLabel {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.iconButton {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s;
+}
+
+.iconButton:hover {
+  background: var(--color-field);
+}
+
+.trash {
+  color: #8d9a92;
+}
+
+.trash:hover {
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ---- custo total ---- */
+.total {
+  margin: 22px 0 0 4px;
+  font-size: 1.1875rem;
+  color: #4e5c52;
+}
+
+.total strong {
+  font-weight: 700;
+  color: var(--color-danger);
+}
+
+.totalNote {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.retry {
+  padding: 8px var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+}
+
+.retry:hover {
+  background: var(--color-field);
+}
+
+/* ---- confirmação de exclusão (na frente da tela, fundo escurecido) ---- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(80, 80, 80, 0.38);
+}
+
+.dialog {
+  width: min(100%, 420px);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-modal);
+}
+
+.dialogTitle {
+  margin-bottom: var(--space-3);
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.dialogText {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
+
+.dialogText strong {
+  color: var(--color-text);
+}
+
+.dialogError {
+  padding: var(--space-3);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+  border-radius: var(--radius-sm);
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.cancel,
+.danger {
+  padding: 9px var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.cancel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.cancel:hover:not(:disabled) {
+  background: var(--color-field);
+}
+
+.danger {
+  color: #ffffff;
+  background: var(--color-danger);
+}
+
+.danger:hover:not(:disabled) {
+  background: #9a1d13;
+}
+
+.cancel:disabled,
+.danger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ---- telas menores ---- */
+@media (max-width: 900px) {
+  .summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 560px) {
+  .newButton {
+    width: 100%;
+  }
+}
