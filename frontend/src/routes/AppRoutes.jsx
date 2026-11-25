@@ -6,6 +6,7 @@ import CustosPage from '../pages/custos/CustosPage.jsx';
 import DashboardPage from '../pages/dashboard/DashboardPage.jsx';
 import HistoricoPage from '../pages/historico/HistoricoPage.jsx';
 import LoginPage from '../pages/login/LoginPage.jsx';
+import RecuperarSenhaPage from '../pages/recuperar-senha/RecuperarSenhaPage.jsx';
 import PlantiosPage from '../pages/plantios/PlantiosPage.jsx';
 import TarefasPage from '../pages/tarefas/TarefasPage.jsx';
 import { PrivateRoute } from './PrivateRoute.jsx';
@@ -17,6 +18,7 @@ export function AppRoutes() {
       {/* Rotas Públicas */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/cadastro" element={<CadastroPage />} />
+      <Route path="/recuperar-senha" element={<RecuperarSenhaPage />} />
 
       {/* Rotas Protegidas (exigem autenticação do usuário) */}
       <Route element={<PrivateRoute />}>

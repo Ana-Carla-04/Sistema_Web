@@ -17,10 +17,10 @@ public class CadastroRequestDTO {
     private String email;
 
     @NotBlank(message = "A senha é obrigatória")
-    @Size(min = 8, max = 100, message = "A senha deve ter entre 8 e 100 caracteres")
+    @Size(min = 6, max = 100, message = "A senha deve ter no mínimo 6 caracteres")
     @Pattern(
-            regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$",
-            message = "A senha deve conter pelo menos uma letra e um número"
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z0-9]+$",
+            message = "A senha deve conter apenas letras e números (ao menos uma letra e um número)"
     )
     private String senha;
 

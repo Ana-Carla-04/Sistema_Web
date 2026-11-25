@@ -20,6 +20,8 @@ public class CadastroUpdateRequestDTO {
 
     private String novaSenha;
 
+    private String confirmarNovaSenha;
+
     public CadastroUpdateRequestDTO() {}
 
     public String getNome() { return nome; }
@@ -33,4 +35,7 @@ public class CadastroUpdateRequestDTO {
 
     public String getNovaSenha() { return novaSenha; }
     public void setNovaSenha(String novaSenha) { this.novaSenha = novaSenha; }
+
+    public String getConfirmarNovaSenha() { return confirmarNovaSenha; }
+    public void setConfirmarNovaSenha(String confirmarNovaSenha) { this.confirmarNovaSenha = confirmarNovaSenha; }
 }

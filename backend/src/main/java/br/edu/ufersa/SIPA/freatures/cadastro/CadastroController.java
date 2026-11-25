@@ -1,10 +1,12 @@
 package br.edu.ufersa.SIPA.freatures.cadastro;
 
 import br.edu.ufersa.SIPA.freatures.auth.Usuario;
+import br.edu.ufersa.SIPA.freatures.auth.controller.PasswordResetController;
 import br.edu.ufersa.SIPA.freatures.auth.dto.UsuarioResponseDTO;
 import br.edu.ufersa.SIPA.freatures.cadastro.dto.CadastroRequestDTO;
 import br.edu.ufersa.SIPA.freatures.cadastro.dto.CadastroUpdateRequestDTO;
 import br.edu.ufersa.SIPA.shared.exeception.UnauthorizedException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,11 +50,14 @@ public class CadastroController {
     @PutMapping("/me")
     public ResponseEntity<UsuarioResponseDTO> atualizarMeuPerfil(
             @Valid @RequestBody CadastroUpdateRequestDTO dto,
-            @AuthenticationPrincipal Usuario usuarioLogado) {
+            @AuthenticationPrincipal Usuario usuarioLogado,
+            HttpServletRequest request) {
         if (usuarioLogado == null || usuarioLogado.getId() == null) {
             throw new UnauthorizedException("Autenticação obrigatória para acessar este recurso.");
         }
-        return ResponseEntity.ok(UsuarioResponseDTO.fromEntity(cadastroService.atualizar(usuarioLogado.getId(), dto)));
+        String ip = PasswordResetController.extractClientIp(request);
+        String userAgent = request.getHeader("User-Agent");
+        return ResponseEntity.ok(cadastroService.atualizarComAuditoria(usuarioLogado.getId(), dto, ip, userAgent));
     }
 
     @GetMapping("/{usuarioId}")
@@ -65,9 +70,12 @@ public class CadastroController {
     @PutMapping("/{usuarioId}")
     public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long usuarioId,
                                                         @Valid @RequestBody CadastroUpdateRequestDTO dto,
-                                                        @AuthenticationPrincipal Usuario usuarioLogado) {
+                                                        @AuthenticationPrincipal Usuario usuarioLogado,
+                                                        HttpServletRequest request) {
         garantirQueEoProprioUsuario(usuarioId, usuarioLogado);
-        return ResponseEntity.ok(UsuarioResponseDTO.fromEntity(cadastroService.atualizar(usuarioId, dto)));
+        String ip = PasswordResetController.extractClientIp(request);
+        String userAgent = request.getHeader("User-Agent");
+        return ResponseEntity.ok(cadastroService.atualizarComAuditoria(usuarioId, dto, ip, userAgent));
     }
 
     @DeleteMapping("/{usuarioId}")

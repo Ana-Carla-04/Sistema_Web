@@ -56,7 +56,10 @@ export const authService = {
   },
 
   // Atualiza os dados do usuário mediante confirmação de segurança (senhaAtual)
-  atualizarMeuPerfil: async (usuarioId, { nome, email, senhaAtual, novaSenha }) => {
+  atualizarMeuPerfil: async (
+    usuarioId,
+    { nome, email, senhaAtual, novaSenha, confirmarNovaSenha },
+  ) => {
     const endpoint = usuarioId ? `/SIPA/cadastro/${usuarioId}` : '/SIPA/cadastro/me';
     return httpClient.put(
       endpoint,
@@ -64,9 +67,82 @@ export const authService = {
         nome,
         email,
         senhaAtual,
-        ...(novaSenha ? { novaSenha } : {}),
+        ...(novaSenha ? { novaSenha, confirmarNovaSenha } : {}),
       },
       { skipAuthRedirect: true },
     );
+  },
+
+  // Etapa 1: Solicita link tokenizado de recuperação de senha (POST /SIPA/auth/forgot-password)
+  solicitarRecuperacaoSenha: async (email) => {
+    const response = await fetch('http://localhost:8080/SIPA/auth/forgot-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const fieldErrors = errorData.erros ? Object.values(errorData.erros).join(' ') : '';
+      throw new Error(
+        fieldErrors ||
+          errorData.detail ||
+          errorData.message ||
+          'Não foi possível processar a solicitação de recuperação.',
+      );
+    }
+
+    return response.json();
+  },
+
+  // Etapa 2 (GET): Valida o token de recuperação em tempo constante e obtém o token CSRF
+  validarTokenRecuperacao: async (token) => {
+    const response = await fetch(
+      `http://localhost:8080/SIPA/auth/reset-password/${encodeURIComponent(token)}`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      },
+    );
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.valid) {
+      const error = new Error(data.message || data.detail || 'Token inválido ou expirado.');
+      error.captchaRequired = Boolean(data.captchaRequired);
+      throw error;
+    }
+
+    return data; // { valid, message, csrfToken, maskedEmail, expiresInSeconds, captchaRequired }
+  },
+
+  // Etapa 3 (POST): Redefine a senha com token de uso único, proteção CSRF e validação HIBP
+  redefinirSenhaComToken: async ({ token, password, passwordConfirm, csrf, captchaToken }) => {
+    const response = await fetch('http://localhost:8080/SIPA/auth/reset-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token,
+        password,
+        passwordConfirm,
+        csrf,
+        ...(captchaToken ? { captchaToken } : {}),
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const fieldErrors = errorData.erros ? Object.values(errorData.erros).join(' ') : '';
+      throw new Error(
+        fieldErrors || errorData.detail || errorData.message || 'Erro ao redefinir senha.',
+      );
+    }
+
+    return response.json();
   },
 };
