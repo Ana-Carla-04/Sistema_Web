@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { authService } from '../../services/authService.js';
 import { dashboardService } from '../../services/dashboardService.js';
 import { formatSafra, getCurrentSafraStartYear } from '../../utils/plantio.js';
+import { evaluatePasswordStrength } from '../../utils/validators.js';
 import Icon from '../icons/Icon.jsx';
 import styles from './AppLayout.module.css';
 
@@ -46,10 +47,12 @@ export default function AppLayout() {
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState('');
   const [profileSuccess, setProfileSuccess] = useState('');
+  const [profileSecurityAlert, setProfileSecurityAlert] = useState(null);
   const [profileForm, setProfileForm] = useState({
     nome: '',
     email: '',
     novaSenha: '',
+    confirmarNovaSenha: '',
     senhaAtual: '',
   });
 
@@ -146,10 +149,12 @@ export default function AppLayout() {
     setIsEditingProfile(false);
     setProfileError('');
     setProfileSuccess('');
+    setProfileSecurityAlert(null);
     setProfileForm({
       nome: user?.nome ?? '',
       email: user?.email ?? '',
       novaSenha: '',
+      confirmarNovaSenha: '',
       senhaAtual: '',
     });
 
@@ -195,6 +200,7 @@ export default function AppLayout() {
     const emailLimpo = profileForm.email.trim();
     const senhaAtual = profileForm.senhaAtual;
     const novaSenha = profileForm.novaSenha;
+    const confirmarNovaSenha = profileForm.confirmarNovaSenha;
 
     if (!nomeLimpo) {
       setProfileError('O nome não pode ficar em branco.');
@@ -208,14 +214,30 @@ export default function AppLayout() {
       setProfileError('Por segurança, digite sua senha atual para confirmar as alterações.');
       return;
     }
-    if (novaSenha && (novaSenha.length < 8 || !/^(?=.*[A-Za-z])(?=.*\d).+$/.test(novaSenha))) {
-      setProfileError('A nova senha deve ter no mínimo 8 caracteres, com letras e números.');
-      return;
+    if (novaSenha) {
+      const strength = evaluatePasswordStrength(novaSenha, emailLimpo);
+      if (!strength.minLength) {
+        setProfileError('A nova senha deve ter no mínimo 6 caracteres.');
+        return;
+      }
+      if (!strength.onlyAlphanumeric) {
+        setProfileError('A nova senha deve conter apenas letras e números.');
+        return;
+      }
+      if (!strength.hasLetter || !strength.hasDigit) {
+        setProfileError('A nova senha deve conter pelo menos uma letra e um número.');
+        return;
+      }
+      if (novaSenha !== confirmarNovaSenha) {
+        setProfileError('A confirmação da nova senha não coincide.');
+        return;
+      }
     }
 
     setProfileSaving(true);
     setProfileError('');
     setProfileSuccess('');
+    setProfileSecurityAlert(null);
 
     try {
       const atualizado = await authService.atualizarMeuPerfil(user?.id, {
@@ -223,18 +245,38 @@ export default function AppLayout() {
         email: emailLimpo,
         senhaAtual,
         novaSenha: novaSenha || undefined,
+        confirmarNovaSenha: novaSenha ? confirmarNovaSenha : undefined,
       });
 
-      updateUser(atualizado);
+      updateUser({
+        id: atualizado.id ?? user?.id,
+        nome: atualizado.nome ?? nomeLimpo,
+        email: atualizado.email ?? emailLimpo,
+      });
       setProfileForm((prev) => ({
         ...prev,
         nome: atualizado.nome ?? nomeLimpo,
         email: atualizado.email ?? emailLimpo,
         senhaAtual: '',
         novaSenha: '',
+        confirmarNovaSenha: '',
       }));
-      setProfileSuccess('Seus dados foram verificados e atualizados com sucesso!');
-      setIsEditingProfile(false);
+
+      if (atualizado.senhaAlterada && atualizado.sessoesInvalidadas) {
+        setProfileSecurityAlert(atualizado.alertaSeguranca || null);
+        setProfileSuccess(
+          'Senha alterada com sucesso! Por segurança, todas as sessões ativas foram encerradas. Redirecionando para novo login...',
+        );
+        setIsEditingProfile(false);
+        setTimeout(() => {
+          setProfileOpen(false);
+          logout();
+          navigate('/login', { replace: true });
+        }, 3000);
+      } else {
+        setProfileSuccess('Seus dados foram verificados e atualizados com sucesso!');
+        setIsEditingProfile(false);
+      }
     } catch (err) {
       setProfileError(err.message || 'Não foi possível atualizar os dados. Verifique sua senha.');
     } finally {
@@ -539,7 +581,14 @@ export default function AppLayout() {
             {profileSuccess && (
               <div className={styles.profileSuccessBanner} role="status">
                 <Icon name="check" size={16} />
-                <span>{profileSuccess}</span>
+                <div>
+                  <span>{profileSuccess}</span>
+                  {profileSecurityAlert && (
+                    <div style={{ fontSize: '0.75rem', marginTop: '4px', opacity: 0.9 }}>
+                      Auditoria: {profileSecurityAlert.timestamp} • IP: {profileSecurityAlert.ipAddress}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
@@ -644,7 +693,7 @@ export default function AppLayout() {
 
                 <div className={styles.profileFieldGroup}>
                   <label htmlFor="profile-novaSenha" className={styles.profileLabel}>
-                    Nova Senha <span className={styles.optionalTag}>(opcional)</span>
+                    Nova Senha <span className={styles.optionalTag}>(opcional • mín. 6 caracteres • só letras e números)</span>
                   </label>
                   <input
                     id="profile-novaSenha"
@@ -657,6 +706,25 @@ export default function AppLayout() {
                     autoComplete="new-password"
                   />
                 </div>
+
+                {profileForm.novaSenha && (
+                  <div className={styles.profileFieldGroup}>
+                    <label htmlFor="profile-confirmarNovaSenha" className={styles.profileLabel}>
+                      Confirmar Nova Senha
+                    </label>
+                    <input
+                      id="profile-confirmarNovaSenha"
+                      name="confirmarNovaSenha"
+                      type="password"
+                      className={styles.profileInput}
+                      value={profileForm.confirmarNovaSenha}
+                      onChange={handleProfileInputChange}
+                      placeholder="Repita a nova senha para confirmar"
+                      autoComplete="new-password"
+                      required
+                    />
+                  </div>
+                )}
 
                 {/* Caixa destacada de Verificação de Segurança */}
                 <div className={styles.securityBox}>

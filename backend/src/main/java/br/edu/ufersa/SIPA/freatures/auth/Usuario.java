@@ -28,6 +28,14 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private UserRole role;
 
+    /**
+     * Versão das credenciais do usuário (OWASP ASVS 2.5.6).
+     * Incrementada a cada alteração ou redefinição de senha para invalidar
+     * instantaneamente todas as sessões/JWTs emitidos anteriormente.
+     */
+    @Column(name = "token_version", nullable = false, columnDefinition = "integer default 1")
+    private Integer tokenVersion = 1;
+
     // construtores
     public Usuario() {}
 
@@ -96,4 +104,16 @@ public class Usuario implements UserDetails {
     public void setNome(String nome) { this.nome = nome; }
 
     public void setRole(UserRole role) { this.role = role; }
+
+    public int getTokenVersion() {
+        return tokenVersion != null ? tokenVersion : 1;
+    }
+
+    public void setTokenVersion(Integer tokenVersion) {
+        this.tokenVersion = tokenVersion != null ? tokenVersion : 1;
+    }
+
+    public void incrementTokenVersion() {
+        this.tokenVersion = getTokenVersion() + 1;
+    }
 }
