@@ -3,6 +3,7 @@ package br.edu.ufersa.SIPA.freatures.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,18 +40,23 @@ public class TokenService {
                 .withIssuedAt(agora)
                 .withSubject(user.getId().toString())
                 .withClaim("role", user.getRole().getRoleName())
+                .withClaim("tv", user.getTokenVersion())
                 .withExpiresAt(agora.plus(180, ChronoUnit.MINUTES))
                 .sign(algorithm);
     }
 
     public String validateToken(String token) {
+        DecodedJWT decoded = verifyAndDecode(token);
+        return decoded != null ? decoded.getSubject() : null;
+    }
+
+    public DecodedJWT verifyAndDecode(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
                     .withIssuer(ISSUER)
                     .build()
-                    .verify(token)
-                    .getSubject();
+                    .verify(token);
         } catch (JWTVerificationException exception) {
             return null;
         }

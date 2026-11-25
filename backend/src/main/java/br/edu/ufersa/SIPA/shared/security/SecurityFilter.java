@@ -40,20 +40,32 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (authorization != null && authorization.startsWith("Bearer ")
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             String token = authorization.substring(7).trim();
-            String subject = tokenService.validateToken(token);
+            var decodedJwt = tokenService.verifyAndDecode(token);
 
-            if (subject != null) {
+            if (decodedJwt != null && decodedJwt.getSubject() != null) {
                 try {
-                    Long usuarioId = Long.valueOf(subject);
+                    Long usuarioId = Long.valueOf(decodedJwt.getSubject());
                     Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
                     if (usuario != null) {
-                        UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(
-                                        usuario, null, usuario.getAuthorities());
-                        authentication.setDetails(
-                                new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        Integer tokenVersionClaim = decodedJwt.getClaim("tv").asInt();
+                        int currentVersion = usuario.getTokenVersion();
+
+                        // Se o token_version do banco foi incrementado (pós-reset ou troca de senha),
+                        // rejeita imediatamente tokens antigos (OWASP ASVS 2.5.6)
+                        if (tokenVersionClaim != null && tokenVersionClaim != currentVersion) {
+                            log.warn("Sessão revogada por alteração de senha para usuário id={} (tv token={}, tv atual={})",
+                                    usuarioId, tokenVersionClaim, currentVersion);
+                        } else if (tokenVersionClaim == null && currentVersion > 1) {
+                            log.warn("Token legado revogado após alteração de senha para usuário id={}", usuarioId);
+                        } else {
+                            UsernamePasswordAuthenticationToken authentication =
+                                    new UsernamePasswordAuthenticationToken(
+                                            usuario, null, usuario.getAuthorities());
+                            authentication.setDetails(
+                                    new WebAuthenticationDetailsSource().buildDetails(request));
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        }
                     } else {
                         log.warn("Token JWT válido, mas usuário id={} não encontrado no banco (URI={})",
                                 usuarioId, request.getRequestURI());

@@ -49,6 +49,15 @@ public class GlobalExceptionHandler {
     }
 
     // ==========================================
+    // RATE LIMITING / MUITAS TENTATIVAS (429)
+    // ==========================================
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ProblemDetail tratarRateLimit(TooManyRequestsException exception) {
+        log.warn("Limite de requisições atingido (429): {}", exception.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, exception.getMessage());
+    }
+
+    // ==========================================
     // CONFLITO (409) — ex: email duplicado
     // ==========================================
     @ExceptionHandler(ConflictException.class)

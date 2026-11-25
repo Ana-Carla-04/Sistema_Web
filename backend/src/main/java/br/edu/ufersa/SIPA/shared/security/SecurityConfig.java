@@ -28,18 +28,24 @@ public class SecurityConfig {
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.deny())
                         .contentTypeOptions(contentType -> {})
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31536000))
                         .referrerPolicy(referrer -> referrer
-                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // ==========================================
-                        // ENDPOINTS PÚBLICOS (apenas autenticação e criação de conta)
+                        // ENDPOINTS PÚBLICOS (autenticação, cadastro e recuperação de senha em 2 etapas)
                         // ==========================================
                         .requestMatchers(HttpMethod.POST, "/SIPA/login").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/SIPA/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/SIPA/cadastro").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/SIPA/auth/forgot-password", "/auth/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/SIPA/auth/reset-password/**", "/auth/reset-password/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/SIPA/auth/reset-password", "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // ==========================================
@@ -66,6 +72,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 }
